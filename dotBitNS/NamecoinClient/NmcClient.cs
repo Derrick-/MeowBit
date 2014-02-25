@@ -1,7 +1,12 @@
-﻿using System;
+﻿using NamecoinLib.ExceptionHandling;
+using NamecoinLib.Requests;
+using NamecoinLib.Responses;
+using NamecoinLib.RPC;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,34 +32,73 @@ namespace dotBitNS
 
         public NmcClient()
         {
-            Timer.DelayCall(CheckInterval, CheckInterval, new TimerCallback(CheckConnection));
+            CheckConnection();
+           // Timer.DelayCall(CheckInterval, CheckInterval, new TimerCallback(CheckConnection));
         }
 
         void CheckConnection()
         {
-            bool result;
+            var info = GetInfo();
+            if(info!=null)
+            Debug.WriteLine("Success: Wallet version {0}", info.Version);
+        }
 
-            Debug.Write("Checking RPC Connection: ");
+        public GetInfoResponse GetInfo()
+        {
+            return MakeRequest<GetInfoResponse>(RpcMethods.getinfo);
+        }
+
+        private object lockLookup = new object();
+        public NameShowResponse LookupHost(string domainname)
+        {
+            if (domainname.EndsWith(".bit") && domainname.Length > 4)
+            {
+                string name = "d/" + domainname.Remove(domainname.Length - 4);
+
+                NameShowResponse info;
+                lock (lockLookup)
+                {
+                    info = MakeRequest<NameShowResponse>(RpcMethods.name_show, name);
+                }
+                return info;
+            }
+            return null;
+        }
+
+        private readonly IRpcConnector _rpcConnector = new RpcConnector();
+
+        T MakeRequest<T>(RpcMethods method, params object[] parameters)
+        {
+            bool ok;
+            T result = default(T);
             try
             {
-                var svc = new NamecoinLib.Services.NamecoinService();
-                var info = svc.GetInfo();
-                Debug.WriteLine("Success: Wallet version {0}", info.Version);
-                result = true;
+                Console.Write("Making RPC Connection: ");
+                result = _rpcConnector.MakeRequest<T>(method, parameters);
+                ok = true;
             }
-            catch (Exception ex)
+            catch (RpcException ex)
             {
-                Debug.WriteLine("Unable to connect to Namecoin client: {0}", ex.Message);
-                result = false;
+                if ((ex.InnerException is System.IO.IOException) || (ex.InnerException is WebException && ((WebException)ex.InnerException).Response==null))
+                {
+                    Console.WriteLine("Unable to connect to Namecoin client: {0}", ex.Message);
+                    ok = false;
+                }
+                else
+                {
+                    Console.WriteLine("An RPC Error Occurred: {0}", ex.Message);
+                    ok = true;
+                }
             }
 
-            if (result != Available)
+            if (ok != Available)
             {
-                Console.WriteLine("Namecoin client is now {0}.", result ? "online" : "offline");
-                Available = result;
+                Console.WriteLine("Namecoin client is now {0}.", ok ? "online" : "offline");
+                Available = ok;
                 InvokeOnAvailableChanged();
             }
 
+            return result;
         }
 
         private void InvokeOnAvailableChanged()

@@ -8,6 +8,12 @@ namespace NamecoinLib.RPC
     //  Note: Do not alter the capitalization of the enum members as they are being cast as-is to the RPC server
     public enum RpcMethods
     {
+        // -= NMC Specific =-
+        
+        name_show,
+
+        // -= End NMC Specific =-
+
         addmultisigaddress,
         addnode,
         backupwallet,

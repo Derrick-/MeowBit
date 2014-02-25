@@ -74,6 +74,7 @@
     <Compile Include="NamecoinClient\Requests\CreateRawTransaction\CreateRawTransactionInput.cs" />
     <Compile Include="NamecoinClient\Requests\CreateRawTransaction\CreateRawTransactionOutput.cs" />
     <Compile Include="NamecoinClient\Requests\CreateRawTransaction\CreateRawTransactionRequest.cs" />
+    <Compile Include="NamecoinClient\Requests\NameShow.cs" />
     <Compile Include="NamecoinClient\Requests\SignRawTransaction\SigHashType.cs" />
     <Compile Include="NamecoinClient\Requests\SignRawTransaction\SignRawTransactionInput.cs" />
     <Compile Include="NamecoinClient\Requests\SignRawTransaction\SignRawTransactionRequest.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="NamecoinClient\Responses\ListSinceBlockResponse.cs" />
     <Compile Include="NamecoinClient\Responses\ListTransactionsResponse.cs" />
     <Compile Include="NamecoinClient\Responses\ListUnspentResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\NameShowResponse.cs" />
     <Compile Include="NamecoinClient\Responses\SignRawTransactionResponse.cs" />
     <Compile Include="NamecoinClient\Responses\ValidateAddressResponse.cs" />
     <Compile Include="NamecoinClient\RPC\IRpcConnector.cs" />

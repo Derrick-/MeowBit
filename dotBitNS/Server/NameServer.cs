@@ -1,6 +1,7 @@
 ﻿using ARSoft.Tools.Net.Dns;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -28,29 +29,62 @@ namespace dotBitNS.Server
 
             DnsMessage query = message as DnsMessage;
 
-            if ((query != null) && (query.Questions.Count == 1))
+            if (query != null)
             {
-                // send query to upstream server
-                DnsQuestion question = query.Questions[0];
-                DnsMessage answer = DnsClient.Default.Resolve(question.Name, question.RecordType, question.RecordClass);
-
-                // if got an answer, copy it to the message sent to the client
-                if (answer != null)
+                if (query.Questions.Count == 1)
                 {
-                    foreach (DnsRecordBase record in (answer.AnswerRecords))
+                    DnsQuestion question = query.Questions[0];
+          
+                    Console.WriteLine("Query: {0} {1} {2}", question.Name, question.RecordType, question.RecordClass);
+
+                    DnsMessage answer=null;
+
+                    if(question.Name.EndsWith(".bit"))
                     {
-                        query.AnswerRecords.Add(record);
-                    }
-                    foreach (DnsRecordBase record in (answer.AdditionalRecords))
-                    {
-                        query.AnswerRecords.Add(record);
+                        var info = NmcClient.Instance.LookupHost(question.Name);
+                        if (info != null)
+                        {
+                            answer = new DnsMessage()
+                            {
+                                Questions = query.Questions
+                            };
+
+                            // TODO: Make real and complete responses
+                            IPAddress address;
+                            var value = info.GetValue();
+                            if(IPAddress.TryParse(value.ip,out address))
+                            answer.AnswerRecords.Add(new ARecord(question.Name,60,address));
+                        
+                        }
                     }
 
-                    query.ReturnCode = ReturnCode.NoError;
-                    return query;
+                    if (answer == null)
+                    {
+                        // send query to upstream server
+                        answer = DnsClient.Default.Resolve(question.Name, question.RecordType, question.RecordClass);
+                    }
+
+                    // if got an answer, copy it to the message sent to the client
+                    if (answer != null)
+                    {
+                        foreach (DnsRecordBase record in (answer.AnswerRecords))
+                        {
+                            Console.WriteLine("Answer: {0}", record);
+                            query.AnswerRecords.Add(record);
+                        }
+                        foreach (DnsRecordBase record in (answer.AdditionalRecords))
+                        {
+                            Console.WriteLine("Additional Answer: {0}", record);
+                            query.AnswerRecords.Add(record);
+                        }
+
+                        query.ReturnCode = ReturnCode.NoError;
+                        return query;
+                    }
                 }
+                else
+                    Debug.WriteLine("Too many questions ({0})", query.Questions.Count);
             }
-
             // Not a valid query or upstream server did not answer correct
             message.ReturnCode = ReturnCode.ServerFailure;
             return message;
