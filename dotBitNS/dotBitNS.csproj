@@ -40,6 +40,9 @@
     <Reference Include="ARSoft.Tools.Net">
       <HintPath>..\packages\ARSoft.Tools.Net.1.7.2\lib\ARSoft.Tools.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -62,6 +65,45 @@
     <Compile Include="Core\Program.cs" />
     <Compile Include="Core\ServiceInstaller.cs" />
     <Compile Include="Core\Timer.cs" />
+    <Compile Include="NamecoinClient\Auxiliary\ConsoleVisualizations.cs" />
+    <Compile Include="NamecoinClient\Auxiliary\UnixTime.cs" />
+    <Compile Include="NamecoinClient\ExceptionHandling\RpcException.cs" />
+    <Compile Include="NamecoinClient\NmcClient.cs" />
+    <Compile Include="NamecoinClient\Properties\AssemblyInfo.cs" />
+    <Compile Include="NamecoinClient\Requests\AddNode\NodeAction.cs" />
+    <Compile Include="NamecoinClient\Requests\CreateRawTransaction\CreateRawTransactionInput.cs" />
+    <Compile Include="NamecoinClient\Requests\CreateRawTransaction\CreateRawTransactionOutput.cs" />
+    <Compile Include="NamecoinClient\Requests\CreateRawTransaction\CreateRawTransactionRequest.cs" />
+    <Compile Include="NamecoinClient\Requests\SignRawTransaction\SigHashType.cs" />
+    <Compile Include="NamecoinClient\Requests\SignRawTransaction\SignRawTransactionInput.cs" />
+    <Compile Include="NamecoinClient\Requests\SignRawTransaction\SignRawTransactionRequest.cs" />
+    <Compile Include="NamecoinClient\Responses\CreateMultiSigResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\DecodeRawTransactionResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\GetAddedNodeInfoResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\GetBlockResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\GetInfoResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\GetMiningInfoResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\GetPeerInfoResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\GetTransactionResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\GetTxOutSetInfoResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\ListAddressGroupingsResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\ListReceivedByAccountResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\ListReceivedByAddressResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\ListSinceBlockResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\ListTransactionsResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\ListUnspentResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\SignRawTransactionResponse.cs" />
+    <Compile Include="NamecoinClient\Responses\ValidateAddressResponse.cs" />
+    <Compile Include="NamecoinClient\RPC\IRpcConnector.cs" />
+    <Compile Include="NamecoinClient\RPC\JsonRpcRequest.cs" />
+    <Compile Include="NamecoinClient\RPC\JsonRpcResponse.cs" />
+    <Compile Include="NamecoinClient\RPC\RpcConnector.cs" />
+    <Compile Include="NamecoinClient\RPC\RpcMethods.cs" />
+    <Compile Include="NamecoinClient\Services\IBitcoinService.cs" />
+    <Compile Include="NamecoinClient\Services\IRpcExtenderService.cs" />
+    <Compile Include="NamecoinClient\Services\IRpcService.cs" />
+    <Compile Include="NamecoinClient\Services\RpcExtenderService.cs" />
+    <Compile Include="NamecoinClient\Services\RpcService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\NameServer.cs" />
     <Compile Include="Utils\ConsoleUtils.cs" />

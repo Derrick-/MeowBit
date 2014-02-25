@@ -13,6 +13,7 @@ namespace dotBitNS.Server
     {
         private static DnsServer server;
 
+        [CallPriority(MemberPriority.Normal)]
         public static void Initialize()
         {
             Console.Write("Starting Nameserver.... ");

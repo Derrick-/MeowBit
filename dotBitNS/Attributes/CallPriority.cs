@@ -61,12 +61,12 @@ namespace dotBitNS
                 return 0;
 
             if (x == null)
-                return 1;
-
-            if (y == null)
                 return -1;
 
-            return GetPriority(x) - GetPriority(y);
+            if (y == null)
+                return 1;
+
+            return (int)GetPriority(y) - (int)GetPriority(x);
         }
 
         private MemberPriority GetPriority(Tmember mi)
