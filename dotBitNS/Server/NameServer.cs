@@ -92,11 +92,16 @@ namespace dotBitNS.Server
                                 Questions = query.Questions
                             };
 
-                            // TODO: Make real and complete responses
-                            IPAddress address;
-                            var value = info.GetValue();
-                            if(IPAddress.TryParse(value.ip,out address))
-                            answer.AnswerRecords.Add(new ARecord(question.Name,60,address));
+                            bool any = question.RecordType == RecordType.Any;
+
+                            if (any || question.RecordType == RecordType.A)
+                            {
+                                // TODO: Make real and complete responses
+                                IPAddress address;
+                                var value = info.GetValue();
+                                if (IPAddress.TryParse(value.ip, out address))
+                                    answer.AnswerRecords.Add(new ARecord(question.Name, 60, address));
+                            }
                         
                         }
                     }

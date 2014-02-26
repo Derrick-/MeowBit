@@ -17,8 +17,6 @@ namespace NamecoinLib.Responses
         public string address { get; set; }
         public Int32 expires_in { get; set; }
 
-        // TODO clean this up, finish typing the expected response, allow for modification
-         
         public NameValue GetValue()
         {
             using (var sr = new StringReader(value))
