@@ -1,4 +1,5 @@
 ﻿using ARSoft.Tools.Net.Dns;
+using NamecoinLib.Responses;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -64,6 +65,9 @@ namespace dotBitNS.Server
             }
         }
 
+        // TODO: Instances may need to be pooled
+        static Resolver ResolverInstance = new Resolver();
+
         static DnsMessageBase ProcessQuery(DnsMessageBase message, IPAddress clientAddress, ProtocolType protocol)
         {
             Ok = true;
@@ -80,37 +84,8 @@ namespace dotBitNS.Server
           
                     Console.WriteLine("Query: {0} {1} {2}", question.Name, question.RecordType, question.RecordClass);
 
-                    DnsMessage answer=null;
-
-                    if(question.Name.EndsWith(".bit"))
-                    {
-                        var info = NmcClient.Instance.LookupHost(question.Name);
-                        if (info != null)
-                        {
-                            answer = new DnsMessage()
-                            {
-                                Questions = query.Questions
-                            };
-
-                            bool any = question.RecordType == RecordType.Any;
-
-                            if (any || question.RecordType == RecordType.A)
-                            {
-                                // TODO: Make real and complete responses
-                                IPAddress address;
-                                var value = info.GetValue();
-                                if (IPAddress.TryParse(value.ip, out address))
-                                    answer.AnswerRecords.Add(new ARecord(question.Name, 60, address));
-                            }
-                        
-                        }
-                    }
-
-                    if (answer == null)
-                    {
-                        // send query to upstream server
-                        answer = DnsClient.Default.Resolve(question.Name, question.RecordType, question.RecordClass);
-                    }
+                    DnsMessage answer;
+                    answer = ResolverInstance.GetAnswer(question);
 
                     // if got an answer, copy it to the message sent to the client
                     if (answer != null)
@@ -138,6 +113,116 @@ namespace dotBitNS.Server
             return message;
         }
 
+        class Resolver
+        {
+            const int maxRecursion = 5;
+            private int recursionLevel = 0;
 
+            private object lockResolver = new object();
+
+            public DnsMessage GetAnswer(DnsQuestion question)
+            {
+                lock (lockResolver)
+                    return InternalGetAnswer(question);
+            }
+
+            private DnsMessage InternalGetAnswer(DnsQuestion question)
+            {
+                try
+                {
+                    recursionLevel++;
+
+                    if (recursionLevel > maxRecursion)
+                    {
+                        using (new ConsoleUtils.Warning())
+                            Console.WriteLine("Max recursion reached");
+                        return null;
+                    }
+
+                    DnsMessage answer = null;
+
+                    if (question.Name.EndsWith(".bit"))
+                    {
+                        answer = ResolveDotBitAddress(question);
+                    }
+
+                    if (answer == null)
+                    {
+                        // send query to upstream server
+                        answer = DnsClient.Default.Resolve(question.Name, question.RecordType, question.RecordClass);
+                    }
+
+                    return answer;
+                }
+                finally
+                {
+                    recursionLevel--;
+                }
+            }
+
+            private DnsMessage ResolveDotBitAddress(DnsQuestion question)
+            {
+                DnsMessage answer = null;
+
+                var info = NmcClient.Instance.LookupHost(question.Name);
+                if (info != null)
+                {
+                    answer = new DnsMessage()
+                    {
+                        Questions = new List<DnsQuestion>() { question }
+                    };
+
+                    bool any = question.RecordType == RecordType.Any;
+
+                    if (any || question.RecordType == RecordType.A)
+                    {
+                        // TODO: Make real and complete responses
+                        IPAddress address;
+                        var value = info.GetValue();
+
+                        if (IPAddress.TryParse(value.ip, out address))
+                            answer.AnswerRecords.Add(new ARecord(question.Name, 60, address));
+                        else if (value.ns != null && value.ns.Length > 0)
+                        {
+                            List<IPAddress> nameservers = GetDotBitNameservers(value);
+                            if (nameservers.Count() > 0)
+                            {
+                                var client = new DnsClient(nameservers, 2000);
+                                string name;
+                                if (!string.IsNullOrWhiteSpace(value.translate))
+                                    name = value.translate;
+                                else
+                                    name = question.Name;
+                                answer = client.Resolve(name, question.RecordType, question.RecordClass);
+                            }
+                        }
+                    }
+                }
+                return answer;
+            }
+
+            private List<IPAddress> GetDotBitNameservers(NameValue value)
+            {
+                List<IPAddress> nameservers = new List<IPAddress>(value.ns.Length);
+                foreach (var ns in value.ns)
+                {
+                    IPAddress ip;
+                    if (IPAddress.TryParse(ns, out ip))
+                        nameservers.Add(ip);
+                    else
+                    {
+                        var nsQuestion = new DnsQuestion(ns, RecordType.A, RecordClass.Any);
+                        var nsAnswer = InternalGetAnswer(nsQuestion);
+                        if (nsAnswer != null && nsAnswer.AnswerRecords.Any(m => m.RecordType == RecordType.A && m is ARecord))
+                        {
+                            IPAddress nsip = nsAnswer.AnswerRecords.Where(m => m.RecordType == RecordType.A).Cast<ARecord>().First().Address;
+                            nameservers.Add(nsip);
+                        }
+                    }
+                }
+                return nameservers;
+            }
+
+        }
     }
 }
