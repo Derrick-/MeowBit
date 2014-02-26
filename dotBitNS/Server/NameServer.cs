@@ -12,19 +12,62 @@ namespace dotBitNS.Server
 {
     class NameServer
     {
+        public static bool Ok { get; set; }
+        
         private static DnsServer server;
 
         [CallPriority(MemberPriority.Normal)]
         public static void Initialize()
         {
+            StartServer();
+
+            EventSink.Shutdown += EventSink_Shutdown;
+        }
+
+        private static void StartServer()
+        {
             Console.Write("Starting Nameserver.... ");
-            server = new DnsServer(IPAddress.Any, 10, 10, ProcessQuery);
-            server.Start();
-            Console.WriteLine("Done.");
+            if (server == null)
+            {
+                server = new DnsServer(IPAddress.Any, 10, 10, ProcessQuery);
+                server.ExceptionThrown += server_ExceptionThrown;
+                Ok = false;
+            }
+
+            try
+            {
+                server.Start();
+                Console.WriteLine("Done.");
+                Ok = true;
+            }
+            catch (SocketException ex)
+            {
+                using (new ConsoleUtils.Warning())
+                {
+                    Console.WriteLine("Unable to start nameserver, port 53 may be in use. " + ex.Message);
+                }
+                Ok = false;
+            }
+        }
+
+        static void EventSink_Shutdown(ShutdownEventArgs e)
+        {
+            if (server != null)
+                server.Stop();
+        }
+
+        static void server_ExceptionThrown(object sender, ExceptionEventArgs e)
+        {
+            using (new ConsoleUtils.Warning())
+            {
+                Console.WriteLine("Nameserver threw error: " + e.Exception.Message);
+            }
         }
 
         static DnsMessageBase ProcessQuery(DnsMessageBase message, IPAddress clientAddress, ProtocolType protocol)
         {
+            Ok = true;
+
             message.IsQuery = false;
 
             DnsMessage query = message as DnsMessage;

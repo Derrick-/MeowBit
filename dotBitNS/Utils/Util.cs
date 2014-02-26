@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dotBitNS.Utilities
+namespace dotBitNS
 {
     static class Util
     {

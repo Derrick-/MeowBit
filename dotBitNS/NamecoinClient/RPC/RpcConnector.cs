@@ -10,38 +10,14 @@ using System.Net;
 using System.Text;
 using NamecoinLib.ExceptionHandling;
 using Newtonsoft.Json;
-
-//TODO: remove ConfigurationManager mock
-static class ConfigurationManager
-{
-    public static class AppSettings
-    {
-        public static string Get(string key)
-        {
-            switch (key)
-            {
-                case "UseTestNet": return "false";
-                case "DaemonUrl": return "http://127.0.0.1:8336";
-                case "TestNetDaemonUrl": return "http://127.0.0.1:18336";
-                case "RpcPassword": return "derrick";
-                case "RpcUsername": return "derrick";
-                case "RpcRequestTimeoutInSeconds": return "1";
-            }
-            return null;
-        }
-    }
-
-}
+using dotBitNS;
 
 namespace NamecoinLib.RPC
 {
 
     public sealed class RpcConnector : IRpcConnector
     {
-        private readonly String _daemonUrl = !Boolean.Parse(ConfigurationManager.AppSettings.Get("UseTestNet"))
-                                                 ? ConfigurationManager.AppSettings.Get("DaemonUrl")
-                                                 : ConfigurationManager.AppSettings.Get("TestNetDaemonUrl");
-
+        private readonly String _daemonUrl = ConfigurationManager.AppSettings.Get("DaemonUrl");
         private readonly String _rpcPassword = ConfigurationManager.AppSettings.Get("RpcPassword");
         private readonly String _rpcUsername = ConfigurationManager.AppSettings.Get("RpcUsername");
         private readonly Int16 _rpcRequestTimeoutInSeconds = Int16.Parse(ConfigurationManager.AppSettings.Get("RpcRequestTimeoutInSeconds"));

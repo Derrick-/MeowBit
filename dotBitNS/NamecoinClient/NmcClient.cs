@@ -10,18 +10,39 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace dotBitNS
 {
+    //TODO: remove ConfigurationManager mock
+    static class ConfigurationManager
+    {
+        public static class AppSettings
+        {
+            public static string Get(string key)
+            {
+                switch (key)
+                {
+                    case "UseTestNet": return "false";
+                    case "DaemonUrl": return "http://127.0.0.1:" + NmcConfig.RpcPort ;
+                    case "RpcUsername": return NmcConfig.RpcUser;
+                    case "RpcPassword": return NmcConfig.RpcPass;
+                    case "RpcRequestTimeoutInSeconds": return "1";
+                }
+                return null;
+            }
+        }
+
+    }
+
     class NmcClient
     {
-        static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(5.0);
+        public static bool Ok { get { return Instance.Available; } }
 
-        public delegate void OnAvailableChangedHandler(NmcClient source, bool available);
-        public static event OnAvailableChangedHandler OnAvailableChanged;
+        static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(5.0);
 
         public static NmcClient Instance { get; private set; }
 
-        [CallPriority(MemberPriority.Highest)]
+        [CallPriority(MemberPriority.AboveNormal)]
         public static void Initialize()
         {
             Console.WriteLine("Initializing NmcClient...");
@@ -33,7 +54,7 @@ namespace dotBitNS
         public NmcClient()
         {
             CheckConnection();
-           // Timer.DelayCall(CheckInterval, CheckInterval, new TimerCallback(CheckConnection));
+            Timer.DelayCall(CheckInterval, CheckInterval, new TimerCallback(CheckConnection));
         }
 
         void CheckConnection()
@@ -73,7 +94,7 @@ namespace dotBitNS
             T result = default(T);
             try
             {
-                Console.Write("Making RPC Connection: ");
+                //Console.Write("Making RPC Connection: ");
                 result = _rpcConnector.MakeRequest<T>(method, parameters);
                 ok = true;
             }
@@ -95,16 +116,10 @@ namespace dotBitNS
             {
                 Console.WriteLine("Namecoin client is now {0}.", ok ? "online" : "offline");
                 Available = ok;
-                InvokeOnAvailableChanged();
+                EventSink.InvokeNameServerAvailableChanged(this, new NameServerAvailableChangedEventArgs(Available));
             }
 
             return result;
-        }
-
-        private void InvokeOnAvailableChanged()
-        {
-            if (OnAvailableChanged != null)
-                OnAvailableChanged(this, Available);
         }
     }
 }

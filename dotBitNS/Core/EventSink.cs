@@ -9,23 +9,54 @@ namespace dotBitNS
     public delegate void CrashedEventHandler(CrashedEventArgs e);
     public delegate void ShutdownEventHandler(ShutdownEventArgs e);
 
+    public delegate void ConfigUpdatedEventHandler();
+    internal delegate void NameServerAvailableChangedHandler(NmcClient source, NameServerAvailableChangedEventArgs e);
+
     public static class EventSink
     {
         public static event CrashedEventHandler Crashed;
         public static event ShutdownEventHandler Shutdown;
 
-        public static void InvokeShutdown(ShutdownEventArgs e)
+        public static event ConfigUpdatedEventHandler ConfigUpdated;
+
+        internal static event NameServerAvailableChangedHandler NameServerAvailableChanged;
+
+
+        internal static void InvokeShutdown(ShutdownEventArgs e)
         {
             if (Shutdown != null)
                 Shutdown(e);
         }
 
-        public static void InvokeCrashed(CrashedEventArgs e)
+        internal static void InvokeCrashed(CrashedEventArgs e)
         {
             if (Crashed != null)
                 Crashed(e);
         }
 
+        internal static void InvokeConfigUpdated()
+        {
+            if (ConfigUpdated != null)
+                ConfigUpdated();
+        }
+
+
+        internal static void InvokeNameServerAvailableChanged(NmcClient source, NameServerAvailableChangedEventArgs e)
+        {
+            if (NameServerAvailableChanged != null)
+                NameServerAvailableChanged(source, e);
+        }
+
+    }
+
+    internal class NameServerAvailableChangedEventArgs : EventArgs
+    {
+        public bool Available {get;private set;}
+
+        public NameServerAvailableChangedEventArgs(bool Available)
+        {
+            this.Available = Available;
+        }
     }
 
     public class ShutdownEventArgs : EventArgs

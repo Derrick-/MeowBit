@@ -69,6 +69,7 @@
     <Compile Include="NamecoinClient\Auxiliary\UnixTime.cs" />
     <Compile Include="NamecoinClient\ExceptionHandling\RpcException.cs" />
     <Compile Include="NamecoinClient\NmcClient.cs" />
+    <Compile Include="NamecoinClient\NmcConfig.cs" />
     <Compile Include="NamecoinClient\Properties\AssemblyInfo.cs" />
     <Compile Include="NamecoinClient\Requests\AddNode\NodeAction.cs" />
     <Compile Include="NamecoinClient\Requests\CreateRawTransaction\CreateRawTransactionInput.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Utils\ConsoleUtils.cs" />
     <Compile Include="Utils\Insensitive.cs" />
     <Compile Include="Utils\ReflectionUtils.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>
