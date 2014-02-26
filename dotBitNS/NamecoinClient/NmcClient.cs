@@ -70,11 +70,11 @@ namespace dotBitNS
         }
 
         private object lockLookup = new object();
-        public NameShowResponse LookupHost(string domainname)
+        public NameShowResponse LookupRootName(string root)
         {
-            if (domainname.EndsWith(".bit") && domainname.Length > 4)
+            if (!string.IsNullOrWhiteSpace(root))
             {
-                string name = "d/" + domainname.Remove(domainname.Length - 4);
+                string name = "d/" + root;
 
                 NameShowResponse info;
                 lock (lockLookup)

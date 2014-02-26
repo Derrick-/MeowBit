@@ -115,9 +115,6 @@ namespace dotBitNS.Server
 
         class Resolver
         {
-            const int maxRecursion = 5;
-            private int recursionLevel = 0;
-
             private object lockResolver = new object();
 
             public DnsMessage GetAnswer(DnsQuestion question)
@@ -127,6 +124,28 @@ namespace dotBitNS.Server
             }
 
             private DnsMessage InternalGetAnswer(DnsQuestion question)
+            {
+                    DnsMessage answer = ResolveDotBitAddress(question);
+
+                    if (answer == null)
+                    {
+                        // send query to upstream server
+                        answer = DnsClient.Default.Resolve(question.Name, question.RecordType, question.RecordClass);
+                    }
+
+                    return answer;
+            }
+
+            private DnsMessage ResolveDotBitAddress(DnsQuestion question)
+            {
+                string name = question.Name;
+                return GetDotBitAnswerForName(question, name);
+            }
+
+            const int maxRecursion = 7;
+            private int recursionLevel = 0;
+
+            private DnsMessage GetDotBitAnswerForName(DnsQuestion question, string name)
             {
                 try
                 {
@@ -139,19 +158,91 @@ namespace dotBitNS.Server
                         return null;
                     }
 
+                    string[] domainparts = name.Split('.');
+
+                    if (domainparts.Length < 2 || domainparts[domainparts.Length - 1] != "bit")
+                        return null;
+
+                    var info = NmcClient.Instance.LookupRootName(domainparts[domainparts.Length-2]);
                     DnsMessage answer = null;
-
-                    if (question.Name.EndsWith(".bit"))
+                    if (info != null)
                     {
-                        answer = ResolveDotBitAddress(question);
-                    }
 
-                    if (answer == null)
-                    {
-                        // send query to upstream server
-                        answer = DnsClient.Default.Resolve(question.Name, question.RecordType, question.RecordClass);
-                    }
+                        var value = info.GetValue();
 
+                        if (!string.IsNullOrWhiteSpace(value.@delegate))
+                        {
+                            return GetDotBitAnswerForName(question, value.@delegate);
+                        }
+
+                        //TODO: import not implemented
+                        if (!string.IsNullOrWhiteSpace(value.import))
+                            using (new ConsoleUtils.Warning())
+                                Console.WriteLine("import setting not implemented: {0}", value.import);
+
+                        if (domainparts.Length > 2) // sub-domain
+                        {
+                            for (int i = domainparts.Length - 2; i <=0 ; i--)
+                            {
+                                var sub = value.GetMapValue(domainparts[i]).FirstOrDefault();
+                                if(sub!=null)
+                                    //TODO: this isn't working at all and is probably misguided, finish it
+                                    CopyProps(value,sub);
+                            }
+
+                        }
+
+                        if (value.alias!=null)
+                        {
+                            string newLookup;
+                            if(value.alias.EndsWith(".")) // absolute
+                            {
+                                newLookup = value.alias;
+                            }
+                            else // sub domain
+                            {
+                                newLookup = value.alias + '.';
+                            }
+                            DnsQuestion newQuestion = new DnsQuestion(value.alias, question.RecordType, question.RecordClass);
+                            return InternalGetAnswer(newQuestion);
+                        }
+
+                        answer = new DnsMessage()
+                        {
+                            Questions = new List<DnsQuestion>() { question }
+                        };
+
+                        bool any = question.RecordType == RecordType.Any;
+
+                        if (value.ns != null && value.ns.Length > 0) // NS overrides all
+                        {
+                            List<IPAddress> nameservers = GetDotBitNameservers(value);
+                            if (nameservers.Count() > 0)
+                            {
+                                var client = new DnsClient(nameservers, 2000);
+                                if (!string.IsNullOrWhiteSpace(value.translate))
+                                    name = value.translate;
+                                answer = client.Resolve(name, question.RecordType, question.RecordClass);
+                            }
+                        }
+                        else
+                        {
+                            if (any || question.RecordType == RecordType.A)
+                            {
+                                var addresses = value.GetIp4Addresses();
+                                if (addresses.Count() > 0)
+                                    foreach (var address in addresses)
+                                        answer.AnswerRecords.Add(new ARecord(name, 60, address));
+                            }
+                            if (any || question.RecordType == RecordType.Aaaa)
+                            {
+                                var addresses = value.GetIp6Addresses();
+                                if (addresses.Count() > 0)
+                                    foreach (var address in addresses)
+                                        answer.AnswerRecords.Add(new AaaaRecord(name, 60, address));
+                            }
+                        }
+                    }
                     return answer;
                 }
                 finally
@@ -160,45 +251,27 @@ namespace dotBitNS.Server
                 }
             }
 
-            private DnsMessage ResolveDotBitAddress(DnsQuestion question)
+            private void CopyProps(NameValue value, NameValue sub)
             {
-                DnsMessage answer = null;
+        //public dynamic ip { get; set; }
+        //public dynamic ip6 { get; set; }
+        //public string email { get; set; }
+        //public JObject info { get; set; }
+        //public string alias { get; set; }
+        //public string[] ns { get; set; }
 
-                var info = NmcClient.Instance.LookupHost(question.Name);
-                if (info != null)
-                {
-                    answer = new DnsMessage()
-                    {
-                        Questions = new List<DnsQuestion>() { question }
-                    };
-
-                    bool any = question.RecordType == RecordType.Any;
-
-                    if (any || question.RecordType == RecordType.A)
-                    {
-                        // TODO: Make real and complete responses
-                        IPAddress address;
-                        var value = info.GetValue();
-
-                        if (IPAddress.TryParse(value.ip, out address))
-                            answer.AnswerRecords.Add(new ARecord(question.Name, 60, address));
-                        else if (value.ns != null && value.ns.Length > 0)
-                        {
-                            List<IPAddress> nameservers = GetDotBitNameservers(value);
-                            if (nameservers.Count() > 0)
-                            {
-                                var client = new DnsClient(nameservers, 2000);
-                                string name;
-                                if (!string.IsNullOrWhiteSpace(value.translate))
-                                    name = value.translate;
-                                else
-                                    name = question.Name;
-                                answer = client.Resolve(name, question.RecordType, question.RecordClass);
-                            }
-                        }
-                    }
-                }
-                return answer;
+                if (sub.@delegate != null)
+                    value.@delegate = sub.@delegate;
+                if (sub.ip != null)
+                    value.ip = sub.ip;
+                if (sub.email != null)
+                    value.email = sub.email;
+                if (sub.info != null)
+                    value.info = sub.info;
+                if (sub.alias != null)
+                    value.alias = sub.alias;
+                if (sub.ns != null)
+                    value.ns = sub.ns;
             }
 
             private List<IPAddress> GetDotBitNameservers(NameValue value)
