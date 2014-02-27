@@ -6,10 +6,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Image Name="iconOk" Source="/dotBitNs Monitor;component/Resources/checkmark_64.png" />
-        <Image Visibility="Collapsed" Name="iconError" Source="/dotBitNs Monitor;component/Resources/error_64.png" />
-        <Image Visibility="Collapsed" Name="iconWarning" Source="/dotBitNs Monitor;component/Resources/forbidden_64.png" />
-        <Image Visibility="Collapsed" Name="iconQuestion" Source="/dotBitNs Monitor;component/Resources/help_64.png" />
-        <Image Visibility="Collapsed" Name="iconInfo" Source="/dotBitNs Monitor;component/Resources/information_64.png" />
+        <Image Name="iconOk" Source="/dotBitNs Monitor;component/Resources/Ok_125.png" />
+        <Image Visibility="Collapsed" Name="iconError" Source="/dotBitNs Monitor;component/Resources/Error_125.png" />
+        <Image Visibility="Collapsed" Name="iconWarning" Source="/dotBitNs Monitor;component/Resources/Warning_125.png" />
+        <Image Visibility="Collapsed" Name="iconQuestion" Source="/dotBitNs Monitor;component/Resources/Question_125.png" />
+        <Image Visibility="Collapsed" Name="iconInfo" Source="/dotBitNs Monitor;component/Resources/Info_125.png" />
+        <Image Visibility="Collapsed" Name="iconForbidden" Source="/dotBitNs Monitor;component/Resources/Forbidden_125.png" />
     </Grid>
 </UserControl>

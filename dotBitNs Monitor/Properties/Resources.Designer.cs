@@ -63,9 +63,9 @@ namespace dotBitNs_Monitor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap error_64 {
+        internal static System.Drawing.Bitmap Error_125 {
             get {
-                object obj = ResourceManager.GetObject("error_64", resourceCulture);
+                object obj = ResourceManager.GetObject("Error_125", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace dotBitNs_Monitor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap forbidden_64 {
+        internal static System.Drawing.Bitmap Forbidden_125 {
             get {
-                object obj = ResourceManager.GetObject("forbidden_64", resourceCulture);
+                object obj = ResourceManager.GetObject("Forbidden_125", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace dotBitNs_Monitor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap help_64 {
+        internal static System.Drawing.Bitmap Info_125 {
             get {
-                object obj = ResourceManager.GetObject("help_64", resourceCulture);
+                object obj = ResourceManager.GetObject("Info_125", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace dotBitNs_Monitor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap information_64 {
+        internal static System.Drawing.Bitmap Ok_125 {
             get {
-                object obj = ResourceManager.GetObject("information_64", resourceCulture);
+                object obj = ResourceManager.GetObject("Ok_125", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,19 @@ namespace dotBitNs_Monitor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap warning_64 {
+        internal static System.Drawing.Bitmap Question_125 {
             get {
-                object obj = ResourceManager.GetObject("warning_64", resourceCulture);
+                object obj = ResourceManager.GetObject("Question_125", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Warning_125 {
+            get {
+                object obj = ResourceManager.GetObject("Warning_125", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

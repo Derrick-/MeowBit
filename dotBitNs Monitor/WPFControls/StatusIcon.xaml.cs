@@ -28,7 +28,8 @@ namespace dotBitNs_Monitor.WPFControls
             Error,
             Warning,
             Question,
-            Info
+            Info,
+            Forbidden
         }
 
         public StatusType Status 
@@ -57,6 +58,7 @@ namespace dotBitNs_Monitor.WPFControls
             SetVisibility(iconWarning, Status == StatusType.Warning);
             SetVisibility(iconQuestion, Status == StatusType.Question);
             SetVisibility(iconInfo, Status == StatusType.Info);
+            SetVisibility(iconForbidden, Status == StatusType.Forbidden);
         }
 
         private static void SetVisibility(Image image, bool show)

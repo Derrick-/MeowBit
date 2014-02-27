@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="checkmark_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\checkmark_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Error_125" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Error_125.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="error_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\error_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Forbidden_125" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Forbidden_125.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="forbidden_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\forbidden_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Info_125" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Info_125.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="help_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\help_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Ok_125" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ok_125.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="information_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\information_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Question_125" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Question_125.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="warning_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\warning_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Warning_125" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Warning_125.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

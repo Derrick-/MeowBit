@@ -102,22 +102,22 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\checkmark_64.png" />
+    <Resource Include="Resources\Error_125.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\error_64.png" />
+    <Resource Include="Resources\Forbidden_125.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\forbidden_64.png" />
+    <Resource Include="Resources\Info_125.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\help_64.png" />
+    <Resource Include="Resources\Ok_125.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\information_64.png" />
+    <Resource Include="Resources\Question_125.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\warning_64.png" />
+    <Resource Include="Resources\Warning_125.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
