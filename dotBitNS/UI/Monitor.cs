@@ -10,8 +10,8 @@ namespace dotBitNS.UI
 {
     class Monitor
     {
-        public bool NameServerOnline { get { return NameServer.Ok; } }
-        public bool NameCoinOnline { get { return NmcClient.Instance.Available; } }
+        public static bool NameServerOnline { get { return NameServer.Ok; } }
+        public static bool NameCoinOnline { get { return NmcClient.Instance.Available; } }
 
         static Timer timerNmcCheck = null;
         static readonly TimeSpan NmcCheckInterval = TimeSpan.FromSeconds(5.0);

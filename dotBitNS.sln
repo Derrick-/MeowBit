@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{60B92A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotBitDnsTest", "dotBitDnsTest\dotBitDnsTest.csproj", "{550E3496-3D24-415D-BE1D-2EB6573598F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotBitNs Monitor", "dotBitNs Monitor\dotBitNs Monitor.csproj", "{C0CFB769-2597-4C50-8154-06DCDA0EA246}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{550E3496-3D24-415D-BE1D-2EB6573598F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{550E3496-3D24-415D-BE1D-2EB6573598F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{550E3496-3D24-415D-BE1D-2EB6573598F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0CFB769-2597-4C50-8154-06DCDA0EA246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0CFB769-2597-4C50-8154-06DCDA0EA246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0CFB769-2597-4C50-8154-06DCDA0EA246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0CFB769-2597-4C50-8154-06DCDA0EA246}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

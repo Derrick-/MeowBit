@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="dotBitNs_Monitor.WPFControls.StatusIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Image Name="iconOk" Source="/dotBitNs Monitor;component/Resources/checkmark_64.png" />
+        <Image Visibility="Collapsed" Name="iconError" Source="/dotBitNs Monitor;component/Resources/error_64.png" />
+        <Image Visibility="Collapsed" Name="iconWarning" Source="/dotBitNs Monitor;component/Resources/forbidden_64.png" />
+        <Image Visibility="Collapsed" Name="iconQuestion" Source="/dotBitNs Monitor;component/Resources/help_64.png" />
+        <Image Visibility="Collapsed" Name="iconInfo" Source="/dotBitNs Monitor;component/Resources/information_64.png" />
+    </Grid>
+</UserControl>

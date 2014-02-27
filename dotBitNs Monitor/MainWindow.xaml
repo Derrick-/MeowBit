@@ -1,0 +1,26 @@
+﻿<Window xmlns:WPFControls="clr-namespace:dotBitNs_Monitor.WPFControls"  x:Class="dotBitNs_Monitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="dotBitNs Monitor" Height="350" Width="525">
+    <DockPanel>
+        <StackPanel>
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Label}">
+                    <Setter Property="Width" Value="150"/>
+                </Style>
+            </StackPanel.Resources>
+            <WrapPanel>
+                <Label Name="lblServiceName">Service</Label>
+                <WPFControls:StatusIcon Width="32" Status="Question" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label>NameCoin Wallet</Label>
+                <WPFControls:StatusIcon Width="32" Status="Question" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label>Nameserver</Label>
+                <WPFControls:StatusIcon Width="32" Status="Question" />
+            </WrapPanel>
+        </StackPanel>
+    </DockPanel>
+</Window>
