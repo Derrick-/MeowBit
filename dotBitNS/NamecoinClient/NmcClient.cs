@@ -36,33 +36,21 @@ namespace dotBitNS
 
     class NmcClient
     {
-        public static bool Ok { get { return Instance.Available; } }
 
-        static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(5.0);
-
-        public static NmcClient Instance { get; private set; }
+        private static NmcClient _Instance=null;
+        public static NmcClient Instance
+        {
+            get { return NmcClient._Instance ?? (NmcClient._Instance=new NmcClient()); }
+            private set { NmcClient._Instance = value; }
+        }
 
         [CallPriority(MemberPriority.AboveNormal)]
         public static void Initialize()
         {
             Console.WriteLine("Initializing NmcClient...");
-            Instance = new NmcClient();
         }
 
         public bool Available { get; private set; }
-
-        public NmcClient()
-        {
-            CheckConnection();
-            Timer.DelayCall(CheckInterval, CheckInterval, new TimerCallback(CheckConnection));
-        }
-
-        void CheckConnection()
-        {
-            var info = GetInfo();
-            if(info!=null)
-            Debug.WriteLine("Success: Wallet version {0}", info.Version);
-        }
 
         public GetInfoResponse GetInfo()
         {
@@ -114,7 +102,6 @@ namespace dotBitNS
 
             if (ok != Available)
             {
-                Console.WriteLine("Namecoin client is now {0}.", ok ? "online" : "offline");
                 Available = ok;
                 EventSink.InvokeNameServerAvailableChanged(this, new NameServerAvailableChangedEventArgs(Available));
             }

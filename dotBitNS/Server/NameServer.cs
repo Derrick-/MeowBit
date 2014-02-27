@@ -21,7 +21,6 @@ namespace dotBitNS.Server
         public static void Initialize()
         {
             StartServer();
-
             EventSink.Shutdown += EventSink_Shutdown;
         }
 
