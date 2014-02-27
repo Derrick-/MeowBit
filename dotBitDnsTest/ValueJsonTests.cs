@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NamecoinLib.Responses;
 using System.Linq;
+using System.Net;
 
 namespace dotBitDnsTest
 {
@@ -42,7 +43,7 @@ namespace dotBitDnsTest
 
             var result = Response1.GetValue();
 
-            Assert.AreEqual(ip, result.ip);
+            Assert.AreEqual(ip, (string)result.ip);
             Assert.AreEqual(email, result.email);
 
             var mapped = result.map;
@@ -51,7 +52,7 @@ namespace dotBitDnsTest
 
             Assert.AreEqual("us.@", result.GetMapValue("eu").First().GetMapValue("www").First().alias);
             Assert.AreEqual("", result.GetMapValue("*").First().alias);
-            Assert.AreEqual(ipWWW, result.GetMapValue("us").First().ip);
+            Assert.AreEqual(ipWWW, (string)result.GetMapValue("us").First().ip);
 
             Assert.AreEqual("On sale.", result.GetInfoValue("status").First());
         }
@@ -59,7 +60,7 @@ namespace dotBitDnsTest
         [TestMethod]
         public void TranslateParseTest()
         {
-            string Json1 = "{\"translate\": \"bitcoin.org\", \"ns\": [\"1.2.3.4\", \"1.2.3.5\"]}";
+            string Json1 = "{\"translate\": \"bitcoin.org\", \"ns\": [\"1.2.3.4\", \"1.2.3.5\", \"ns1.bitcoin.org\"]}";
 
             NameShowResponse Response1 = new NameShowResponse()
             {
@@ -71,8 +72,12 @@ namespace dotBitDnsTest
             Assert.IsNull(result.ip);
 
             Assert.AreEqual("bitcoin.org", result.translate);
-            Assert.IsTrue(result.ns.Contains("1.2.3.4"));
-            Assert.IsTrue(result.ns.Contains("1.2.3.5"));
+
+            var nameservers = result.GetNsNames();
+
+            Assert.IsTrue(nameservers.Contains("1.2.3.4"));
+            Assert.IsTrue(nameservers.Contains("1.2.3.5"));
+            Assert.IsTrue(nameservers.Contains("ns1.bitcoin.org"));
         }
     }
 }

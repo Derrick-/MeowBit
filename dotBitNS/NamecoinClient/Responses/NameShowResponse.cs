@@ -32,8 +32,13 @@ namespace NamecoinLib.Responses
                 catch (JsonSerializationException ex)
                 {
                     ConsoleUtils.WriteWarning(ex.Message);
-                    return null;
                 }
+                catch (JsonReaderException ex)
+                {
+                    ConsoleUtils.WriteWarning(ex.Message);
+                }
+                ConsoleUtils.WriteWarning(" - Json: {0}", value);
+                return null;
             }
         }
 
@@ -50,7 +55,7 @@ namespace NamecoinLib.Responses
         public string import { get; set; }
         public string alias { get; set; }
         public string translate { get; set; }
-        public string[] ns { get; set; }
+        public dynamic ns { get; set; }
 
         public IEnumerable<IPAddress> GetIp4Addresses()
         {
@@ -62,24 +67,41 @@ namespace NamecoinLib.Responses
             return ParseIPAddresses(ip6);
         }
 
-        private IEnumerable<IPAddress> ParseIPAddresses(JObject addresses)
+        public IEnumerable<string> GetNsNames()
+        {
+            IEnumerable<string> toReturn=null;
+            if (ns != null)
+            {
+                if (ns is IEnumerable<string>)
+                    toReturn = ns.Cast<string>();
+                else if (ns is JArray)
+                    toReturn = ((JArray)ns).Select(m => (string)m);
+                else if (ns is string)
+                    toReturn = new string[] { (string)ip };
+            }
+            return toReturn;
+        }
+
+        private IEnumerable<IPAddress> ParseIPAddresses(dynamic addresses)
         {
             List<IPAddress> toReturn = new List<IPAddress>();
             IEnumerable<string> ips;
-
-            if (addresses.Type == JTokenType.Array)
+            if (addresses != null)
             {
-                ips = addresses.Cast<string>();
-            }
-            else if (addresses.Type == JTokenType.String)
-                ips = new string[] { (string)ip };
-            else
-                return toReturn;
+                if (addresses is IEnumerable<string>)
+                    ips = addresses.Cast<string>();
+                else if (addresses is JArray)
+                    ips = ((JArray)addresses).Select(m => (string)m);
+                else if (addresses is string)
+                    ips = new string[] { (string)ip };
+                else
+                    return toReturn;
 
-            IPAddress addr;
-            foreach (var item in ips)
-                if (IPAddress.TryParse(item, out addr))
-                    toReturn.Add(addr);
+                IPAddress addr;
+                foreach (var item in ips)
+                    if (IPAddress.TryParse(item, out addr))
+                        toReturn.Add(addr);
+            }
             return toReturn;
         }
 
@@ -129,8 +151,16 @@ namespace NamecoinLib.Responses
 
                 foreach (var prop in jObject)
                 {
-                    toReturn.Add(new NameData { name = prop.Key, value = prop.Value.ToObject<NameValue>() });
-                }
+                    try
+                    {
+                        toReturn.Add(new NameData { name = prop.Key, value = prop.Value.ToObject<NameValue>() });
+                    }
+                    catch (JsonSerializationException ex)
+                    {
+                        ConsoleUtils.WriteWarning(" - ERR: \"{0}\":\"{1}\"", prop.Key, prop.Value);
+                        return null;
+                    }
+}
 
                 return toReturn;
             }

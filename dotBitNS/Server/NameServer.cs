@@ -113,7 +113,7 @@ namespace dotBitNS.Server
             return message;
         }
 
-        class Resolver
+        internal class Resolver
         {
             private object lockResolver = new object();
 
@@ -163,86 +163,73 @@ namespace dotBitNS.Server
                     if (domainparts.Length < 2 || domainparts[domainparts.Length - 1] != "bit")
                         return null;
 
-                    var info = NmcClient.Instance.LookupRootName(domainparts[domainparts.Length-2]);
+                    NameValue value = GetNameValueForDomainname(domainparts);
+
+                    if (value == null)
+                        return null;
+
                     DnsMessage answer = null;
-                    if (info != null)
+
+                    //TODO: delegate not implemented
+                    if (!string.IsNullOrWhiteSpace(value.@delegate))
+                        ConsoleUtils.WriteWarning("delegate setting not implemented: {0}", value.import);
+
+                    //TODO: import not implemented
+                    if (!string.IsNullOrWhiteSpace(value.import))
+                        ConsoleUtils.WriteWarning("import setting not implemented: {0}", value.import);
+
+                    if (value.alias != null)
                     {
-
-                        var value = info.GetValue();
-
-                        if (!string.IsNullOrWhiteSpace(value.@delegate))
+                        string newLookup;
+                        if (value.alias.EndsWith(".")) // absolute
                         {
-                            return GetDotBitAnswerForName(question, value.@delegate);
+                            newLookup = value.alias;
                         }
-
-                        //TODO: import not implemented
-                        if (!string.IsNullOrWhiteSpace(value.import))
-                            using (new ConsoleUtils.Warning())
-                                Console.WriteLine("import setting not implemented: {0}", value.import);
-
-                        if (domainparts.Length > 2) // sub-domain
+                        else // sub domain
                         {
-                            for (int i = domainparts.Length - 2; i <=0 ; i--)
-                            {
-                                var sub = value.GetMapValue(domainparts[i]).FirstOrDefault();
-                                if(sub!=null)
-                                    //TODO: this isn't working at all and is probably misguided, finish it
-                                    CopyProps(value,sub);
-                            }
-
+                            newLookup = value.alias + '.';
                         }
+                        DnsQuestion newQuestion = new DnsQuestion(value.alias, question.RecordType, question.RecordClass);
+                        return InternalGetAnswer(newQuestion);
+                    }
 
-                        if (value.alias!=null)
-                        {
-                            string newLookup;
-                            if(value.alias.EndsWith(".")) // absolute
-                            {
-                                newLookup = value.alias;
-                            }
-                            else // sub domain
-                            {
-                                newLookup = value.alias + '.';
-                            }
-                            DnsQuestion newQuestion = new DnsQuestion(value.alias, question.RecordType, question.RecordClass);
-                            return InternalGetAnswer(newQuestion);
-                        }
+                    answer = new DnsMessage()
+                    {
+                        Questions = new List<DnsQuestion>() { question }
+                    };
 
-                        answer = new DnsMessage()
-                        {
-                            Questions = new List<DnsQuestion>() { question }
-                        };
+                    bool any = question.RecordType == RecordType.Any;
 
-                        bool any = question.RecordType == RecordType.Any;
-
-                        if (value.ns != null && value.ns.Length > 0) // NS overrides all
+                    var nsnames = value.GetNsNames();
+                    if (nsnames != null && nsnames.Count() > 0) // NS overrides all
+                    {
+                        List<IPAddress> nameservers = GetDotBitNameservers(value);
+                        if (nameservers.Count() > 0)
                         {
-                            List<IPAddress> nameservers = GetDotBitNameservers(value);
-                            if (nameservers.Count() > 0)
-                            {
-                                var client = new DnsClient(nameservers, 2000);
-                                if (!string.IsNullOrWhiteSpace(value.translate))
-                                    name = value.translate;
-                                answer = client.Resolve(name, question.RecordType, question.RecordClass);
-                            }
-                        }
-                        else
-                        {
-                            if (any || question.RecordType == RecordType.A)
-                            {
-                                var addresses = value.GetIp4Addresses();
-                                if (addresses.Count() > 0)
-                                    foreach (var address in addresses)
-                                        answer.AnswerRecords.Add(new ARecord(name, 60, address));
-                            }
-                            if (any || question.RecordType == RecordType.Aaaa)
-                            {
-                                var addresses = value.GetIp6Addresses();
-                                if (addresses.Count() > 0)
-                                    foreach (var address in addresses)
-                                        answer.AnswerRecords.Add(new AaaaRecord(name, 60, address));
-                            }
+                            var client = new DnsClient(nameservers, 2000);
+                            if (!string.IsNullOrWhiteSpace(value.translate))
+                                name = value.translate;
+                            answer = client.Resolve(name, question.RecordType, question.RecordClass);
                         }
                     }
+                    else
+                    {
+                        if (any || question.RecordType == RecordType.A)
+                        {
+                            var addresses = value.GetIp4Addresses();
+                            if (addresses.Count() > 0)
+                                foreach (var address in addresses)
+                                    answer.AnswerRecords.Add(new ARecord(name, 60, address));
+                        }
+                        if (any || question.RecordType == RecordType.Aaaa)
+                        {
+                            var addresses = value.GetIp6Addresses();
+                            if (addresses.Count() > 0)
+                                foreach (var address in addresses)
+                                    answer.AnswerRecords.Add(new AaaaRecord(name, 60, address));
+                        }
+                    }
+
                     return answer;
                 }
                 finally
@@ -251,33 +238,53 @@ namespace dotBitNS.Server
                 }
             }
 
-            private void CopyProps(NameValue value, NameValue sub)
+            private static NameValue GetNameValueForDomainname(string[] domainparts)
             {
-        //public dynamic ip { get; set; }
-        //public dynamic ip6 { get; set; }
-        //public string email { get; set; }
-        //public JObject info { get; set; }
-        //public string alias { get; set; }
-        //public string[] ns { get; set; }
+                NameValue value;
+                var info = NmcClient.Instance.LookupRootName(domainparts[domainparts.Length - 2]);
+                if (info == null)
+                    value = null;
+                else
+                {
+                    value = info.GetValue();
+                    value = ResolveSubdomain(domainparts, value);
+                }
+                return value;
+            }
 
-                if (sub.@delegate != null)
-                    value.@delegate = sub.@delegate;
-                if (sub.ip != null)
-                    value.ip = sub.ip;
-                if (sub.email != null)
-                    value.email = sub.email;
-                if (sub.info != null)
-                    value.info = sub.info;
-                if (sub.alias != null)
-                    value.alias = sub.alias;
-                if (sub.ns != null)
-                    value.ns = sub.ns;
+            internal static NameValue ResolveSubdomain(string[] domainparts, NameValue value)
+            {
+                if (domainparts.Length > 2) // sub-domain
+                {
+                    for (int i = domainparts.Length - 3; i >= 0; i--)
+                    {
+                        if (string.IsNullOrWhiteSpace(domainparts[i]))
+                        {
+                            value = null;
+                            break;
+                        }
+
+                        var sub = value.GetMapValue(domainparts[i]).FirstOrDefault();
+                        if (sub == null)
+                            sub = value.GetMapValue("*").FirstOrDefault();
+                        if (sub == null)
+                            sub = value.GetMapValue("").FirstOrDefault();
+                        if (sub == null)
+                        {
+                            value = null;
+                            break;
+                        }
+                        value = sub;
+                    }
+
+                }
+                return value;
             }
 
             private List<IPAddress> GetDotBitNameservers(NameValue value)
             {
-                List<IPAddress> nameservers = new List<IPAddress>(value.ns.Length);
-                foreach (var ns in value.ns)
+                List<IPAddress> nameservers = new List<IPAddress>();
+                foreach (var ns in value.GetNsNames())
                 {
                     IPAddress ip;
                     if (IPAddress.TryParse(ns, out ip))
