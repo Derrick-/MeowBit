@@ -37,6 +37,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -54,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ServiceMonitor.cs" />
     <Compile Include="WPFControls\StatusIcon.xaml.cs">
       <DependentUpon>StatusIcon.xaml</DependentUpon>
     </Compile>
@@ -118,6 +121,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Warning_125.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dotBitNS\dotBitNS.csproj">
+      <Project>{3444e4c6-1b91-4dd9-8d0d-a39c3802fe15}</Project>
+      <Name>dotBitNS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

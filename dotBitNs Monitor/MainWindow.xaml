@@ -11,7 +11,11 @@
             </StackPanel.Resources>
             <WrapPanel>
                 <Label Name="lblServiceName">Service</Label>
-                <WPFControls:StatusIcon Width="32" Status="Question" />
+                <WPFControls:StatusIcon x:Name="iconService" Width="32" Status="Question" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label Name="lblAPIName">API</Label>
+                <WPFControls:StatusIcon x:Name="iconAPI" Width="32" Status="Question" />
             </WrapPanel>
             <WrapPanel>
                 <Label>NameCoin Wallet</Label>

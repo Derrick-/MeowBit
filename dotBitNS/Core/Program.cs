@@ -13,7 +13,7 @@ namespace dotBitNS
 {
     public delegate void Slice();
 
-    static class Program
+    internal static class Program
     {
         private enum ConsoleEventType
         {
