@@ -24,7 +24,8 @@ namespace dotBitNs_Monitor
 
         public const string AppName = "MeowBit";
 
-        ServiceMonitor serviceMonitor = new ServiceMonitor();
+        ServiceMonitor serviceMonitor;
+        ApiClient apiClient;
 
         public MainWindow()
         {
@@ -34,8 +35,21 @@ namespace dotBitNs_Monitor
             lblServiceName.Content = AppName + " Service";
             lblAPIName.Content = AppName + " API";
 
-            serviceMonitor.PropertyChanged += serviceMonitor_PropertyChanged;
-            UpdateServiceStatus();
+            serviceMonitor = new ServiceMonitor(serviceMonitor_PropertyChanged);
+
+            apiClient = new ApiClient(apiClient_PropertyChanged);
+        }
+
+        void apiClient_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            UpdateApiStatus();
+        }
+
+        private void UpdateApiStatus()
+        {
+            iconAPI.Status = apiClient.ApiOnline ? StatusIcon.StatusType.Ok : StatusIcon.StatusType.Error;
+            iconNmc.Status = apiClient.ApiOnline ? StatusIcon.StatusType.Ok : StatusIcon.StatusType.Error;
+            iconNs.Status = apiClient.ApiOnline ? StatusIcon.StatusType.Ok : StatusIcon.StatusType.Error;
         }
 
         void serviceMonitor_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

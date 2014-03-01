@@ -19,11 +19,11 @@
             </WrapPanel>
             <WrapPanel>
                 <Label>NameCoin Wallet</Label>
-                <WPFControls:StatusIcon Width="32" Status="Question" />
+                <WPFControls:StatusIcon x:Name="iconNmc" Width="32" Status="Question" />
             </WrapPanel>
             <WrapPanel>
                 <Label>Nameserver</Label>
-                <WPFControls:StatusIcon Width="32" Status="Question" />
+                <WPFControls:StatusIcon x:Name="iconNs" Width="32" Status="Question" />
             </WrapPanel>
         </StackPanel>
     </DockPanel>

@@ -3,13 +3,20 @@ using System.Web.Http;
 
 namespace dotBitNS.UI.ApiControllers
 {
+    class ApiMonitorResponse
+    {
+        public bool Nmc { get; set; }
+        public bool Ns { get; set; }
+    }
+
+
     public class MonitorController : ApiController
     {
         // GET api/Monitor 
         // GET api/Monitor/5 
         public dynamic Get(int? id = null)
         {
-            return new { Nmc = Monitor.NameCoinOnline, Ns = Monitor.NameServerOnline };
+            return new ApiMonitorResponse() { Nmc = Monitor.NameCoinOnline, Ns = Monitor.NameServerOnline };
         }
 
         // POST api/Monitor 

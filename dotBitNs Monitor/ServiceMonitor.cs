@@ -12,7 +12,7 @@ using System.Timers;
 
 namespace dotBitNs_Monitor
 {
-    class ServiceMonitor : DependencyObject, INotifyPropertyChanged , IDisposable
+    class ServiceMonitor : DependencyObject, INotifyPropertyChanged, IDisposable
     {
         static readonly string ProcessName = typeof(dotBitNS.Program).Assembly.GetName().Name;
         static readonly string ServiceName = dotBitNS.Service.GlobalServiceName;
@@ -24,8 +24,10 @@ namespace dotBitNs_Monitor
         public static DependencyProperty IsAutoProperty = DependencyProperty.Register("IsAuto", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
 
         Timer t;
-        public ServiceMonitor()
+        public ServiceMonitor(PropertyChangedEventHandler propChangeHandler)
         {
+            PropertyChanged += propChangeHandler;
+
             t = new Timer(5000);
             t.Elapsed += t_Elapsed;
             t.Start();

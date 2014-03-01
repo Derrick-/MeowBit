@@ -8,17 +8,37 @@ namespace dotBitNS.UI
 {
     class WebApiHost
     {
-        public static int Port { get; private set; }
+        public const int DefaultPort = 9098;
 
-        const string baseAddress = "http://localhost:9000/";
-        
+        private static int _Port;
+
+        public static int Port
+        {
+            get { return WebApiHost._Port; }
+            private set 
+            {
+                WebApiHost._Port = value;
+                InitializeApiServer();
+            }
+        }
+
         private static IDisposable app;
 
         public static void Initialize()
         {
-            Port = 9000;
+            Port = DefaultPort;
 
-            Console.WriteLine("Initializing api on port {0}...",Port);
+            InitializeApiServer();
+        }
+
+        private static void InitializeApiServer()
+        {
+            if (app != null)
+            {
+                app.Dispose();
+                app = null;
+            }
+            Console.WriteLine("Initializing api on port {0}...", Port);
             app = WebApp.Start<WebApiHost>(url: "http://localhost:" + Port.ToString());
         }
 
