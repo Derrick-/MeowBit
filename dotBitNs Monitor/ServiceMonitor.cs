@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System;using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +10,7 @@ using System.ComponentModel;
 using System.Timers;
 using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 
 namespace dotBitNs_Monitor
 {
@@ -20,10 +20,11 @@ namespace dotBitNs_Monitor
         static readonly string ServiceName = dotBitNS.Service.GlobalServiceName;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<SystemGoEventArgs> SystemGoChanged;
 
         public event EventHandler OnStatusUpdated;
 
-        public static DependencyPropertyKey SystemGoProperty = DependencyProperty.RegisterReadOnly("SystemGo", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+        public static DependencyPropertyKey SystemGoProperty = DependencyProperty.RegisterReadOnly("SystemGo", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnSystemGoPropertyChanged));
 
         public static DependencyPropertyKey ServiceRunningProperty = DependencyProperty.RegisterReadOnly("ServiceRunning", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
         public static DependencyPropertyKey ServiceInstalledProperty = DependencyProperty.RegisterReadOnly("ServiceInstalled", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
@@ -32,6 +33,23 @@ namespace dotBitNs_Monitor
         public static DependencyPropertyKey ApiOnlineProperty = DependencyProperty.RegisterReadOnly("ApiOnline", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
         public static DependencyPropertyKey NameCoinOnlineProperty = DependencyProperty.RegisterReadOnly("NameCoinOnline", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
         public static DependencyPropertyKey NameServerOnlineProperty = DependencyProperty.RegisterReadOnly("NameServerOnline", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+
+        public class SystemGoEventArgs : EventArgs
+        {
+            public bool OldValue { get; set; }
+            public bool NewValue { get; set; }
+        }
+
+        private static void OnSystemGoPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var target = d as ServiceMonitor;
+            if (target != null)
+            {
+                target.OnPropertyChanged(e.Property.Name);
+                if (target.SystemGoChanged != null)
+                    target.SystemGoChanged(target, new SystemGoEventArgs() { OldValue = (bool)e.OldValue, NewValue = (bool)e.NewValue });
+            }
+        }
 
         ApiClient apiClient = new ApiClient();
 
@@ -275,7 +293,13 @@ namespace dotBitNs_Monitor
 
                     ProcessStartInfo startInfo = new ProcessStartInfo(path, args);
                     startInfo.Verb = "runas";
-                    System.Diagnostics.Process.Start(startInfo);
+                    startInfo.ErrorDialog = false;
+                    startInfo.CreateNoWindow = true;
+                    try
+                    {
+                        System.Diagnostics.Process.Start(startInfo);
+                    }
+                    catch (System.Runtime.InteropServices.ExternalException) { }
                 }
                 catch { }
             }

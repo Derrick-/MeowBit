@@ -37,7 +37,12 @@ namespace dotBitNs_Monitor
 
             serviceMonitor = new ServiceMonitor();
             serviceMonitor.OnStatusUpdated += serviceMonitor_OnStatusUpdated;
+            serviceMonitor.SystemGoChanged += serviceMonitor_SystemGoChanged;
 
+        }
+
+        void serviceMonitor_SystemGoChanged(object sender, ServiceMonitor.SystemGoEventArgs e)
+        {
         }
 
         void serviceMonitor_OnStatusUpdated(object sender, EventArgs e)

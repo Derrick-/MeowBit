@@ -1,0 +1,22 @@
+﻿<Window x:Class="dotBitNs_Monitor.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AboutWindow" Height="300" Width="551">
+    <StackPanel>
+        <WrapPanel>
+            <TextBlock>MeowBit</TextBlock>
+            <TextBlock>is a gift to the world from THE BEASTLICK INTERNET POLICY COMMISSION outreach team:</TextBlock>
+        </WrapPanel>
+        <WrapPanel>
+            <TextBlock>Michael W. Dean:</TextBlock>
+            <TextBlock>CAO (Chief Anarchy Officer), cat herder, worm wrangler.</TextBlock>
+        </WrapPanel>
+        <WrapPanel>
+            <TextBlock>Derrick Slopey:</TextBlock>
+            <TextBlock>Entropy De-scrambler, Python wrangler.</TextBlock>
+        </WrapPanel>
+        <TextBlock>MeowBit help, info and donate links:</TextBlock>
+        <TextBlock>http://meowbit.com</TextBlock>
+        <TextBlock>http://meowbit.bit</TextBlock>
+    </StackPanel>
+</Window>

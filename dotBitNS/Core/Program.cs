@@ -301,7 +301,8 @@ namespace dotBitNS
             if (restart)
                 Process.Start(ExePath, Arguments);
 
-            m_Process.Kill();
+            if(!IsService)
+                m_Process.Kill();
         }
 
         private static void HandleClosed()
@@ -317,6 +318,8 @@ namespace dotBitNS
                 EventSink.InvokeShutdown(new ShutdownEventArgs());
 
             Timer.TimerThread.Set();
+
+            UI.Monitor.DisableCacheEntries();
 
             Console.WriteLine("done");
         }

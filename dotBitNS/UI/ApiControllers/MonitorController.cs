@@ -7,8 +7,8 @@ namespace dotBitNS.UI.ApiControllers
     {
         public bool Nmc { get; set; }
         public bool Ns { get; set; }
+        public bool CacheHook { get; set; }
     }
-
 
     public class MonitorController : ApiController
     {
@@ -16,7 +16,12 @@ namespace dotBitNS.UI.ApiControllers
         // GET api/Monitor/5 
         public dynamic Get(int? id = null)
         {
-            return new ApiMonitorResponse() { Nmc = Monitor.NameCoinOnline, Ns = Monitor.NameServerOnline };
+            return new ApiMonitorResponse() 
+            { 
+                Nmc = Monitor.NameCoinOnline, 
+                Ns = Monitor.NameServerOnline, 
+                CacheHook = WindowsNameServicesManager.AnyDotBitCacheConfigKeys() 
+            };
         }
 
         // POST api/Monitor 

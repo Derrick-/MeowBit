@@ -36,6 +36,9 @@
   <PropertyGroup>
     <StartupObject>dotBitNS.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ARSoft.Tools.Net">
       <HintPath>..\packages\ARSoft.Tools.Net.1.7.2\lib\ARSoft.Tools.Net.dll</HintPath>
@@ -141,9 +144,11 @@
     <Compile Include="Utils\ReflectionUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\Util.cs" />
+    <Compile Include="UI\WindowsNameServicesManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="app.manifest" />
     <None Include="win8-dot-bit.reg" />
     <None Include="packages.config" />
   </ItemGroup>

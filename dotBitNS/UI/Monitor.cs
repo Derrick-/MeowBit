@@ -10,6 +10,8 @@ namespace dotBitNS.UI
 {
     class Monitor
     {
+        static WindowsNameServicesManager wnsm = new WindowsNameServicesManager();
+        
         public static bool NameServerOnline { get { return NameServer.Ok; } }
         public static bool NameCoinOnline { get { return NmcClient.Instance.Available; } }
 
@@ -26,7 +28,17 @@ namespace dotBitNS.UI
 
         static void EventSink_Shutdown(ShutdownEventArgs e)
         {
+            try
+            {
+                wnsm.Disable();
+            }
+            catch (System.Security.SecurityException) { }
             Console.WriteLine("Shutting down.");
+        }
+
+        public static void DisableCacheEntries()
+        {
+            wnsm.Disable();
         }
 
         static void CheckNmcConnection()
@@ -34,6 +46,11 @@ namespace dotBitNS.UI
             var info = NmcClient.Instance.GetInfo();
             if (info != null)
                 Debug.WriteLine(string.Format("Success: Wallet version {0}", info.Version));
+
+            if(NameServerOnline && NameCoinOnline)
+                wnsm.Enable();
+            else
+                wnsm.Disable();
         }
 
 
