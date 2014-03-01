@@ -8,10 +8,17 @@
                 <Style TargetType="{x:Type Label}">
                     <Setter Property="Width" Value="150"/>
                 </Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="3 0 0 0"/>
+                </Style>
             </StackPanel.Resources>
             <WrapPanel>
                 <Label Name="lblServiceName">Service</Label>
                 <WPFControls:StatusIcon x:Name="iconService" Width="32" Status="Question" />
+                <Button Visibility="Collapsed" Name="btnInstall">Install Service</Button>
+                <Button Visibility="Collapsed" Click="btnStart_Click"  Name="btnStart">Start Service</Button>
+                <Button Visibility="Collapsed" Click="btnStop_Click" Name="btnStop">Stop Service</Button>
+                <Button  Visibility="Collapsed" Click="btnAutostart_Click" Name="btnAutostart">Make Auto-Start</Button>
             </WrapPanel>
             <WrapPanel>
                 <Label Name="lblAPIName">API</Label>

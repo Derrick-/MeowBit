@@ -14,59 +14,14 @@ using System.Windows;
 
 namespace dotBitNs_Monitor
 {
-    class ApiClient : DependencyObject, INotifyPropertyChanged, IDisposable
+    class ApiClient : DependencyObject, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public static DependencyProperty PortProperty = DependencyProperty.Register("Port", typeof(int), typeof(ApiClient), new PropertyMetadata(dotBitNS.UI.WebApiHost.DefaultPort, OnPropertyChanged));
 
-        public static DependencyProperty ApiOnlineProperty = DependencyProperty.Register("ApiOnline", typeof(bool), typeof(ApiClient), new PropertyMetadata(false, OnPropertyChanged));
-        public static DependencyProperty NameCoinOnlineProperty = DependencyProperty.Register("NameCoinOnline", typeof(bool), typeof(ApiClient), new PropertyMetadata(false, OnPropertyChanged));
-        public static DependencyProperty NameServerOnlineProperty = DependencyProperty.Register("NameServerOnline", typeof(bool), typeof(ApiClient), new PropertyMetadata(false, OnPropertyChanged));
-
-        public bool ApiOnline
+        public ApiClient()
         {
-            get { return (bool)GetValue(ApiOnlineProperty); }
-            set { SetValue(ApiOnlineProperty, value); }
-        }
-
-        public bool NameCoinOnline
-        {
-            get { return (bool)GetValue(NameCoinOnlineProperty); }
-            set { SetValue(NameCoinOnlineProperty, value); }
-        }
-
-        public bool NameServerOnline
-        {
-            get { return (bool)GetValue(NameServerOnlineProperty); }
-            set { SetValue(NameServerOnlineProperty, value); }
-        }
-
-        System.Timers.Timer t;
-        public ApiClient(PropertyChangedEventHandler propChangeHandler)
-        {
-            PropertyChanged += propChangeHandler;
-
-            t = new Timer(5000);
-            t.Elapsed += t_Elapsed;
-            t.Start();
-        }
-
-        private void t_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            t.Stop();
-            Dispatcher.Invoke(UpdateStatus);
-            t.Start();
-        }
-
-        async void UpdateStatus()
-        {
-            ApiMonitorResponse status = await GetStatus();
-            if (ApiOnline = status != null)
-            {
-                NameCoinOnline = status.Nmc;
-                NameServerOnline = status.Ns;
-            }
         }
 
         public async Task<ApiMonitorResponse> GetStatus()
@@ -129,13 +84,6 @@ namespace dotBitNs_Monitor
             {
                 handler(this, new PropertyChangedEventArgs(name));
             }
-        }
-
-        public void Dispose()
-        {
-            if (t != null)
-                t.Dispose();
-            t = null;
         }
     }
 }

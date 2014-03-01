@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Windows;
 using System.ComponentModel;
 using System.Timers;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace dotBitNs_Monitor
 {
@@ -19,15 +21,23 @@ namespace dotBitNs_Monitor
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public static DependencyProperty RunningProperty = DependencyProperty.Register("Running", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
-        public static DependencyProperty InstalledProperty = DependencyProperty.Register("Installed", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
-        public static DependencyProperty IsAutoProperty = DependencyProperty.Register("IsAuto", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+        public event EventHandler OnStatusUpdated;
+
+        public static DependencyPropertyKey SystemGoProperty = DependencyProperty.RegisterReadOnly("SystemGo", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+
+        public static DependencyPropertyKey ServiceRunningProperty = DependencyProperty.RegisterReadOnly("ServiceRunning", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+        public static DependencyPropertyKey ServiceInstalledProperty = DependencyProperty.RegisterReadOnly("ServiceInstalled", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+        public static DependencyPropertyKey ServiceIsAutoProperty = DependencyProperty.RegisterReadOnly("ServiceIsAuto", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+
+        public static DependencyPropertyKey ApiOnlineProperty = DependencyProperty.RegisterReadOnly("ApiOnline", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+        public static DependencyPropertyKey NameCoinOnlineProperty = DependencyProperty.RegisterReadOnly("NameCoinOnline", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+        public static DependencyPropertyKey NameServerOnlineProperty = DependencyProperty.RegisterReadOnly("NameServerOnline", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
+
+        ApiClient apiClient = new ApiClient();
 
         Timer t;
-        public ServiceMonitor(PropertyChangedEventHandler propChangeHandler)
+        public ServiceMonitor()
         {
-            PropertyChanged += propChangeHandler;
-
             t = new Timer(5000);
             t.Elapsed += t_Elapsed;
             t.Start();
@@ -36,33 +46,84 @@ namespace dotBitNs_Monitor
         void t_Elapsed(object sender, ElapsedEventArgs e)
         {
             t.Stop();
-            Dispatcher.Invoke(Update);
+            Dispatcher.Invoke(UpdateStatus);
             t.Start();
         }
 
-        void Update()
+        void UpdateStatus()
         {
-            Running = ServiceMonitor.ProcessIsRunning();
-            Installed = ServiceMonitor.GetServiceController() != null;
-            IsAuto = ServiceMonitor.ServiceIsAutostart();
+            ServiceRunning = ServiceMonitor.ProcessIsRunning();
+            ServiceInstalled = ServiceMonitor.GetServiceController() != null;
+            ServiceIsAuto = ServiceMonitor.ServiceIsAutostart();
+
+            if (ServiceRunning)
+                UpdateApiStatus();
+            else
+            {
+                ApiOnline = false;
+                NameCoinOnline = false;
+                NameServerOnline = false;
+            }
+
+            SystemGo = ServiceRunning && ApiOnline && NameCoinOnline && NameServerOnline;
+
+            if (OnStatusUpdated != null)
+                OnStatusUpdated(this, new EventArgs() { });
         }
 
-        public bool Running
+        async void UpdateApiStatus()
         {
-            get { return (bool)GetValue(RunningProperty); }
-            set { SetValue(RunningProperty, value); }
+            dotBitNS.UI.ApiControllers.ApiMonitorResponse status = await apiClient.GetStatus();
+            if (ApiOnline = status != null)
+            {
+                NameCoinOnline = status.Nmc;
+                NameServerOnline = status.Ns;
+            }
         }
 
-        public bool Installed
+        /// <summary>
+        /// This property is set or unset by the monitor to indicate whether nameserver calls should be hooked.
+        /// </summary>
+        public bool SystemGo
         {
-            get { return (bool)GetValue(InstalledProperty); }
-            set { SetValue(InstalledProperty, value); }
+            get { return (bool)GetValue(SystemGoProperty.DependencyProperty); }
+            private set { SetValue(SystemGoProperty, value); }
         }
 
-        public bool IsAuto
+        public bool ServiceRunning
         {
-            get { return (bool)GetValue(IsAutoProperty); }
-            set { SetValue(IsAutoProperty, value); }
+            get { return (bool)GetValue(ServiceRunningProperty.DependencyProperty); }
+            private set { SetValue(ServiceRunningProperty, value); }
+        }
+
+        public bool ServiceInstalled
+        {
+            get { return (bool)GetValue(ServiceInstalledProperty.DependencyProperty); }
+            private set { SetValue(ServiceInstalledProperty, value); }
+        }
+
+        public bool ServiceIsAuto
+        {
+            get { return (bool)GetValue(ServiceIsAutoProperty.DependencyProperty); }
+            private set { SetValue(ServiceIsAutoProperty, value); }
+        }
+
+        public bool ApiOnline
+        {
+            get { return (bool)GetValue(ApiOnlineProperty.DependencyProperty); }
+            private set { SetValue(ApiOnlineProperty, value); }
+        }
+
+        public bool NameCoinOnline
+        {
+            get { return (bool)GetValue(NameCoinOnlineProperty.DependencyProperty); }
+            private set { SetValue(NameCoinOnlineProperty, value); }
+        }
+
+        public bool NameServerOnline
+        {
+            get { return (bool)GetValue(NameServerOnlineProperty.DependencyProperty); }
+            private set { SetValue(NameServerOnlineProperty, value); }
         }
 
         static bool ProcessIsRunning()
@@ -85,17 +146,40 @@ namespace dotBitNs_Monitor
         static ServiceController GetServiceController()
         {
             var Service = new ServiceController(ServiceName);
+            try
+            {
+                var status = Service.Status;
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
             return Service;
         }
 
         static string GetServiceStartMode(string serviceName)
+        {
+            try
+            {
+                var svc = GetServiceManagementObject(serviceName);
+                if (svc != null)
+                    return svc.GetPropertyValue("StartMode").ToString();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(string.Format("GetServiceStartMode('{0}') threw exception: {1}", serviceName, ex.Message));
+            }
+            return "<null>";
+        }
+
+        static ManagementObject GetServiceManagementObject(string serviceName)
         {
             string filter = String.Format("SELECT * FROM Win32_Service WHERE Name = '{0}'", serviceName);
 
             ManagementObjectSearcher query = new ManagementObjectSearcher(filter);
 
             // No match = failed condition
-            if (query == null) return "<null>";
+            if (query == null) return null;
 
             try
             {
@@ -103,16 +187,16 @@ namespace dotBitNs_Monitor
 
                 foreach (ManagementObject service in services)
                 {
-                    return service.GetPropertyValue("StartMode").ToString();
+                    return service;
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(string.Format("GetServiceStartMode('{0}') threw exception: {1}", serviceName, ex.Message));
-                return "<null>";
+                Debug.WriteLine(string.Format("GetServiceManagementObject('{0}') threw exception: {1}", serviceName, ex.Message));
+                return null;
             }
 
-            return "<null>";
+            return null;
         }
 
         private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -137,5 +221,65 @@ namespace dotBitNs_Monitor
                 t.Dispose();
             t = null;
         }
+
+        internal static void TryStartService()
+        {
+            var svc = GetServiceController();
+            if (svc != null)
+            {
+                try
+                {
+                    svc.Start();
+                }
+                catch (InvalidOperationException)
+                {
+                    Debug.WriteLine("Invalid Operation in Starting the service. May not have permissions");
+                    TryServiceProcessRunAs("-start");
+                }
+            }
+        }
+
+        internal static void TryStopService()
+        {
+            var svc = GetServiceController();
+            if (svc != null)
+            {
+                try
+                {
+                    svc.Stop();
+                }
+                catch (InvalidOperationException)
+                {
+                    Debug.WriteLine("Invalid Operation in Stopping the service. May not have permissions");
+                    TryServiceProcessRunAs("-stop");
+
+                }
+            }
+        }
+
+        internal static void TrySetAutoStartService()
+        {
+            //TODO: TrySetAutoStartService
+            MessageBox.Show("Sorry, not implemented yet");
+        }
+        
+        private static void TryServiceProcessRunAs(string args)
+        {
+            var svc = GetServiceManagementObject(ServiceName);
+            if (svc != null)
+            {
+                try
+                {
+                    string path = svc.GetPropertyValue("PathName") as string;
+                    path = path.Replace(".exe -service",".exe");
+
+                    ProcessStartInfo startInfo = new ProcessStartInfo(path, args);
+                    startInfo.Verb = "runas";
+                    System.Diagnostics.Process.Start(startInfo);
+                }
+                catch { }
+            }
+        }
+
     }
 }
