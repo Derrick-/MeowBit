@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("THE BEASTLICK INTERNET POLICY COMMISSION")]
 [assembly: AssemblyProduct("MeowBit")]
-[assembly: AssemblyCopyright("Copyleft (ↄ) 2014 except where noted")]
+[assembly: AssemblyCopyright("Copyright (C) 2014: GNU General Public License version 3, or later.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

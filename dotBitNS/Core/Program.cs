@@ -8,6 +8,8 @@ using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace dotBitNS
 {
@@ -142,6 +144,14 @@ namespace dotBitNS
                     else
                         Console.WriteLine("An error occurred during service removal.");
                 }
+                else if (Insensitive.Equals(args[0], "-setauto"))
+                {
+                    ServiceInstaller si = new ServiceInstaller();
+                    if (si.SetAutoAtart(Service.GlobalServiceName))
+                        Console.WriteLine("The " + Service.GlobalServiceName + " service has been set to auto-start.");
+                    else
+                        Console.WriteLine("An error occurred during service modification.");
+                }
                 return;
             }
 
@@ -160,18 +170,65 @@ namespace dotBitNS
                 }
             }
 
-            if (IsService)
+            StartIfNotRunning();
+        }
+
+        private static void StartIfNotRunning()
+        {
+            // get application GUID as defined in AssemblyInfo.cs
+            string appGuid = ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value.ToString();
+
+            // unique id for global mutex - Global prefix means it is global to the machine
+            string mutexId = string.Format("Global\\{{{0}}}", appGuid);
+
+            using (var mutex = new Mutex(false, mutexId))
             {
-                ServiceBase[] ServicesToRun;
-                ServicesToRun = new ServiceBase[] 
-			    { 
-				    new Service()
-			    };
-                ServiceBase.Run(ServicesToRun);
-            }
-            else
-            {
-                Run();
+                var allowEveryoneRule = new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.FullControl, AccessControlType.Allow);
+                var securitySettings = new MutexSecurity();
+                securitySettings.AddAccessRule(allowEveryoneRule);
+                mutex.SetAccessControl(securitySettings);
+
+                var hasHandle = false;
+                try
+                {
+                    try
+                    {
+                        // note, you may want to time out here instead of waiting forever
+                        // edited by acidzombie24
+                        // mutex.WaitOne(Timeout.Infinite, false);
+                        hasHandle = mutex.WaitOne(5000, false);
+                        if (hasHandle == false)
+                            {
+                                Console.WriteLine("Instance already running, timeout expired");
+                                return;
+                            }
+                    }
+                    catch (AbandonedMutexException)
+                    {
+                        // Log the fact the mutex was abandoned in another process, it will still get aquired
+                        hasHandle = true;
+                    }
+
+                    if (IsService)
+                    {
+                        ServiceBase[] ServicesToRun;
+                        ServicesToRun = new ServiceBase[] 
+			            { 
+				            new Service()
+			            };
+                        ServiceBase.Run(ServicesToRun);
+                    }
+                    else
+                    {
+                        Run();
+                    }
+                }
+                finally
+                {
+                    // edited by acidzombie24, added if statemnet
+                    if (hasHandle)
+                        mutex.ReleaseMutex();
+                }
             }
         }
 
@@ -180,6 +237,7 @@ namespace dotBitNS
             return
                 Insensitive.Equals(arg, "-install") ||
                 Insensitive.Equals(arg, "-uninstall") ||
+                Insensitive.Equals(arg, "-setauto") ||
                 Insensitive.Equals(arg, "-restart") ||
                 Insensitive.Equals(arg, "-stop") ||
                 Insensitive.Equals(arg, "-start");

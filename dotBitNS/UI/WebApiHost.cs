@@ -27,8 +27,6 @@ namespace dotBitNS.UI
         public static void Initialize()
         {
             Port = DefaultPort;
-
-            InitializeApiServer();
         }
 
         private static void InitializeApiServer()
@@ -39,7 +37,15 @@ namespace dotBitNS.UI
                 app = null;
             }
             Console.WriteLine("Initializing api on port {0}...", Port);
-            app = WebApp.Start<WebApiHost>(url: "http://localhost:" + Port.ToString());
+            try
+            {
+                app = WebApp.Start<WebApiHost>(url: "http://localhost:" + Port.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to start the API server on port {0}, is the service already running?", Port);
+                Console.WriteLine(" - {0}", ex.Message);
+            }
         }
 
         // This code configures Web API. The Startup class is specified as a type

@@ -17,6 +17,7 @@ namespace dotBitNS
         private static MultiTextWriter m_MultiConOut;
 
         public const string GlobalServiceName = "dotBitNS";
+        public const string GlobalServiceDescription = "MeowBit Name Server for dot-bit name resolution";
 
         public Service()
         {

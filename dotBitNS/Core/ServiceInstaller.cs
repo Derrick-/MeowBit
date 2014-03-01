@@ -36,6 +36,7 @@ namespace dotBitNS
         SERVICE_INTERROGATE |
         SERVICE_USER_DEFINED_CONTROL);
         const int SERVICE_AUTO_START = 0x00000002;
+        const int SERVICE_NO_CHANGE = -1;
         #endregion Constants declaration.
 
         #region Private Variables
@@ -44,7 +45,7 @@ namespace dotBitNS
         //private string _serviceDisplayName;
 
         private bool m_StartOnInstall = false;
-        private int m_StartMode = SERVICE_DEMAND_START;
+        private int m_StartMode = SERVICE_AUTO_START;
 
         #endregion Private Variables
         #region DLLImport
@@ -64,6 +65,26 @@ namespace dotBitNS
         public static extern int DeleteService(IntPtr SVHANDLE);
         [DllImport("kernel32.dll")]
         public static extern int GetLastError();
+        [DllImport("advapi32.dll",
+         SetLastError = true, CharSet = CharSet.Auto)]
+         private static extern int ChangeServiceConfig(
+         IntPtr service,
+         int serviceType,
+         int startType,
+         int errorControl,
+         [MarshalAs(UnmanagedType.LPTStr)]
+         string binaryPathName,
+         [MarshalAs(UnmanagedType.LPTStr)]
+         string loadOrderGroup,
+         IntPtr tagID,
+         [MarshalAs(UnmanagedType.LPTStr)]
+         string dependencies,
+         [MarshalAs(UnmanagedType.LPTStr)]
+         string startName,
+         [MarshalAs(UnmanagedType.LPTStr)]
+         string password,
+         [MarshalAs(UnmanagedType.LPTStr)]
+         string displayName);
         #endregion DLLImport
         /// <summary>
         /// The main entry point for the application.
@@ -102,7 +123,7 @@ namespace dotBitNS
                 IntPtr sc_handle = OpenSCManager(null, null, SC_MANAGER_CREATE_SERVICE);
                 if (sc_handle.ToInt32() != 0)
                 {
-                    Console.WriteLine(svcName + " is being installed as a Manual Start Type and will not be started by the installer.");
+                    Console.WriteLine(svcName + " is being installed as a Auto Start Type but will not be started by the installer.");
                     Console.WriteLine("To modify this, use the Services applet in the Control Panel.");
                     Console.WriteLine("To start stop or restart the service, you can run the .exe with args -start -stop or -restart.");
                     IntPtr sv_handle = CreateService(sc_handle, svcName, svcDispName, SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS, m_StartMode, SERVICE_ERROR_NORMAL, svcPath, null, 0, null, null, null);
@@ -127,6 +148,9 @@ namespace dotBitNS
                             Console.WriteLine("Success");
                         }
                         CloseServiceHandle(sc_handle);
+
+                        SetServiceDescription();
+
                         return true;
                     }
                 }
@@ -154,6 +178,29 @@ namespace dotBitNS
                 throw e;
             }
         }
+
+        private void SetServiceDescription()
+        {
+            try
+            {
+                //Open the HKEY_LOCAL_MACHINE\SYSTEM key
+                var system = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("System");
+                //Open CurrentControlSet
+                var currentControlSet = system.OpenSubKey("CurrentControlSet");
+                //Go to the services key
+                var services = currentControlSet.OpenSubKey("Services");
+                //Open the key for your service, and allow writing
+                var service = services.OpenSubKey(Service.GlobalServiceName, true);
+                //Add your service's description as a REG_SZ value named "Description"
+                service.SetValue("Description", Service.GlobalServiceDescription);
+                //(Optional) Add some custom information your service will use...
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An exception was thrown while setting service description:\n" + e.Message);
+            }
+        }
+
         /// <summary>
         /// This method uninstalls the service from the service conrol manager.
         /// </summary>
@@ -186,6 +233,48 @@ namespace dotBitNS
             }
             else
                 return false;
+        }
+
+        public bool SetAutoAtart(string svcName)
+        {
+            int GENERIC_WRITE = 0x40000000;
+            IntPtr schSCManager = OpenSCManager(null, null, GENERIC_WRITE);
+
+            if (schSCManager == IntPtr.Zero)
+            {
+                Console.WriteLine("OpenSCManager failed {0}", GetLastError());
+                return false;
+            }
+
+            var schService = OpenService(
+                 schSCManager,            // SCM database 
+                 svcName,               // name of service 
+                 SERVICE_CHANGE_CONFIG);  // need change config access 
+
+            if (schService != IntPtr.Zero)
+            {
+                if (0 == ChangeServiceConfig(
+                        schService,      // handle of service 
+                        SERVICE_NO_CHANGE, // service type: no change 
+                        SERVICE_AUTO_START,// service start type 
+                        SERVICE_NO_CHANGE, // error control: no change 
+                        null,              // binary path: no change 
+                        null,              // load order group: no change 
+                        IntPtr.Zero,       // tag ID: no change 
+                        null,              // dependencies: no change 
+                        null,              // account name: no change 
+                        null,              // password: no change 
+                        null))             // display name: no change
+                     Console.WriteLine("ChangeServiceConfig failed {0}", GetLastError());
+                 else 
+                     Console.WriteLine("Service change successfully.");
+
+                 CloseServiceHandle(schService);
+                 CloseServiceHandle(schSCManager);
+                 return true;
+            }
+            CloseServiceHandle(schSCManager);
+            return false;
         }
     }
 }
