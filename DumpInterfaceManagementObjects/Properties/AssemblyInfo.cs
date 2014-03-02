@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("dotBitNS")]
-[assembly: AssemblyDescription("Provides name resolution against the namecoin blockchain for .bit domains")]
+[assembly: AssemblyTitle("DumpInterfaceManagementObjects")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("THE BEASTLICK INTERNET POLICY COMMISSION")]
-[assembly: AssemblyProduct("MeowBit")]
-[assembly: AssemblyCopyright("Copyright (C) 2014: GNU General Public License version 3, or later.")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("DumpInterfaceManagementObjects")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("28c42c78-4f18-4591-99b2-bb659e5d998a")]
+[assembly: Guid("00e97127-6f12-401c-b648-66bbb6ef35cd")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,9 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.*")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
-
-[assembly: InternalsVisibleTo("dotBitDnsTest")]
-[assembly: InternalsVisibleTo("MeowBit")]
-[assembly: InternalsVisibleTo("DumpInterfaceManagementObjects")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

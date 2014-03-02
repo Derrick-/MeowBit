@@ -156,7 +156,7 @@ namespace dotBitNS
             }
         }
 
-        private static ManagementObjectCollection GetNetworkConfigs()
+        internal static ManagementObjectCollection GetNetworkConfigs()
         {
             ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
             ManagementObjectCollection moc = mc.GetInstances();
@@ -169,7 +169,7 @@ namespace dotBitNS
             return originaldns;
         }
 
-        private static void DumpInterfaceProps(ManagementObject mo)
+        internal static void DumpInterfaceProps(ManagementObject mo)
         {
             foreach (var prop in mo.Properties)
             {
@@ -180,7 +180,7 @@ namespace dotBitNS
                     val = prop.Value.ToString();
                 else
                     val = null;
-                Debug.WriteLine(string.Format(" {0} : {1}", prop.Name, val));
+                Console.WriteLine(string.Format(" {0} : {1}", prop.Name, val));
             }
         }
 
@@ -300,7 +300,7 @@ namespace dotBitNS
 
         // http://support.microsoft.com/kb/304283
         // http://msdn.microsoft.com/en-us/library/windows/desktop/ms724832(v=vs.85).aspx
-        public OSVersionType GetWindowsVersion()
+        internal static OSVersionType GetWindowsVersion()
         {
             System.OperatingSystem osInfo = System.Environment.OSVersion;
 
