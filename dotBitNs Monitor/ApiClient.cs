@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -63,6 +64,35 @@ namespace dotBitNs_Monitor
             
             return null;
         }
+
+        public async void SendConfig()
+        {
+            using (var client = new HttpClient())
+            {
+                client.Timeout = TimeSpan.FromMilliseconds(3000);
+                var cts = new System.Threading.CancellationTokenSource();
+
+                HttpResponseMessage response = null;
+                try
+                {
+                    HttpRequestMessage request = new HttpRequestMessage();
+
+                    NmcConfigJson config = new NmcConfigJson()
+                    {
+                        User = NmcConfigSettings.RpcUser,
+                        Pass = NmcConfigSettings.RpcPass,
+                        Port = NmcConfigSettings.RpcPort
+                    };
+
+                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(config);
+                    HttpContent content = new StringContent(json);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    response = await client.PostAsync("http://localhost:" + Port + "/api/control", content, cts.Token);
+                }
+                catch { }
+            }
+        }
+
 
         public int Port
         {

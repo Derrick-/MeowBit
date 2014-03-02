@@ -66,22 +66,6 @@ namespace dotBitNS
             }
         }
 
-        bool CheckPermissions()
-        {
-            if (OSVersion >= OSVersionType.WinVista)
-            {
-                try
-                {
-                    var key = GetDnsCacheConfigKey(true);
-                }
-                catch (System.Security.SecurityException ex)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         const string DnsPolicyCacheConfigName = @"SYSTEM\ControlSet001\Services\Dnscache\Parameters\DnsPolicyConfig\";
         const string configGUID = "{74f2c340-2644-4a72-9d81-a61b8f174d7a}";
 

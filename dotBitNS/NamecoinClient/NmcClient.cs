@@ -23,7 +23,7 @@ namespace dotBitNS
                 switch (key)
                 {
                     case "UseTestNet": return "false";
-                    case "DaemonUrl": return "http://127.0.0.1:" + NmcConfig.RpcPort ;
+                    case "DaemonUrl": return string.IsNullOrWhiteSpace(NmcConfig.RpcPort) ? null : "http://127.0.0.1:" + NmcConfig.RpcPort ;
                     case "RpcUsername": return NmcConfig.RpcUser;
                     case "RpcPassword": return NmcConfig.RpcPass;
                     case "RpcRequestTimeoutInSeconds": return "1";
@@ -82,9 +82,14 @@ namespace dotBitNS
             T result = default(T);
             try
             {
-                //Console.Write("Making RPC Connection: ");
                 result = _rpcConnector.MakeRequest<T>(method, parameters);
-                ok = true;
+                if (result == null)
+                {
+                    Console.WriteLine("NMC Connector is misconfigured");
+                    ok = false;
+                }
+                else
+                    ok = true;
             }
             catch (RpcException ex)
             {
@@ -95,8 +100,8 @@ namespace dotBitNS
                 }
                 else
                 {
-                    Console.WriteLine("An RPC Error Occurred: {0}", ex.Message);
-                    ok = true;
+                    Console.WriteLine("An RPC Error Occurred: {0}", ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                    ok = false;
                 }
             }
 

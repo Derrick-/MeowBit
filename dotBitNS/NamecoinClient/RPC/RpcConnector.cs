@@ -17,25 +17,29 @@ namespace NamecoinLib.RPC
 
     public sealed class RpcConnector : IRpcConnector
     {
-        private readonly String _daemonUrl = ConfigurationManager.AppSettings.Get("DaemonUrl");
-        private readonly String _rpcPassword = ConfigurationManager.AppSettings.Get("RpcPassword");
-        private readonly String _rpcUsername = ConfigurationManager.AppSettings.Get("RpcUsername");
+        private string _daemonUrl { get { return ConfigurationManager.AppSettings.Get("DaemonUrl"); } }
+        private string _rpcPassword { get { return  ConfigurationManager.AppSettings.Get("RpcPassword");} }
+        private string _rpcUsername { get { return ConfigurationManager.AppSettings.Get("RpcUsername"); } }
         private readonly Int16 _rpcRequestTimeoutInSeconds = Int16.Parse(ConfigurationManager.AppSettings.Get("RpcRequestTimeoutInSeconds"));
 
         public T MakeRequest<T>(RpcMethods rpcMethod, params object[] parameters)
         {
             JsonRpcResponse<T> rpcResponse = MakeRpcRequest<T>(new JsonRpcRequest(1, rpcMethod.ToString(), parameters));
-            return rpcResponse.Result;
+            return rpcResponse == null ? default(T) : rpcResponse.Result;
         }
 
         private JsonRpcResponse<T> MakeRpcRequest<T>(JsonRpcRequest jsonRpcRequest)
         {
             HttpWebRequest httpWebRequest = MakeHttpRequest(jsonRpcRequest);
-            return GetRpcResponse<T>(httpWebRequest);
+            if (httpWebRequest != null)
+                return GetRpcResponse<T>(httpWebRequest);
+            else return null;
         }
 
         private HttpWebRequest MakeHttpRequest(JsonRpcRequest jsonRpcRequest)
         {
+            string url = _daemonUrl;
+            if (url == null) return null;
             HttpWebRequest webRequest = (HttpWebRequest) WebRequest.Create(_daemonUrl);
             SetBasicAuthHeader(webRequest, _rpcUsername, _rpcPassword);
             webRequest.Credentials = new NetworkCredential(_rpcUsername, _rpcPassword);

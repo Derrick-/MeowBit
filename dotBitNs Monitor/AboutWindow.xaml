@@ -20,5 +20,7 @@
         <TextBlock>http://meowbit.bit</TextBlock>
         <TextBlock>MeowBit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</TextBlock>
         <TextBlock>https://www.gnu.org/licenses/gpl-3.0.txt</TextBlock>
+        <TextBlock>MeowBit was not created to use for any illegal purpose. Laws vary. If you have questions concerning your intended use of this software, the creators of MeowBit recommend consulting an attorney of your choice</TextBlock>
+        <TextBlock>MeowBit makes it difficult for your domain to be removed.  Used alone, MeowBit does NOT make the website owner or viewer invisible. MeowBit is not intended to mask the identity of the website owner or viewer.</TextBlock>
     </StackPanel>
 </Window>

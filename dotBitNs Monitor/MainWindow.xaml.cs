@@ -39,6 +39,13 @@ namespace dotBitNs_Monitor
             serviceMonitor.OnStatusUpdated += serviceMonitor_OnStatusUpdated;
             serviceMonitor.SystemGoChanged += serviceMonitor_SystemGoChanged;
 
+            NmcConfigSettings.ConfigUpdated += NmcConfigSetter_ConfigUpdated;
+            NmcConfigSettings.ValidateNmcConfig();
+        }
+
+        void NmcConfigSetter_ConfigUpdated()
+        {
+            txtNameCoinInfo.Text = "NameCoin config updated: restart wallet.";
         }
 
         void serviceMonitor_SystemGoChanged(object sender, ServiceMonitor.SystemGoEventArgs e)
@@ -105,6 +112,7 @@ namespace dotBitNs_Monitor
                 }
             }
 
+            btnInstall.Visibility = !installed ? Visibility.Visible : Visibility.Collapsed;
             btnStart.Visibility = !running && installed ? Visibility.Visible : Visibility.Collapsed;
             btnStop.Visibility = running && installed ? Visibility.Visible : Visibility.Collapsed;
             btnAutostart.Visibility = installed && !auto ? Visibility.Visible : Visibility.Collapsed;
@@ -112,12 +120,33 @@ namespace dotBitNs_Monitor
             iconService.ToolTip = textStatus;
         }
 
+        const int buttonDisableDurationMs = 20000;
+
+        private void btnInstall_Click(object sender, RoutedEventArgs e)
+        {
+            btnInstall.IsEnabled = false;
+            ServiceMonitor.TryInstallService();
+            btnStart.ToolTip = "Trying to install service";
+            Timer t = new Timer(buttonDisableDurationMs);
+            t.Elapsed += tbtnInstall_Elapsed;
+            t.Start();
+        }
+
+        private void btnAutostart_Click(object sender, RoutedEventArgs e)
+        {
+            btnAutostart.IsEnabled = false;
+            ServiceMonitor.TrySetAutoStartService();
+            Timer t = new Timer(buttonDisableDurationMs);
+            t.Elapsed += tbtnAutostart_Elapsed;
+            t.Start();
+        }
+
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             btnStart.IsEnabled = false;
             ServiceMonitor.TryStartService();
             btnStart.ToolTip = "Trying to start service";
-            Timer t = new Timer(20000);
+            Timer t = new Timer(buttonDisableDurationMs);
             t.Elapsed += tbtnStart_Elapsed;
             t.Start();
         }
@@ -127,20 +156,18 @@ namespace dotBitNs_Monitor
             btnStop.IsEnabled = false;
             ServiceMonitor.TryStopService();
             btnStop.ToolTip = "Trying to stop service";
-            Timer t = new Timer(20000);
+            Timer t = new Timer(buttonDisableDurationMs);
             t.Elapsed += tbtnStop_Elapsed;
             t.Start();
         }
 
-        private void btnAutostart_Click(object sender, RoutedEventArgs e)
+        private void tbtnInstall_Elapsed(object sender, ElapsedEventArgs e)
         {
-            btnAutostart.IsEnabled = false;
-            ServiceMonitor.TrySetAutoStartService();
-            Timer t = new Timer(20000);
-            t.Elapsed += tbtnAutostart_Elapsed;
-            t.Start();
+            ((Timer)sender).Stop();
+            Dispatcher.Invoke(() => { btnInstall.IsEnabled = true; });
+            btnInstall.ToolTip = "";
         }
-    
+
         void tbtnStart_Elapsed(object sender, ElapsedEventArgs e)
         {
             ((Timer)sender).Stop();

@@ -97,6 +97,10 @@ namespace dotBitNs_Monitor
                 NameCoinOnline = status.Nmc;
                 NameServerOnline = status.Ns;
             }
+            if (!NameCoinOnline)
+            {
+                apiClient.SendConfig();
+            }
         }
 
         /// <summary>
@@ -240,6 +244,23 @@ namespace dotBitNs_Monitor
             t = null;
         }
 
+        internal static void TryInstallService()
+        {
+            string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            path = Path.GetDirectoryName(path);
+            path = Path.Combine(path, "dotBitNS.exe");
+            TryServiceProcessRunAs("-install", path);
+        }
+
+        internal static void TrySetAutoStartService()
+        {
+            var svc = GetServiceController();
+            if (svc != null)
+            {
+                TryServiceProcessRunAs("-setauto");
+            }
+        }
+
         internal static void TryStartService()
         {
             var svc = GetServiceController();
@@ -275,22 +296,24 @@ namespace dotBitNs_Monitor
             }
         }
 
-        internal static void TrySetAutoStartService()
+        private static void TryServiceProcessRunAs(string args, string command = null)
         {
-            //TODO: TrySetAutoStartService
-            MessageBox.Show("Sorry, not implemented yet");
-        }
-        
-        private static void TryServiceProcessRunAs(string args)
-        {
-            var svc = GetServiceManagementObject(ServiceName);
-            if (svc != null)
+            string path = null;
+            try
             {
-                try
+                if (command == null)
                 {
-                    string path = svc.GetPropertyValue("PathName") as string;
-                    path = path.Replace(".exe -service",".exe");
-
+                    var svc = GetServiceManagementObject(ServiceName);
+                    if (svc != null)
+                    {
+                        path = svc.GetPropertyValue("PathName") as string;
+                        path = path.Replace(".exe -service", ".exe");
+                    }
+                }
+                else
+                    path = command;
+                if (path != null && File.Exists(path))
+                {
                     ProcessStartInfo startInfo = new ProcessStartInfo(path, args);
                     startInfo.Verb = "runas";
                     startInfo.ErrorDialog = false;
@@ -301,8 +324,8 @@ namespace dotBitNs_Monitor
                     }
                     catch (System.Runtime.InteropServices.ExternalException) { }
                 }
-                catch { }
             }
+            catch { }
         }
 
     }

@@ -9,15 +9,12 @@ namespace dotBitNS
     public delegate void CrashedEventHandler(CrashedEventArgs e);
     public delegate void ShutdownEventHandler(ShutdownEventArgs e);
 
-    public delegate void ConfigUpdatedEventHandler();
     internal delegate void NameServerAvailableChangedHandler(NmcClient source, NameServerAvailableChangedEventArgs e);
 
     public static class EventSink
     {
         public static event CrashedEventHandler Crashed;
         public static event ShutdownEventHandler Shutdown;
-
-        public static event ConfigUpdatedEventHandler ConfigUpdated;
 
         internal static event NameServerAvailableChangedHandler NameServerAvailableChanged;
 
@@ -32,12 +29,6 @@ namespace dotBitNS
         {
             if (Crashed != null)
                 Crashed(e);
-        }
-
-        internal static void InvokeConfigUpdated()
-        {
-            if (ConfigUpdated != null)
-                ConfigUpdated();
         }
 
 

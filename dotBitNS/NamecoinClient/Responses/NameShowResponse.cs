@@ -5,7 +5,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 using System.Net;
 using dotBitNS;
 
@@ -155,7 +154,7 @@ namespace NamecoinLib.Responses
                     {
                         toReturn.Add(new NameData { name = prop.Key, value = prop.Value.ToObject<NameValue>() });
                     }
-                    catch (JsonSerializationException ex)
+                    catch (JsonSerializationException)
                     {
                         ConsoleUtils.WriteWarning(" - ERR: \"{0}\":\"{1}\"", prop.Key, prop.Value);
                         return null;

@@ -193,9 +193,6 @@ namespace dotBitNS
                 {
                     try
                     {
-                        // note, you may want to time out here instead of waiting forever
-                        // edited by acidzombie24
-                        // mutex.WaitOne(Timeout.Infinite, false);
                         hasHandle = mutex.WaitOne(5000, false);
                         if (hasHandle == false)
                             {
@@ -225,7 +222,6 @@ namespace dotBitNS
                 }
                 finally
                 {
-                    // edited by acidzombie24, added if statemnet
                     if (hasHandle)
                         mutex.ReleaseMutex();
                 }
