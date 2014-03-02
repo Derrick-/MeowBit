@@ -74,14 +74,14 @@ namespace dotBitNs_Monitor
             ServiceInstalled = ServiceMonitor.GetServiceController() != null;
             ServiceIsAuto = ServiceMonitor.ServiceIsAutostart();
 
-            if (ServiceRunning)
+            //if (ServiceRunning)
                 UpdateApiStatus();
-            else
-            {
-                ApiOnline = false;
-                NameCoinOnline = false;
-                NameServerOnline = false;
-            }
+            //else
+            //{
+            //    ApiOnline = false;
+            //    NameCoinOnline = false;
+            //    NameServerOnline = false;
+            //}
 
             SystemGo = ServiceRunning && ApiOnline && NameCoinOnline && NameServerOnline;
 

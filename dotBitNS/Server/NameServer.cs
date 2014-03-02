@@ -60,7 +60,7 @@ namespace dotBitNS.Server
         {
             using (new ConsoleUtils.Warning())
             {
-                Console.WriteLine("Nameserver threw error: " + e.Exception.Message);
+                Console.WriteLine("Nameserver threw error: " + e.Exception.ToString());
             }
         }
 
@@ -129,10 +129,27 @@ namespace dotBitNS.Server
                     if (answer == null)
                     {
                         // send query to upstream server
-                        answer = DnsClient.Default.Resolve(question.Name, question.RecordType, question.RecordClass);
+                        DnsClient dnsClient;
+                        if (WindowsNameServicesManager.NameServerHookMethod != WindowsNameServicesManager.NameServerHookMethodType.ChangeNS)
+                            dnsClient = DnsClient.Default;
+                        else
+                        {
+                            dnsClient = GetNonDefaultDnsClient();
+                        }
+                        answer = dnsClient.Resolve(question.Name, question.RecordType, question.RecordClass);
                     }
 
                     return answer;
+            }
+
+            private IPAddress defaultDnsServer = new IPAddress(new byte[] { 8, 8, 8, 8 });
+            private DnsClient GetNonDefaultDnsClient()
+            {
+                var servers = WindowsNameServicesManager.GetCachedDnsServers();
+                if(!servers.Any())
+                    servers.Add(defaultDnsServer);
+                var client = new DnsClient(servers, 2000);
+                return client;
             }
 
             private DnsMessage ResolveDotBitAddress(DnsQuestion question)

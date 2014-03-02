@@ -91,7 +91,6 @@ namespace dotBitNs_Monitor
             }
             else
             {
-                iconAPI.Status = StatusIcon.StatusType.Error;
                 if (!installed || !auto)
                 {
                     if (!installed)

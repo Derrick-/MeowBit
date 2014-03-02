@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Management;
+using System.Net;
 using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
@@ -41,8 +43,8 @@ namespace dotBitNS
             ChangeNS,
         }
 
-        public OSVersionType OSVersion { get; private set; }
-        public NameServerHookMethodType NameServerHookMethod{get;private set;}
+        public static OSVersionType OSVersion { get; private set; }
+        public static NameServerHookMethodType NameServerHookMethod{get;private set;}
 
         public WindowsNameServicesManager()
         {
@@ -52,17 +54,133 @@ namespace dotBitNS
 
         public void Enable()
         {
-            if (NameServerHookMethod == NameServerHookMethodType.CacheHook)
+            switch (NameServerHookMethod)
             {
-                InsertCacheHook();
+                case NameServerHookMethodType.CacheHook:
+                    InsertCacheHook(); break;
+                case NameServerHookMethodType.ChangeNS:
+                    ReplaceDnsServers(); break;
             }
         }
 
         public void Disable()
         {
-            if (NameServerHookMethod == NameServerHookMethodType.CacheHook)
+            switch (NameServerHookMethod)
             {
-                RemoveCacheHook();
+                case NameServerHookMethodType.CacheHook:
+                    RemoveCacheHook(); break;
+                case NameServerHookMethodType.ChangeNS:
+                    RestoreDnsServers(); break;
+            }
+        }
+
+
+        static Dictionary<Guid, List<string>> OriginalDnsConfigs = new Dictionary<Guid, List<string>>();
+
+        public static List<IPAddress> GetCachedDnsServers()
+        {
+            var toReturn = new List<IPAddress>();
+
+            foreach (var address in OriginalDnsConfigs.Values.SelectMany(m => m))
+            {
+                IPAddress ip;
+                if (address != localip && IPAddress.TryParse(address, out ip) && !ip.IsIPv6LinkLocal)
+                {
+                    toReturn.Add(ip);
+                }
+            }
+            return toReturn;
+        }
+
+        const string localip = "127.0.0.1";
+        private void ReplaceDnsServers()
+        {
+            try 
+            {
+                ManagementObjectCollection moc = GetNetworkConfigs();
+                foreach (ManagementObject mo in moc)
+                {
+                    if ((bool)mo["IPEnabled"])
+                    {
+                        string[] originaldns = GetCurrentDnsServers(mo);
+                        if (originaldns.Length != 1 && originaldns[0] != localip)
+                        {
+                            Guid config;
+                            if (Guid.TryParse(mo["SettingID"] as string, out config))
+                            {
+                                OriginalDnsConfigs[config] = originaldns.ToList();
+                                string interfacename = config.ToString();
+                                string[] newdns = { localip };
+                                ReplaceDnsOnInterface(mo, interfacename, newdns);
+                            }
+                        }
+                        //DumpInterfaceProps(mo);
+                    }
+                }
+            }
+            catch (ManagementException e)
+            {
+                Console.WriteLine("An error occurred while querying for WMI data: " + e.Message);
+            }
+        }
+
+        private void RestoreDnsServers()
+        {
+            ManagementObjectCollection moc = GetNetworkConfigs();
+            foreach (ManagementObject mo in moc)
+            {
+                Guid config;
+                if (Guid.TryParse(mo["SettingID"] as string, out config))
+                {
+                    if (OriginalDnsConfigs.ContainsKey(config))
+                    {
+                        string interfacename = config.ToString();
+                        string[] newdns = OriginalDnsConfigs[config].Where(m => m != localip).ToArray();
+                        ReplaceDnsOnInterface(mo, interfacename, newdns);
+                    }
+                }
+            }
+        }
+
+        private static void ReplaceDnsOnInterface(ManagementObject mo, string interfacename, string[] newdns)
+        {
+            string[] originaldns = GetCurrentDnsServers(mo);
+            Console.WriteLine("Replacing DNS on Interface {0}, was: {1}", interfacename, string.Join(", ", originaldns));
+
+            ManagementBaseObject objdns = mo.GetMethodParameters("SetDNSServerSearchOrder");
+            if (objdns != null)
+            {
+                objdns["DNSServerSearchOrder"] = newdns;
+                mo.InvokeMethod("SetDNSServerSearchOrder", objdns, null);
+                Console.WriteLine("DNS is set to {0}", string.Join(", ", newdns));
+            }
+        }
+
+        private static ManagementObjectCollection GetNetworkConfigs()
+        {
+            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+            ManagementObjectCollection moc = mc.GetInstances();
+            return moc;
+        }
+
+        private static string[] GetCurrentDnsServers(ManagementObject mo)
+        {
+            string[] originaldns = (string[])mo["DNSServerSearchOrder"];
+            return originaldns;
+        }
+
+        private static void DumpInterfaceProps(ManagementObject mo)
+        {
+            foreach (var prop in mo.Properties)
+            {
+                string val;
+                if (prop.Value is string[])
+                    val = string.Join(", ", (string[])prop.Value);
+                else if (prop.Value != null)
+                    val = prop.Value.ToString();
+                else
+                    val = null;
+                Debug.WriteLine(string.Format(" {0} : {1}", prop.Name, val));
             }
         }
 
