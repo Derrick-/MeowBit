@@ -38,6 +38,8 @@ namespace dotBitNS.UI
 
         public static void DisableCacheEntries()
         {
+            if(wnsm==null)
+                wnsm=new WindowsNameServicesManager();
             wnsm.Disable();
         }
 

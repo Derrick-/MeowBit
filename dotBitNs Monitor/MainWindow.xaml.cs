@@ -116,6 +116,9 @@ namespace dotBitNs_Monitor
             btnStop.Visibility = running && installed ? Visibility.Visible : Visibility.Collapsed;
             btnAutostart.Visibility = installed && !auto ? Visibility.Visible : Visibility.Collapsed;
 
+            if (serviceMonitor.NameCoinOnline)
+                txtNameCoinInfo.Text = "";
+
             iconService.ToolTip = textStatus;
         }
 

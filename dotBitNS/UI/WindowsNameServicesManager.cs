@@ -46,10 +46,14 @@ namespace dotBitNS
         public static OSVersionType OSVersion { get; private set; }
         public static NameServerHookMethodType NameServerHookMethod{get;private set;}
 
-        public WindowsNameServicesManager()
+        static WindowsNameServicesManager()
         {
             OSVersion = GetWindowsVersion();
             DetermineSupport();
+        }
+
+        public WindowsNameServicesManager()
+        {
         }
 
         public void Enable()
@@ -103,7 +107,7 @@ namespace dotBitNS
                     if ((bool)mo["IPEnabled"])
                     {
                         string[] originaldns = GetCurrentDnsServers(mo);
-                        if (originaldns == null || originaldns.Length != 1 && originaldns[0] != localip)
+                        if (originaldns == null || originaldns.Length != 1 || originaldns[0] != localip)
                         {
                             Console.Write("Found unhooked interface: ");
                             Guid config;
@@ -203,31 +207,41 @@ namespace dotBitNS
         private void InsertCacheHook()
         {
             var key = GetDnsCacheConfigKey(true);
-            var subs = key.GetSubKeyNames();
-            RegistryKey found = null;
-            foreach (string name in subs)
+            if (key != null)
             {
-                var configKey = Registry.LocalMachine.OpenSubKey(DnsPolicyCacheConfigName + name);
-                var val = configKey.GetValue("Name", null) as string[];
-                if (name == configGUID)
+                var subs = key.GetSubKeyNames();
+                RegistryKey found = null;
+                foreach (string name in subs)
                 {
-                    if(found!=null) // duplicate found
-                        DeleteConfigKey(key, name);
-                    else if (!val.Contains(".bit"))
+                    var configKey = Registry.LocalMachine.OpenSubKey(DnsPolicyCacheConfigName + name);
+                    var val = configKey.GetValue("Name", null) as string[];
+                    if (name == configGUID)
                     {
-                        found = null;
-                        DeleteConfigKey(key,name);
+                        if (found != null) // duplicate found
+                            DeleteConfigKey(key, name);
+                        else if (!val.Contains(".bit"))
+                        {
+                            found = null;
+                            DeleteConfigKey(key, name);
+                        }
+                        else
+                            found = configKey;
                     }
-                    else
-                        found = configKey;
+                    else if (val.Contains(".bit"))
+                    {
+                        DeleteConfigKey(key, name);
+                    }
                 }
-                else if (val.Contains(".bit"))
-                {
-                    DeleteConfigKey(key, name);
-                }
+                if (key != null && found == null)
+                    InstallDnsCacheConfigKeys(key);
             }
-            if (key != null && found == null)
-                InstallDnsCacheConfigKeys(key);
+            else
+            {
+                RemoveCacheHook();
+                NameServerHookMethod = NameServerHookMethodType.ChangeNS;
+                Console.WriteLine("CacheConfig Failed: switching to {0}", NameServerHookMethod);
+
+            }
         }
 
         //    [HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\Dnscache\Parameters\DnsPolicyConfig\{74f2c340-2644-4a72-9d81-a61b8f174d7a}]
@@ -250,15 +264,18 @@ namespace dotBitNS
         private void RemoveCacheHook()
         {
             var key = GetDnsCacheConfigKey(true);
-            var subs = key.GetSubKeyNames();
-            foreach (string name in subs)
+            if (key != null)
             {
-                var configKey = Registry.LocalMachine.OpenSubKey(DnsPolicyCacheConfigName + name);
-                var val = configKey.GetValue("Name", null) as string;
-                if (name == configGUID)
+                var subs = key.GetSubKeyNames();
+                foreach (string name in subs)
                 {
-                    Console.WriteLine("Disabling DNS cache hook");
-                    DeleteConfigKey(key, name);
+                    var configKey = Registry.LocalMachine.OpenSubKey(DnsPolicyCacheConfigName + name);
+                    var val = configKey.GetValue("Name", null) as string;
+                    if (name == configGUID)
+                    {
+                        Console.WriteLine("Disabling DNS cache hook");
+                        DeleteConfigKey(key, name);
+                    }
                 }
             }
         }
@@ -301,7 +318,7 @@ namespace dotBitNS
             parentKey.DeleteSubKey(subkeyname);
         }
 
-        private void DetermineSupport()
+        private static void DetermineSupport()
         {
             Console.Write("Dermining client hook method...");
             switch (OSVersion)
