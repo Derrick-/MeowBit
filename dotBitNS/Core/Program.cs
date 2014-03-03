@@ -296,6 +296,10 @@ namespace dotBitNS
             {
                 CurrentDomain_UnhandledException(null, new UnhandledExceptionEventArgs(e, true));
             }
+            finally
+            {
+                UI.Monitor.DisableCacheEntries();
+            }
         }
 
         private static void Configure()
@@ -372,8 +376,6 @@ namespace dotBitNS
                 EventSink.InvokeShutdown(new ShutdownEventArgs());
 
             Timer.TimerThread.Set();
-
-            UI.Monitor.DisableCacheEntries();
 
             Console.WriteLine("done");
         }

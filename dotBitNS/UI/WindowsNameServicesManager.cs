@@ -59,7 +59,7 @@ namespace dotBitNS
                 case NameServerHookMethodType.CacheHook:
                     InsertCacheHook(); break;
                 case NameServerHookMethodType.ChangeNS:
-                    ReplaceDnsServers(); break;
+                    HookDnsServers(); break;
             }
         }
 
@@ -70,7 +70,7 @@ namespace dotBitNS
                 case NameServerHookMethodType.CacheHook:
                     RemoveCacheHook(); break;
                 case NameServerHookMethodType.ChangeNS:
-                    RestoreDnsServers(); break;
+                    UnhookDnsServers(); break;
             }
         }
 
@@ -93,7 +93,7 @@ namespace dotBitNS
         }
 
         const string localip = "127.0.0.1";
-        private void ReplaceDnsServers()
+        private void HookDnsServers()
         {
             try 
             {
@@ -103,12 +103,15 @@ namespace dotBitNS
                     if ((bool)mo["IPEnabled"])
                     {
                         string[] originaldns = GetCurrentDnsServers(mo);
-                        if (originaldns.Length != 1 && originaldns[0] != localip)
+                        if (originaldns == null || originaldns.Length != 1 && originaldns[0] != localip)
                         {
+                            Console.Write("Found unhooked interface: ");
                             Guid config;
                             if (Guid.TryParse(mo["SettingID"] as string, out config))
                             {
-                                OriginalDnsConfigs[config] = originaldns.ToList();
+                                Console.WriteLine(config);
+                                if (originaldns != null)
+                                    OriginalDnsConfigs[config] = originaldns.ToList();
                                 string interfacename = config.ToString();
                                 string[] newdns = { localip };
                                 ReplaceDnsOnInterface(mo, interfacename, newdns);
@@ -124,7 +127,7 @@ namespace dotBitNS
             }
         }
 
-        private void RestoreDnsServers()
+        private void UnhookDnsServers()
         {
             ManagementObjectCollection moc = GetNetworkConfigs();
             foreach (ManagementObject mo in moc)
@@ -144,8 +147,12 @@ namespace dotBitNS
 
         private static void ReplaceDnsOnInterface(ManagementObject mo, string interfacename, string[] newdns)
         {
+            Console.WriteLine("Replacing DNS on Interface {0},", interfacename);
             string[] originaldns = GetCurrentDnsServers(mo);
-            Console.WriteLine("Replacing DNS on Interface {0}, was: {1}", interfacename, string.Join(", ", originaldns));
+            if (originaldns == null)
+                Console.WriteLine(", was: <NULL>");
+            else
+                Console.WriteLine(", was: {0}", string.Join(", ", originaldns));
 
             ManagementBaseObject objdns = mo.GetMethodParameters("SetDNSServerSearchOrder");
             if (objdns != null)
@@ -290,19 +297,24 @@ namespace dotBitNS
 
         private void DetermineSupport()
         {
-            if (OSVersion >= OSVersionType.Win8)
-                NameServerHookMethod = NameServerHookMethodType.CacheHook;
-            else if (OSVersion >= OSVersionType.WinXP)
-                NameServerHookMethod = NameServerHookMethodType.ChangeNS;
-            else
-                NameServerHookMethod = NameServerHookMethodType.Unsupported;
+            Console.Write("Dermining client hook method...");
+            switch (OSVersion)
+            {
+                case OSVersionType.Win8:
+                    NameServerHookMethod = NameServerHookMethodType.CacheHook; break;
+                default: // case OSVersionType.Win7:
+                    NameServerHookMethod = NameServerHookMethodType.ChangeNS; break;
+            }
+            Console.WriteLine(" {0}", NameServerHookMethod);
         }
 
         // http://support.microsoft.com/kb/304283
         // http://msdn.microsoft.com/en-us/library/windows/desktop/ms724832(v=vs.85).aspx
         internal static OSVersionType GetWindowsVersion()
         {
+            Console.Write("Dermining windows version...");
             System.OperatingSystem osInfo = System.Environment.OSVersion;
+            Console.WriteLine(" {0}", osInfo);
 
             switch (osInfo.Platform)
             {

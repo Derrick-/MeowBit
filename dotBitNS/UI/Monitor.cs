@@ -44,19 +44,21 @@ namespace dotBitNS.UI
         static int failcount = 0;
         static void CheckNmcConnection()
         {
-            var info = NmcClient.Instance.GetInfo();
-            if (info != null)
-                Debug.WriteLine(string.Format("Success: Wallet version {0}", info.Version));
-
-            if (NameServerOnline && NameCoinOnline)
+            if (!Program.Closing)
             {
-                wnsm.Enable();
-                failcount = 0;
-            }
-            else if(++failcount > 2)
-                wnsm.Disable();
-        }
+                var info = NmcClient.Instance.GetInfo();
+                if (info != null)
+                    Debug.WriteLine(string.Format("Success: Wallet version {0}", info.Version));
 
+                if (NameServerOnline && NameCoinOnline)
+                {
+                    wnsm.Enable();
+                    failcount = 0;
+                }
+                else if (++failcount > 2)
+                    wnsm.Disable();
+            }
+        }
 
         static void EventSink_NameServerAvailableChanged(NmcClient source, NameServerAvailableChangedEventArgs e)
         {
