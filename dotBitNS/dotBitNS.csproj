@@ -96,6 +96,7 @@
     <Compile Include="NamecoinClient\Auxiliary\ConsoleVisualizations.cs" />
     <Compile Include="NamecoinClient\Auxiliary\UnixTime.cs" />
     <Compile Include="NamecoinClient\ExceptionHandling\RpcException.cs" />
+    <Compile Include="NamecoinClient\NameCoinUtils.cs" />
     <Compile Include="NamecoinClient\NmcClient.cs" />
     <Compile Include="NamecoinClient\NmcConfig.cs" />
     <Compile Include="NamecoinClient\Properties\AssemblyInfo.cs" />

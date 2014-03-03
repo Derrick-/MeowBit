@@ -23,6 +23,8 @@ namespace dotBitNs_Monitor
     public partial class MainWindow : Window
     {
 
+        public static readonly DateTime GenesisBlockTimeGMT = new DateTime(2011, 4, 19, 12, 59, 40);
+
         public const string AppName = "MeowBit";
 
         ServiceMonitor serviceMonitor;
@@ -116,10 +118,52 @@ namespace dotBitNs_Monitor
             btnStop.Visibility = running && installed ? Visibility.Visible : Visibility.Collapsed;
             btnAutostart.Visibility = installed && !auto ? Visibility.Visible : Visibility.Collapsed;
 
+            if (serviceMonitor.LastBlockTime.HasValue)
+            {
+                var now = DateTime.UtcNow.Ticks;
+                var start = GenesisBlockTimeGMT.Ticks;
+                var current = serviceMonitor.LastBlockTime.Value.Ticks;
+                var total = now - start;
+
+                pbStatus.Maximum = total;
+                pbStatus.Value = current - start;
+                TimeSpan behind = TimeSpan.FromTicks(now - current);
+                if(behind > TimeSpan.FromMinutes(10))
+                    txtBlockStatus.Text = FriendlyTimeString(behind) + " behind.";
+                else
+                    txtBlockStatus.Text = "Up to date";
+            }
+            else
+            {
+                pbStatus.Value = 0;
+                txtBlockStatus.Text = "No Blocks";
+            }
+                
+
             if (serviceMonitor.NameCoinOnline)
                 txtNameCoinInfo.Text = "";
 
             iconService.ToolTip = textStatus;
+        }
+
+        private string FriendlyTimeString(TimeSpan ts)
+        {
+            int days = (int)ts.TotalDays;
+            int weeks = days / 7;
+            int months = days / 30; //naive guess at month size
+            int years = days / 365; //no leap year accounting
+
+            if (years > 1)
+                return years.ToString() + " years";
+            else if (months > 1)
+                return months.ToString() + " months";
+            if (weeks > 1)
+                return weeks.ToString() + " weeks";
+            if (days > 2)
+                return days.ToString() + " days";
+            if(ts.TotalHours > 1)
+                return ((int)ts.TotalHours).ToString() + " hours";
+            return ((int)ts.TotalMinutes).ToString() + " minutes";
         }
 
         const int buttonDisableDurationMs = 20000;

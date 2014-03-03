@@ -252,13 +252,14 @@ namespace dotBitNS
         //    "Version"=dword:00000002
         private void InstallDnsCacheConfigKeys(RegistryKey parentKey)
         {
-            Console.WriteLine("Enabling DNS cache hook");
+            Console.Write("Enabling DNS cache hook: ");
             var key = parentKey.CreateSubKey(configGUID);
             key.SetValue("ConfigOptions", 8, RegistryValueKind.DWord);
             key.SetValue("Name", new string[] { ".bit" }, RegistryValueKind.MultiString);
             key.SetValue("IPSECCARestriction", "");
             key.SetValue("GenericDNSServers", "127.0.0.1");
             key.SetValue("Version", 2, RegistryValueKind.DWord);
+            Console.WriteLine("Hooked");
         }
 
         private void RemoveCacheHook()
@@ -315,7 +316,7 @@ namespace dotBitNS
 
         private void DeleteConfigKey(RegistryKey parentKey, string subkeyname)
         {
-            parentKey.DeleteSubKey(subkeyname);
+            parentKey.DeleteSubKey(subkeyname, false);
         }
 
         private static void DetermineSupport()

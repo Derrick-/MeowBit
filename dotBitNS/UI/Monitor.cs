@@ -15,6 +15,8 @@ namespace dotBitNS.UI
         public static bool NameServerOnline { get { return NameServer.Ok; } }
         public static bool NameCoinOnline { get { return NmcClient.Instance.Available; } }
 
+        public static DateTime? LastBlockTimeGMT { get; set; }
+
         static Timer timerNmcCheck = null;
         static readonly TimeSpan NmcCheckInterval = TimeSpan.FromSeconds(5.0);
         
@@ -50,7 +52,15 @@ namespace dotBitNS.UI
             {
                 var info = NmcClient.Instance.GetInfo();
                 if (info != null)
+                {
                     Debug.WriteLine(string.Format("Success: Wallet version {0}", info.Version));
+
+                    var lastblock = NmcClient.Instance.GetLastBlock();
+                    if (lastblock != null)
+                    {
+                        LastBlockTimeGMT = NamecoinLib.Auxiliary.UnixTime.UnixTimeToDateTime(lastblock.Time);
+                    }
+                }
 
                 if (NameServerOnline && NameCoinOnline)
                 {

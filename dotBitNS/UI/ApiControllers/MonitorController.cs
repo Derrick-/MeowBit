@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace dotBitNS.UI.ApiControllers
@@ -8,6 +9,7 @@ namespace dotBitNS.UI.ApiControllers
         public bool Nmc { get; set; }
         public bool Ns { get; set; }
         public bool CacheHook { get; set; }
+        public DateTime? LastBlockTime { get; set; }
     }
 
     public class MonitorController : ApiController
@@ -20,7 +22,8 @@ namespace dotBitNS.UI.ApiControllers
             { 
                 Nmc = Monitor.NameCoinOnline, 
                 Ns = Monitor.NameServerOnline, 
-                CacheHook = WindowsNameServicesManager.AnyDotBitCacheConfigKeys() 
+                CacheHook = WindowsNameServicesManager.AnyDotBitCacheConfigKeys(),
+                LastBlockTime = Monitor.LastBlockTimeGMT
             };
         }
 

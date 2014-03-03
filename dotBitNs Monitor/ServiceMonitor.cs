@@ -34,6 +34,8 @@ namespace dotBitNs_Monitor
         public static DependencyPropertyKey NameCoinOnlineProperty = DependencyProperty.RegisterReadOnly("NameCoinOnline", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
         public static DependencyPropertyKey NameServerOnlineProperty = DependencyProperty.RegisterReadOnly("NameServerOnline", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
 
+        public static DependencyPropertyKey LastBlockTimeProperty = DependencyProperty.RegisterReadOnly("LastBlockTime", typeof(DateTime?), typeof(ServiceMonitor), new PropertyMetadata(null, OnPropertyChanged));
+        
         public class SystemGoEventArgs : EventArgs
         {
             public bool OldValue { get; set; }
@@ -96,6 +98,7 @@ namespace dotBitNs_Monitor
             {
                 NameCoinOnline = status.Nmc;
                 NameServerOnline = status.Ns;
+                LastBlockTime = status.LastBlockTime;
             }
             if (!NameCoinOnline)
             {
@@ -148,11 +151,16 @@ namespace dotBitNs_Monitor
             private set { SetValue(NameServerOnlineProperty, value); }
         }
 
+        public DateTime? LastBlockTime
+        {
+            get { return (DateTime?)GetValue(LastBlockTimeProperty.DependencyProperty); }
+            private set { SetValue(LastBlockTimeProperty, value); }
+        }
+
         static bool ProcessIsRunning()
         {
             var processes = System.Diagnostics.Process.GetProcessesByName(ProcessName);
             return processes.Any();
-
         }
 
         static bool ServiceIsInstalled()

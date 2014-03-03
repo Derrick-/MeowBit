@@ -57,6 +57,34 @@ namespace dotBitNS
             return MakeRequest<GetInfoResponse>(RpcMethods.getinfo);
         }
 
+        public GetBlockResponse GetLastBlock()
+        {
+            GetBlockResponse block=null;
+            var id = GetBlockCount();
+            if (id.HasValue)
+            {
+                var hash = GetBlockHash(id.Value);
+                if (hash != null)
+                    block = GetBlockInfo(hash);
+            }
+            return block;
+        }
+
+        public long? GetBlockCount()
+        {
+            return MakeRequest<long?>(RpcMethods.getblockcount);
+        }
+
+        public string GetBlockHash(long blockid)
+        {
+            return MakeRequest<string>(RpcMethods.getblockhash, blockid);
+        }
+
+        public GetBlockResponse GetBlockInfo(string hash)
+        {
+            return MakeRequest<GetBlockResponse>(RpcMethods.getblock, hash);
+        }
+
         private object lockLookup = new object();
         public NameShowResponse LookupRootName(string root)
         {
