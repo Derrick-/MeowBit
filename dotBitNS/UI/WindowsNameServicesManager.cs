@@ -117,6 +117,12 @@ namespace dotBitNS
                                 ReplaceDnsOnInterface(mo, interfacename, newdns);
                             }
                         }
+                        else
+                        {
+                            Console.Write("Found hooked interface: ");
+                            Console.Write("DNS {0}", originaldns == null ? "<NULL>" : string.Join(",", originaldns));
+                            Console.WriteLine(mo["SettingID"]);
+                        }
                         //DumpInterfaceProps(mo);
                     }
                 }

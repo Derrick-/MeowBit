@@ -58,6 +58,8 @@ namespace dotBitNS.UI
                 else if (++failcount > 2)
                     wnsm.Disable();
             }
+            else
+                Console.WriteLine("Service is closing...");
         }
 
         static void EventSink_NameServerAvailableChanged(NmcClient source, NameServerAvailableChangedEventArgs e)
