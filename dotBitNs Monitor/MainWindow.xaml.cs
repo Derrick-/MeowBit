@@ -43,6 +43,40 @@ namespace dotBitNs_Monitor
 
             NmcConfigSettings.ConfigUpdated += NmcConfigSetter_ConfigUpdated;
             NmcConfigSettings.ValidateNmcConfig();
+
+            Program.OnAdditionalInstanceSignal += OnRequestShow;
+
+            this.Closing += MainWindow_Closing;
+        }
+
+        void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // TODO: Integrate with Tray Icon
+            //this.Hide();
+            //e.Cancel = true;
+        }
+
+        private void OnRequestShow(object sender, EventArgs e)
+        {
+            Dispatcher.Invoke(EnsureVisible);
+        }
+
+        private void EnsureVisible()
+        {
+            if (!IsVisible)
+            {
+                Show();
+            }
+
+            if (WindowState == WindowState.Minimized)
+            {
+                WindowState = WindowState.Normal;
+            }
+
+            Activate();
+            Topmost = true;  // important
+            Topmost = false; // important
+            Focus();         // important
         }
 
         void NmcConfigSetter_ConfigUpdated()

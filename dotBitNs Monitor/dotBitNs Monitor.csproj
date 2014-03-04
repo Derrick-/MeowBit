@@ -38,6 +38,9 @@
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>dotBitNs_Monitor.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -72,6 +75,7 @@
     </Compile>
     <Compile Include="ApiClient.cs" />
     <Compile Include="NmcConfig.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="ServiceMonitor.cs" />
     <Compile Include="WPFControls\StatusIcon.xaml.cs">
       <DependentUpon>StatusIcon.xaml</DependentUpon>

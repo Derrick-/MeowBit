@@ -1,7 +1,7 @@
 ﻿<Window xmlns:WPFControls="clr-namespace:dotBitNs_Monitor.WPFControls"  x:Class="dotBitNs_Monitor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="dotBitNs Monitor" Height="210" Width="399" ResizeMode="NoResize">
+        Title="dotBitNs Monitor" Height="210" Width="399" ResizeMode="CanMinimize" Icon="icon.ico">
     <DockPanel Margin="0,0,0,5">
         <StackPanel Margin="0,0,0,10">
             <StackPanel.Resources>
@@ -46,5 +46,6 @@
                 </Grid>
             </DockPanel>
         </StackPanel>
+        <ToolBarTray Height="176" VerticalAlignment="Top" Width="100"/>
     </DockPanel>
 </Window>
