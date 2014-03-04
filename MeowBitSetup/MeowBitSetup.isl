@@ -4388,7 +4388,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{D499045D-EF28-4D03-B772-C4AED53E2FD1}</td><td/></row>
 		<row><td>ProductName</td><td>MeowBit</td><td/></row>
-		<row><td>ProductVersion</td><td>0.01.0000</td><td/></row>
+		<row><td>ProductVersion</td><td>0.02.0000</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
 		<row><td>ProgressType2</td><td>installed</td><td/></row>
