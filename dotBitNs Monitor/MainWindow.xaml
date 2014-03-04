@@ -4,8 +4,8 @@
         xmlns:WPFControls="clr-namespace:dotBitNs_Monitor.WPFControls"
         xmlns:tb="clr-namespace:Hardcodet.Wpf.TaskbarNotification" 
         xmlns:commands="clr-namespace:dotBitNs_Monitor.Commands" 
-        Title="dotBitNs Monitor" Height="210" Width="399" ResizeMode="CanMinimize" Icon="icon.ico">
-    <DockPanel Margin="0,0,0,5">
+        Title="dotBitNs Monitor" Height="222" Width="399" ResizeMode="CanMinimize" Icon="icon.ico">
+    <DockPanel Margin="0,0,0,0">
         <tb:TaskbarIcon x:Name="MyNotifyIcon"
                         IconSource="Resources/Cat48_Warning.ico"
                         ToolTipText="MeowBit"
@@ -17,6 +17,18 @@
             <!-- the data context of the context menu is the NotifyIcon itself (see more about this in DataBinding samples) -->
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="_About MeowBit"
+                              Command="{commands:ShowAboutCommand}"
+                              CommandParameter="{Binding}">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="Resources/info16.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <Separator />
+
                     <MenuItem Header="_Show Window"
                               Command="{commands:ShowWindowCommand}"
                               CommandParameter="{Binding}">
@@ -50,14 +62,14 @@
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
-        <StackPanel Margin="0,0,0,10">
+        <StackPanel>
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Label}">
                     <Setter Property="Width" Value="120"/>
                     <Setter Property="VerticalAlignment" Value="Center"/>
                 </Style>
                 <Style TargetType="{x:Type Button}">
-                    <Setter Property="Margin" Value="3 0 0 0"/>
+                    <Setter Property="Margin" Value="3,0,0,0"/>
                 </Style>
                 
             </StackPanel.Resources>
@@ -92,6 +104,18 @@
                     <TextBlock Name="txtBlockStatus" VerticalAlignment="Center" HorizontalAlignment="Center">No Blocks</TextBlock>
                 </Grid>
             </DockPanel>
+            <TextBlock TextAlignment="Center" Margin="0,3,0,0">
+            <TextBlock Margin="20,0,20,0">
+                <Hyperlink NavigateUri="http://meowbit.com" RequestNavigate="Hyperlink_OpenAbout">
+                    About MeowBit
+                </Hyperlink>
+                </TextBlock>
+                <TextBlock Margin="20,0,20,0">
+                <Hyperlink NavigateUri="http://meowbit.com" RequestNavigate="Hyperlink_RequestNavigate">
+                    http://meowbit.com
+                </Hyperlink>
+            </TextBlock>
+            </TextBlock>
         </StackPanel>
     </DockPanel>
 </Window>

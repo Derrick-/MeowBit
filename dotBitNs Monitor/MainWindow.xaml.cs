@@ -1,6 +1,7 @@
 ﻿using dotBitNs_Monitor.WPFControls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace dotBitNs_Monitor
     interface IMainWindow
     {
         void EnsureVisible();
+        void ShowAbout();
         void Exit();
     }
 
@@ -74,6 +76,23 @@ namespace dotBitNs_Monitor
             Close();
         }
 
+        private AboutWindow about = null;
+        public void ShowAbout()
+        {
+            if (about == null)
+            {
+                about = new AboutWindow();
+                about.Closed += about_Closed;
+            }
+            EnsureVisible(about);
+        }
+
+        void about_Closed(object sender, EventArgs e)
+        {
+            about = null;
+        }
+
+
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if(!AllowExit)
@@ -90,20 +109,25 @@ namespace dotBitNs_Monitor
 
         public void EnsureVisible()
         {
-            if (!IsVisible)
+            EnsureVisible(this);
+        }
+
+        private static void EnsureVisible(Window window)
+        {
+            if (!window.IsVisible)
             {
-                Show();
+                window.Show();
             }
 
-            if (WindowState == WindowState.Minimized)
+            if (window.WindowState == WindowState.Minimized)
             {
-                WindowState = WindowState.Normal;
+                window.WindowState = WindowState.Normal;
             }
 
-            Activate();
-            Topmost = true;  // important
-            Topmost = false; // important
-            Focus();         // important
+            window.Activate();
+            window.Topmost = true;  // important
+            window.Topmost = false; // important
+            window.Focus();         // important
         }
 
         void NmcConfigSetter_ConfigUpdated()
@@ -313,6 +337,17 @@ namespace dotBitNs_Monitor
         private void MyNotifyIcon_PreviewTrayContextMenuOpen(object sender, System.Windows.RoutedEventArgs e)
         {
 
+        }
+
+        private void Hyperlink_OpenAbout(object sender, RequestNavigateEventArgs e)
+        {
+            ShowAbout();
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }
