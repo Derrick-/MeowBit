@@ -10,7 +10,7 @@
                         IconSource="Resources/Cat48_Warning.ico"
                         ToolTipText="MeowBit"
                         TrayContextMenuOpen="MyNotifyIcon_TrayContextMenuOpen"
-                        DoubleClickCommand="{commands:ShowWindowCommand}"
+                        DoubleClickCommand="{commands:ToggleWindowCommand}"
                         DoubleClickCommandParameter="{Binding}"
                         PreviewTrayContextMenuOpen="MyNotifyIcon_PreviewTrayContextMenuOpen">
             <!-- Set a simple context menu  -->

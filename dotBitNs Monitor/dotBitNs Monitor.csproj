@@ -81,6 +81,7 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ApiClient.cs" />
+    <Compile Include="Commands\ToggleWindowCommand.cs" />
     <Compile Include="Commands\ShowAboutCommand.cs" />
     <Compile Include="NmcConfig.cs" />
     <Compile Include="Program.cs" />

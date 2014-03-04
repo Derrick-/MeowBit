@@ -11,15 +11,24 @@ namespace dotBitNs_Monitor.Commands
     /// <summary>
     /// Shows the main window.
     /// </summary>
-    public class ShowWindowCommand : CommandBase<ShowWindowCommand>
+    public class ToggleWindowCommand : CommandBase<ToggleWindowCommand>
     {
         public override void Execute(object parameter)
         {
             var win = GetTaskbarWindow(parameter);
-            if (win is IMainWindow)
-                ((IMainWindow)win).EnsureVisible();
+            var imain = win as IMainWindow;
+            bool show = !win.IsVisible || win.WindowState == WindowState.Minimized;
+
+            if (show)
+            {
+                if (imain != null)
+                    imain.EnsureVisible();
+                else 
+                    win.Show();
+            }
             else
-                win.Show();
+                win.Hide();
+
             CommandManager.InvalidateRequerySuggested();
         }
 
@@ -27,8 +36,6 @@ namespace dotBitNs_Monitor.Commands
         public override bool CanExecute(object parameter)
         {
             Window win = GetTaskbarWindow(parameter);
-            if (win is IMainWindow)
-                    return true;
             return win != null && !win.IsVisible;
         }
     }
