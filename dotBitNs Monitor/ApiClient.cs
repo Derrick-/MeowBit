@@ -1,4 +1,9 @@
-﻿using dotBitNS.UI.ApiControllers;
+﻿// Products: MeowBit dotBitNS
+// THE BEASTLICK INTERNET POLICY COMMISSION & Alien Seed Software
+// Author: Derrick Slopey derrick@alienseed.com
+// March 4, 2014
+
+using dotBitNS.UI.ApiControllers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

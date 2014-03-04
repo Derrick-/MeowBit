@@ -1,4 +1,9 @@
-﻿// Thanks to Sachin Nigam for the code.
+﻿// Products: MeowBit dotBitNS
+// THE BEASTLICK INTERNET POLICY COMMISSION & Alien Seed Software
+// Author: Derrick Slopey derrick@alienseed.com
+// March 4, 2014
+
+// Thanks to Sachin Nigam for the code.
 // http://www.c-sharpcorner.com/UploadFile/sachin.nigam/InstallingWinServiceProgrammatically11262005061332AM/InstallingWinServiceProgrammatically.aspx
 
 using System;

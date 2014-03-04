@@ -1,4 +1,9 @@
-﻿using NamecoinLib.ExceptionHandling;
+﻿// Products: MeowBit dotBitNS
+// THE BEASTLICK INTERNET POLICY COMMISSION & Alien Seed Software
+// Author: Derrick Slopey derrick@alienseed.com
+// March 4, 2014
+
+using NamecoinLib.ExceptionHandling;
 using NamecoinLib.Requests;
 using NamecoinLib.Responses;
 using NamecoinLib.RPC;

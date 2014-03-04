@@ -1,4 +1,9 @@
-﻿using System.Reflection;
+﻿// Products: MeowBit dotBitNS
+// THE BEASTLICK INTERNET POLICY COMMISSION & Alien Seed Software
+// Author: Derrick Slopey derrick@alienseed.com
+// March 4, 2014
+
+using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

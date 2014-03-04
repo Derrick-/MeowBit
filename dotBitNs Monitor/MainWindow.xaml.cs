@@ -1,4 +1,9 @@
-﻿using dotBitNs_Monitor.WPFControls;
+﻿// Products: MeowBit dotBitNS
+// THE BEASTLICK INTERNET POLICY COMMISSION & Alien Seed Software
+// Author: Derrick Slopey derrick@alienseed.com
+// March 4, 2014
+
+using dotBitNs_Monitor.WPFControls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

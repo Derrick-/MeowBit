@@ -1,4 +1,9 @@
-﻿using System.Windows;
+﻿// Products: MeowBit dotBitNS
+// THE BEASTLICK INTERNET POLICY COMMISSION & Alien Seed Software
+// Author: Derrick Slopey derrick@alienseed.com
+// March 4, 2014
+
+using System.Windows;
 using System.Windows.Input;
 
 namespace dotBitNs_Monitor.Commands

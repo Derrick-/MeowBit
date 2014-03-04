@@ -1,4 +1,9 @@
-﻿using ARSoft.Tools.Net.Dns;
+﻿// Products: MeowBit dotBitNS
+// THE BEASTLICK INTERNET POLICY COMMISSION & Alien Seed Software
+// Author: Derrick Slopey derrick@alienseed.com
+// March 4, 2014
+
+using ARSoft.Tools.Net.Dns;
 using NamecoinLib.Responses;
 using System;
 using System.Collections.Generic;

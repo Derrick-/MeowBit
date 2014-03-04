@@ -1,4 +1,9 @@
-﻿using Owin;
+﻿// Products: MeowBit dotBitNS
+// THE BEASTLICK INTERNET POLICY COMMISSION & Alien Seed Software
+// Author: Derrick Slopey derrick@alienseed.com
+// March 4, 2014
+
+using Owin;
 using System.Web.Http;
 using Microsoft.Owin.Hosting;
 using System;
