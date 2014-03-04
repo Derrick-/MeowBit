@@ -113,6 +113,15 @@ namespace dotBitNs_Monitor
 
         void serviceMonitor_SystemGoChanged(object sender, ServiceMonitor.SystemGoEventArgs e)
         {
+            string icoName;
+            if (e.NewValue)
+                icoName = "Cat48_Ok.ico";
+            else
+                icoName = "Cat48_Error.ico";
+
+            var iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/" + icoName)).Stream;
+            var icon = new System.Drawing.Icon(iconStream);
+            MyNotifyIcon.Icon = icon;
         }
 
         void serviceMonitor_OnStatusUpdated(object sender, EventArgs e)
@@ -205,6 +214,7 @@ namespace dotBitNs_Monitor
                 txtNameCoinInfo.Text = "";
 
             iconService.ToolTip = textStatus;
+            MyNotifyIcon.ToolTipText = "Meow Bit: " + textStatus;
         }
 
         private string FriendlyTimeString(TimeSpan ts)

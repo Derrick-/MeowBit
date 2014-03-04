@@ -85,7 +85,7 @@ namespace dotBitNs_Monitor
             //    NameServerOnline = false;
             //}
 
-            SystemGo = ServiceRunning && ApiOnline && NameCoinOnline && NameServerOnline;
+            SystemGo = NameCoinOnline && NameServerOnline;
 
             if (OnStatusUpdated != null)
                 OnStatusUpdated(this, new EventArgs() { });

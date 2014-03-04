@@ -7,7 +7,7 @@
         Title="dotBitNs Monitor" Height="210" Width="399" ResizeMode="CanMinimize" Icon="icon.ico">
     <DockPanel Margin="0,0,0,5">
         <tb:TaskbarIcon x:Name="MyNotifyIcon"
-                        IconSource="/Resources/icon.ico"
+                        IconSource="Resources/Cat48_Warning.ico"
                         ToolTipText="MeowBit"
                         TrayContextMenuOpen="MyNotifyIcon_TrayContextMenuOpen"
                         DoubleClickCommand="{commands:ShowWindowCommand}"
