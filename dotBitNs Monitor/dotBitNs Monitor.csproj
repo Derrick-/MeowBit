@@ -77,6 +77,28 @@
     <Compile Include="NmcConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ServiceMonitor.cs" />
+    <Compile Include="WPFControls\NotifyIcon\BalloonIcon.cs" />
+    <Compile Include="Commands\CloseWindowCommand.cs" />
+    <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\HideWindowCommand.cs" />
+    <Compile Include="Commands\ShowWindowCommand.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\BalloonFlags.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\IconDataMembers.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\IconState.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\MouseEvent.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\NotifyCommand.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\NotifyIconData.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\NotifyIconVersion.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\Point.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\TrayInfo.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\WinApi.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\WindowClass.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Interop\WindowMessageSink.cs" />
+    <Compile Include="WPFControls\NotifyIcon\PopupActivationMode.cs" />
+    <Compile Include="WPFControls\NotifyIcon\RoutedEventHelper.cs" />
+    <Compile Include="WPFControls\NotifyIcon\TaskbarIcon.cs" />
+    <Compile Include="WPFControls\NotifyIcon\TaskbarIcon.Declarations.cs" />
+    <Compile Include="WPFControls\NotifyIcon\Util.cs" />
     <Compile Include="WPFControls\StatusIcon.xaml.cs">
       <DependentUpon>StatusIcon.xaml</DependentUpon>
     </Compile>
@@ -156,6 +178,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

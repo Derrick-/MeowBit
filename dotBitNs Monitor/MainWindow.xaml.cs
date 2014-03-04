@@ -17,10 +17,17 @@ using System.Windows.Shapes;
 
 namespace dotBitNs_Monitor
 {
+
+    interface IMainWindow
+    {
+        void EnsureVisible();
+        void Exit();
+    }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IMainWindow
     {
 
         public static readonly DateTime GenesisBlockTimeGMT = new DateTime(2011, 4, 19, 12, 59, 40);
@@ -47,13 +54,33 @@ namespace dotBitNs_Monitor
             Program.OnAdditionalInstanceSignal += OnRequestShow;
 
             this.Closing += MainWindow_Closing;
+
+            this.StateChanged += MainWindow_StateChanged;
+
+            MyNotifyIcon.DoubleClickCommandParameter = MyNotifyIcon;
+        }
+
+        void MainWindow_StateChanged(object sender, EventArgs e)
+        {
+            var window = sender as MainWindow;
+            if (window != null)
+                window.ShowInTaskbar = window.WindowState != System.Windows.WindowState.Minimized;
+        }
+
+        bool AllowExit=false;
+        public void Exit()
+        {
+            AllowExit=true;
+            Close();
         }
 
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // TODO: Integrate with Tray Icon
-            //this.Hide();
-            //e.Cancel = true;
+            if(!AllowExit)
+            {
+            this.Hide();
+            e.Cancel = true;
+            }
         }
 
         private void OnRequestShow(object sender, EventArgs e)
@@ -61,7 +88,7 @@ namespace dotBitNs_Monitor
             Dispatcher.Invoke(EnsureVisible);
         }
 
-        private void EnsureVisible()
+        public void EnsureVisible()
         {
             if (!IsVisible)
             {
@@ -268,5 +295,14 @@ namespace dotBitNs_Monitor
             Dispatcher.Invoke(() => { btnAutostart.IsEnabled = true; });
         }
 
+        private void MyNotifyIcon_TrayContextMenuOpen(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+
+        private void MyNotifyIcon_PreviewTrayContextMenuOpen(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

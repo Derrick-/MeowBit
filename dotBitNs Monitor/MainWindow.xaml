@@ -1,8 +1,55 @@
-﻿<Window xmlns:WPFControls="clr-namespace:dotBitNs_Monitor.WPFControls"  x:Class="dotBitNs_Monitor.MainWindow"
+﻿<Window x:Class="dotBitNs_Monitor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:WPFControls="clr-namespace:dotBitNs_Monitor.WPFControls"
+        xmlns:tb="clr-namespace:Hardcodet.Wpf.TaskbarNotification" 
+        xmlns:commands="clr-namespace:dotBitNs_Monitor.Commands" 
         Title="dotBitNs Monitor" Height="210" Width="399" ResizeMode="CanMinimize" Icon="icon.ico">
     <DockPanel Margin="0,0,0,5">
+        <tb:TaskbarIcon x:Name="MyNotifyIcon"
+                        IconSource="/Resources/icon.ico"
+                        ToolTipText="MeowBit"
+                        TrayContextMenuOpen="MyNotifyIcon_TrayContextMenuOpen"
+                        DoubleClickCommand="{commands:ShowWindowCommand}"
+                        DoubleClickCommandParameter="{Binding}"
+                        PreviewTrayContextMenuOpen="MyNotifyIcon_PreviewTrayContextMenuOpen">
+            <!-- Set a simple context menu  -->
+            <!-- the data context of the context menu is the NotifyIcon itself (see more about this in DataBinding samples) -->
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="_Show Window"
+                              Command="{commands:ShowWindowCommand}"
+                              CommandParameter="{Binding}">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="/Resources/Add.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="_Hide Window"
+                              Command="{commands:HideWindowCommand}"
+                              CommandParameter="{Binding}">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="/Resources/Remove.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    
+                    <Separator />
+
+                    <MenuItem Header="E_xit MeowBit"
+                              Command="{commands:CloseWindowCommand}"
+                              CommandParameter="{Binding}">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="/Resources/Close.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
         <StackPanel Margin="0,0,0,10">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Label}">
@@ -46,6 +93,5 @@
                 </Grid>
             </DockPanel>
         </StackPanel>
-        <ToolBarTray Height="176" VerticalAlignment="Top" Width="100"/>
     </DockPanel>
 </Window>
