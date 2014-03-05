@@ -81,6 +81,7 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ApiClient.cs" />
+    <Compile Include="Commands\OpenBrowserCommand.cs" />
     <Compile Include="Commands\ToggleWindowCommand.cs" />
     <Compile Include="Commands\ShowAboutCommand.cs" />
     <Compile Include="NmcConfig.cs" />
@@ -220,6 +221,24 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\info16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\question16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\page_go.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\namecoin_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\namecoin_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\namecoin_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\namecoin_48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

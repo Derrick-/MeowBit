@@ -173,9 +173,59 @@ namespace dotBitNs_Monitor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap namecoin_16 {
+            get {
+                object obj = ResourceManager.GetObject("namecoin_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap namecoin_32 {
+            get {
+                object obj = ResourceManager.GetObject("namecoin_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap namecoin_48 {
+            get {
+                object obj = ResourceManager.GetObject("namecoin_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap namecoin_64 {
+            get {
+                object obj = ResourceManager.GetObject("namecoin_64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Ok_125 {
             get {
                 object obj = ResourceManager.GetObject("Ok_125", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap page_go {
+            get {
+                object obj = ResourceManager.GetObject("page_go", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -196,6 +246,16 @@ namespace dotBitNs_Monitor.Properties {
         internal static System.Drawing.Bitmap Question_125 {
             get {
                 object obj = ResourceManager.GetObject("Question_125", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap question16 {
+            get {
+                object obj = ResourceManager.GetObject("question16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
