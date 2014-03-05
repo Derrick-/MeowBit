@@ -50,6 +50,6 @@
             </Hyperlink>
         </TextBlock>
         <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">MeowBit was not created to use for any illegal purpose. Laws vary. If you have questions concerning your intended use of this software, the creators of MeowBit recommend consulting an attorney of your choice</TextBlock>
-        <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">MeowBit makes it difficult for your domain to be removed.  Used alone, MeowBit does NOT make the website owner or viewer invisible. MeowBit is not intended to mask the identity of the website owner or viewer.</TextBlock>
+        <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">Dot-Bit makes it difficult for your domain to be removed. Used alone, Dot-Bit and MeowBit do NOT make the website owner or viewer invisible. Dot-Bit and MeowBit are not intended to mask the identity of the website owner or viewer.</TextBlock>
     </StackPanel>
 </Window>
