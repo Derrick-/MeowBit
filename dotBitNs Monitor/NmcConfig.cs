@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -129,13 +130,24 @@ namespace dotBitNs_Monitor
                     {
                         var parts = GetLineParts(line);
                         if (parts != null && parts.Length > 0)
-                            Settings.Add(parts[0].ToLower(), parts.Length > 0 ? parts.Length == 1 ? parts[1] : string.Join(" ", parts.Skip(1)) : null);
+                        {
+                            string key=parts[0].ToLower();
+                            string value = parts.Length > 0 ? parts.Length == 1 ? parts[1] : string.Join(" ", parts.Skip(1)) : null;
+                            if(Settings.ContainsKey(key))
+                                Debug.WriteLine("Duplicate Namecoin key {0}={1}, using first found value of {2}", key, PrintFormatKey(value), PrintFormatKey(Settings[key]), PrintFormatKey(Settings[key]));
+                            Settings[key] = value;
+                        }
                     }
                 }
                 else
                 {
                     InvokeNameCoinConfigInfo(string.Format("Creating default config file at {0}", Path));
                 }
+            }
+
+            private string PrintFormatKey(string value)
+            {
+                return value ?? "<NULL>";
             }
 
             private void EnsureSetting(string key, string defaultvalue, bool forceDefaultValue)
