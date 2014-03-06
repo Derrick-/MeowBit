@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace dotBitNS
 {
+    [System.ComponentModel.DesignerCategory("")]
     public partial class Service : ServiceBase
     {
         public const string GlobalServiceName = "dotBitNS";

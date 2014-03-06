@@ -337,7 +337,7 @@ namespace dotBitNS
 
         private static void LoadSettings()
         {
-            LoggingRequested |= IsService & ConfigurationManager.AppSettings.Get("ServiceLogging") == "true";
+            LoggingRequested |= IsService && ConfigurationManager.AppSettings.Get("ServiceLogging") == "true";
         }
 
         private static void Initialize()

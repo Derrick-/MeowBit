@@ -81,6 +81,8 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ApiClient.cs" />
+    <Compile Include="Commands\CheckForUpdatesCommand.cs" />
+    <Compile Include="Commands\OpenSettingsWindowCommand.cs" />
     <Compile Include="Commands\OpenBrowserCommand.cs" />
     <Compile Include="Commands\ToggleWindowCommand.cs" />
     <Compile Include="Commands\ShowAboutCommand.cs" />

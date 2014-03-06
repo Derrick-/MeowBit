@@ -85,9 +85,7 @@
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Core\EventSink.cs" />
     <Compile Include="Core\Logger.cs" />
-    <Compile Include="Core\Service.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Core\Service.cs" />
     <Compile Include="Core\Service.Designer.cs">
       <DependentUpon>Service.cs</DependentUpon>
     </Compile>

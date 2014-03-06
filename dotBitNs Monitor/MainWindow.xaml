@@ -17,19 +17,20 @@
             <!-- the data context of the context menu is the NotifyIcon itself (see more about this in DataBinding samples) -->
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="_Check for Updates" Command="{commands:CheckForUpdatesCommand}" CommandParameter="{Binding}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="Resources/updates_icon.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="_Settings" Command="{commands:OpenSettingsWindowCommand}" CommandParameter="{Binding}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="Resources/gear_icon.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Header="_Help">
                         <MenuItem.Icon>
                             <Image Width="16"  Height="16" Source="Resources/question16.png" />
                         </MenuItem.Icon>
-                        <MenuItem.Resources>
-                            <Style TargetType="MenuItem">
-                                <Setter Property="Icon">
-                                    <Setter.Value>
-                                        <Image Width="16" Height="16" Source="Resources/page_go.png" />
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </MenuItem.Resources>
                         <MenuItem Header="_MeowBit Site" Command="{commands:OpenBrowserCommand}" CommandParameter="http://meowbit.com">
                             <MenuItem.Icon>
                                 <Image Width="16" Height="16" Source="Resources/Cat48-clear.png" />
@@ -48,45 +49,32 @@
                     </MenuItem>
 
                     <MenuItem Header="_About MeowBit"
-                              Command="{commands:ShowAboutCommand}"
-                              CommandParameter="{Binding}">
+                              Command="{commands:ShowAboutCommand}" CommandParameter="{Binding}">
                         <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="Resources/info16.png" />
+                            <Image Width="16" Height="16" Source="Resources/info16.png" />
                         </MenuItem.Icon>
                     </MenuItem>
 
                     <Separator />
 
                     <MenuItem Header="_Show Window"
-                              Command="{commands:ShowWindowCommand}"
-                              CommandParameter="{Binding}">
+                              Command="{commands:ShowWindowCommand}" CommandParameter="{Binding}">
                         <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="/Resources/Add.png" />
+                            <Image Width="16" Height="16" Source="/Resources/Add.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Hide Window"
-                              Command="{commands:HideWindowCommand}"
-                              CommandParameter="{Binding}">
+                              Command="{commands:HideWindowCommand}" CommandParameter="{Binding}">
                         <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="/Resources/Remove.png" />
+                            <Image Width="16" Height="16" Source="/Resources/Remove.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     
                     <Separator />
 
-                    <MenuItem Header="E_xit MeowBit"
-                              Command="{commands:CloseWindowCommand}"
-                              CommandParameter="{Binding}">
+                    <MenuItem Header="E_xit MeowBit" Command="{commands:CloseWindowCommand}" CommandParameter="{Binding}">
                         <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="/Resources/Close.png" />
+                            <Image Width="16" Height="16" Source="/Resources/Close.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
