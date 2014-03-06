@@ -20,7 +20,7 @@ namespace DumpInterfaceManagementObjects
         static void Main(string[] args)
         {
             MultiTextWriter m_MultiConOut;
-            Console.SetOut(m_MultiConOut = new MultiTextWriter(Console.Out, new FileLogger(outFile, false)));
+            Console.SetOut(m_MultiConOut = new MultiTextWriter(Console.Out, new FileLogger(outFile, append: false)));
             Console.WriteLine("OS Version {0} : {1}", System.Environment.OSVersion, WindowsNameServicesManager.GetWindowsVersion());
             using (m_MultiConOut)
             {

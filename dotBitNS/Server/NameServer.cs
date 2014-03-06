@@ -65,7 +65,7 @@ namespace dotBitNS.Server
         {
             using (new ConsoleUtils.Warning())
             {
-                Console.WriteLine("Nameserver threw error: " + e.Exception.ToString());
+                Console.WriteLine("Nameserver threw error: " + e.Exception.Message);
             }
         }
 

@@ -42,6 +42,14 @@ namespace dotBitNS
         private static string m_WorkingFolder;
         static string m_Name = null;
 
+        private static MultiTextWriter m_MultiConOut;
+        private static FileLogger m_Logger;
+        public static bool LoggingEnabled
+        {
+            get { return (m_Logger != null) ? m_Logger.Enabled : false; }
+            set { if (m_Logger != null) m_Logger.Enabled = value; }
+        }
+
         private static long m_CycleIndex = 1;
         private static float[] m_CyclesPerSecond = new float[100];
 
@@ -54,8 +62,9 @@ namespace dotBitNS
         public static string Arguments { get; set; }
         public static bool IsService { get; private set; }
         public static bool TestMode { get; private set; }
-        public static bool Debug { get; private set; }
+        public static bool LoggingRequested { get; private set; }
 
+        public static bool Debug { get; private set; }
         public static Assembly Assembly { get { return m_Assembly; } set { m_Assembly = value; } }
         public static Version Version { get { return m_Assembly.GetName().Version; } }
         public static string Name { get { return m_Name ?? (m_Name = m_Assembly.FullName.Split(',')[0]); } }
@@ -168,6 +177,8 @@ namespace dotBitNS
                     TestMode = true;
                 else if (Insensitive.Equals(arg, "-service"))
                     IsService = true;
+                else if (Insensitive.Equals(arg, "-log"))
+                    LoggingRequested = true;
                 else if (IsServiceCommand(arg))
                 {
                     Console.WriteLine("Service commands may not be used with other arguments");
@@ -246,6 +257,10 @@ namespace dotBitNS
 
         internal static void Run()
         {
+
+            LoadSettings();
+            InitializeLogging();
+
             Console.WriteLine("Starting...");
 
             m_Thread = Thread.CurrentThread;
@@ -262,8 +277,6 @@ namespace dotBitNS
             Version ver = m_Assembly.GetName().Version;
 
             Configure();
-
-            LoadSettings();
 
             Initialize();
 
@@ -307,6 +320,16 @@ namespace dotBitNS
             }
         }
 
+        private static void InitializeLogging()
+        {
+            string datecode = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string file = string.Format("{0}.log", datecode);
+            string path = Path.Combine(Program.WorkingFolder, @"logs\console\");
+            Directory.CreateDirectory(path);
+            m_Logger = new FileLogger(file, path, enabled: LoggingRequested);
+            Console.SetOut(m_MultiConOut = new MultiTextWriter(Console.Out, m_Logger));
+        }
+
         private static void Configure()
         {
             Invoke(new Assembly[] { Assembly }, "Configure");
@@ -314,7 +337,7 @@ namespace dotBitNS
 
         private static void LoadSettings()
         {
-
+            LoggingRequested |= IsService & ConfigurationManager.AppSettings.Get("ServiceLogging") == "true";
         }
 
         private static void Initialize()
@@ -448,6 +471,5 @@ namespace dotBitNS
         {
             Console.WriteLine("Pause and Continue not implemented...");
         }
-
     }
 }

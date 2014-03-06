@@ -19,8 +19,6 @@ namespace dotBitNS
 {
     public partial class Service : ServiceBase
     {
-        private static MultiTextWriter m_MultiConOut;
-
         public const string GlobalServiceName = "dotBitNS";
         public const string GlobalServiceDescription = "MeowBit Name Server for dot-bit name resolution";
 
@@ -34,12 +32,6 @@ namespace dotBitNS
             CanStop = true;
 
             this.EventLog.Source = ServiceName;
-
-            string datecode = DateTime.Now.ToString("yyyyMMddHHmmss");
-            string FileName = string.Format("{0}.log", datecode);
-            string path = Path.Combine(Program.WorkingFolder, @"logs\console\");
-            Directory.CreateDirectory(path);
-            Console.SetOut(m_MultiConOut = new MultiTextWriter(Console.Out, new FileLogger(Path.Combine(path, FileName))));
         }
 
         public static void ServiceControlStop()

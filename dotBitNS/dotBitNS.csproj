@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\CallPriority.cs" />
+    <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Core\EventSink.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\Service.cs">

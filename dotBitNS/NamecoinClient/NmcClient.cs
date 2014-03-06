@@ -18,27 +18,6 @@ using System.Threading.Tasks;
 
 namespace dotBitNS
 {
-    //TODO: remove ConfigurationManager mock
-    static class ConfigurationManager
-    {
-        public static class AppSettings
-        {
-            public static string Get(string key)
-            {
-                switch (key)
-                {
-                    case "UseTestNet": return "false";
-                    case "DaemonUrl": return string.IsNullOrWhiteSpace(NmcConfig.RpcPort) ? null : "http://127.0.0.1:" + NmcConfig.RpcPort ;
-                    case "RpcUsername": return NmcConfig.RpcUser;
-                    case "RpcPassword": return NmcConfig.RpcPass;
-                    case "RpcRequestTimeoutInSeconds": return "1";
-                }
-                return null;
-            }
-        }
-
-    }
-
     class NmcClient
     {
 
@@ -118,7 +97,7 @@ namespace dotBitNS
                 result = _rpcConnector.MakeRequest<T>(method, parameters);
                 if (result == null)
                 {
-                    Console.WriteLine("NMC Connector is misconfigured");
+                    Console.WriteLine("NMC Connector is not configured");
                     ok = false;
                 }
                 else
