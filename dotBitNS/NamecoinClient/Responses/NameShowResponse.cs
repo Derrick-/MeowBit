@@ -104,10 +104,16 @@ namespace NamecoinLib.Responses
             return toReturn;
         }
 
+        static class Lists<T>
+        {
+            public static readonly List<T> Empty = new List<T>();
+        }
+
         public IEnumerable<string> Maps
         {
             get
             {
+                if (map == null) return Lists<string>.Empty;
                 return map.Select(m => m.name);
             }
         }
@@ -116,18 +122,21 @@ namespace NamecoinLib.Responses
         {
             get
             {
+                if (info == null) return Lists<string>.Empty;
                 return info.Properties().Select(m => m.Name);
             }
         }
 
         public IEnumerable<NameValue> GetMapValue(string name)
         {
+            if (map == null) return Lists<NameValue>.Empty;
             return map.Where(m => m.name == name).Select(m => m.value);
         }
 
 
         public IEnumerable<string> GetInfoValue(string name)
         {
+            if (info == null) return Lists<string>.Empty;
             return info.Properties().Where(m => m.Name == name && m.Value.Type == JTokenType.String).Select(m => (string)m.Value);
         }
     }

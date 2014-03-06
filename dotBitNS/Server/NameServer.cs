@@ -289,10 +289,11 @@ namespace dotBitNS.Server
                         if (sub == null)
                             sub = value.GetMapValue("*").FirstOrDefault();
                         if (sub == null)
+                            // TODO: What is the specification for ""
                             sub = value.GetMapValue("").FirstOrDefault();
                         if (sub == null)
                         {
-                            value = null;
+                            // TODO: What is the specification for an undeclared domain with no "*" or ""
                             break;
                         }
                         value = sub;
