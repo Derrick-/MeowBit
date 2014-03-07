@@ -15,7 +15,7 @@ namespace dotBitNs_Monitor.Commands
         {
             var win = GetTaskbarWindow(parameter);
             if (win is IMainWindow)
-                ((IMainWindow)win).ShowAbout();
+                ((IMainWindow)win).ShowSettingsWindow(SettingsWindow.TabName.About); ;
             CommandManager.InvalidateRequerySuggested();
         }
 

@@ -41,7 +41,27 @@ namespace dotBitNs_Monitor
         public static DependencyPropertyKey NameServerOnlineProperty = DependencyProperty.RegisterReadOnly("NameServerOnline", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnPropertyChanged));
 
         public static DependencyPropertyKey LastBlockTimeProperty = DependencyProperty.RegisterReadOnly("LastBlockTime", typeof(DateTime?), typeof(ServiceMonitor), new PropertyMetadata(null, OnPropertyChanged));
-        
+
+        public static DependencyProperty LoggingProperty = DependencyProperty.Register("Logging", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnLoggingChanged));
+
+        private static void OnLoggingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var target = d as ServiceMonitor;
+            if (target != null)
+                target.SendConfig(
+                    new dotBitNS.UI.ApiControllers.NmcConfigJson()
+                    {
+                        Logging = e.NewValue.ToString()
+                    });
+
+        }
+
+        public bool Logging
+        {
+            get { return (bool)GetValue(LoggingProperty); }
+            set { SetValue(LoggingProperty, value); }
+        }
+
         public class SystemGoEventArgs : EventArgs
         {
             public bool OldValue { get; set; }
@@ -108,8 +128,19 @@ namespace dotBitNs_Monitor
             }
             if (!NameCoinOnline)
             {
-                apiClient.SendConfig();
+                SendConfig(new dotBitNS.UI.ApiControllers.NmcConfigJson()
+                {
+                    User = NmcConfigSettings.RpcUser,
+                    Pass = NmcConfigSettings.RpcPass,
+                    Port = NmcConfigSettings.RpcPort,
+                    //Logging = Logging.ToString(),
+                });
             }
+        }
+
+        private void SendConfig(dotBitNS.UI.ApiControllers.NmcConfigJson config)
+        {
+            apiClient.SendConfig(config);
         }
 
         /// <summary>

@@ -70,7 +70,7 @@ namespace dotBitNs_Monitor
             return null;
         }
 
-        public async void SendConfig()
+        public async void SendConfig(NmcConfigJson config)
         {
             using (var client = new HttpClient())
             {
@@ -82,13 +82,6 @@ namespace dotBitNs_Monitor
                 {
                     HttpRequestMessage request = new HttpRequestMessage();
 
-                    NmcConfigJson config = new NmcConfigJson()
-                    {
-                        User = NmcConfigSettings.RpcUser,
-                        Pass = NmcConfigSettings.RpcPass,
-                        Port = NmcConfigSettings.RpcPort
-                    };
-
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(config);
                     HttpContent content = new StringContent(json);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -97,7 +90,6 @@ namespace dotBitNs_Monitor
                 catch { }
             }
         }
-
 
         public int Port
         {

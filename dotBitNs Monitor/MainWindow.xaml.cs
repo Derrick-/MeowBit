@@ -27,7 +27,7 @@ namespace dotBitNs_Monitor
     interface IMainWindow
     {
         void EnsureVisible();
-        void ShowAbout();
+        void ShowSettingsWindow(SettingsWindow.TabName tab = default(SettingsWindow.TabName));
         void Exit();
     }
 
@@ -61,6 +61,7 @@ namespace dotBitNs_Monitor
             Program.OnAdditionalInstanceSignal += OnRequestShow;
 
             this.Closing += MainWindow_Closing;
+            this.Closed += MainWindow_Closed;
 
             this.StateChanged += MainWindow_StateChanged;
 
@@ -81,15 +82,16 @@ namespace dotBitNs_Monitor
             Close();
         }
 
-        private AboutWindow about = null;
-        public void ShowAbout()
+        private SettingsWindow about = null;
+        public void ShowSettingsWindow(SettingsWindow.TabName tab = default(SettingsWindow.TabName))
         {
             if (about == null)
             {
-                about = new AboutWindow();
+                about = new SettingsWindow(serviceMonitor);
                 about.Closed += about_Closed;
             }
             EnsureVisible(about);
+            about.SwitchToTab(tab);
         }
 
         void about_Closed(object sender, EventArgs e)
@@ -100,10 +102,19 @@ namespace dotBitNs_Monitor
 
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if(!AllowExit)
+            if (!AllowExit)
             {
-            this.Hide();
-            e.Cancel = true;
+                this.Hide();
+                e.Cancel = true;
+            }
+        }
+
+        void MainWindow_Closed(object sender, EventArgs e)
+        {
+            if (about != null)
+            {
+                about.Close();
+                about = null;
             }
         }
 
@@ -346,7 +357,7 @@ namespace dotBitNs_Monitor
 
         private void Hyperlink_OpenAbout(object sender, RequestNavigateEventArgs e)
         {
-            ShowAbout();
+            ShowSettingsWindow(SettingsWindow.TabName.About);
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

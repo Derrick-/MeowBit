@@ -15,6 +15,7 @@ namespace dotBitNS.UI.ApiControllers
         public bool Ns { get; set; }
         public bool CacheHook { get; set; }
         public DateTime? LastBlockTime { get; set; }
+        public bool Logging { get; set; }
     }
 
     public class MonitorController : ApiController
@@ -28,7 +29,8 @@ namespace dotBitNS.UI.ApiControllers
                 Nmc = Monitor.NameCoinOnline, 
                 Ns = Monitor.NameServerOnline, 
                 CacheHook = WindowsNameServicesManager.AnyDotBitCacheConfigKeys(),
-                LastBlockTime = Monitor.LastBlockTimeGMT
+                LastBlockTime = Monitor.LastBlockTimeGMT,
+                Logging = Program.LoggingEnabled
             };
         }
 

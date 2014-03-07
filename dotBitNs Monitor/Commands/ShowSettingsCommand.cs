@@ -12,11 +12,14 @@ namespace dotBitNs_Monitor.Commands
     /// <summary>
     /// Closes the current window.
     /// </summary>
-    public class OpenSettingsWindowCommand : CommandBase<OpenSettingsWindowCommand>
+    public class ShowSettingsCommand : CommandBase<ShowSettingsCommand>
     {
         public override void Execute(object parameter)
         {
-            MessageBox.Show("Unimplemented");
+            var win = GetTaskbarWindow(parameter);
+            if (win is IMainWindow)
+                ((IMainWindow)win).ShowSettingsWindow(SettingsWindow.TabName.Settings);
+            CommandManager.InvalidateRequerySuggested();
         }
 
 

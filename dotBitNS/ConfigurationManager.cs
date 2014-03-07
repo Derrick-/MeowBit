@@ -19,7 +19,7 @@ namespace dotBitNS
                     case "RpcUsername": return NmcConfig.RpcUser;
                     case "RpcPassword": return NmcConfig.RpcPass;
                     case "RpcRequestTimeoutInSeconds": return "1";
-                    case "ServiceLogging": return "false";
+                    case "ServiceLogging": return "true";
                 }
                 return null;
             }
