@@ -1,7 +1,7 @@
 ﻿<Window x:Class="dotBitNs_Monitor.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MeowBit Settings" Height="471.273" Width="452.909" ResizeMode="NoResize" Icon="Resources/Info_125.png">
+        Title="MeowBit Settings" Height="451.637" Width="480.182" ResizeMode="NoResize" Icon="Resources/Info_125.png">
     <!--<Window.Background>
         <ImageBrush ImageSource="Resources/PeanutClimbsIntoTheSink1.jpg" Opacity="0.1"/>
     </Window.Background>-->
@@ -44,7 +44,7 @@
             </StackPanel>
         </TabItem>
         <TabItem Header="About" Name="About">
-            <StackPanel Margin="5,5,5,0">
+            <StackPanel Margin="5,5,2,0">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type Label}">
                         <Setter Property="Width" Value="120"/>
@@ -60,7 +60,7 @@
                     </Style>
                 </StackPanel.Resources>
                 <WrapPanel>
-                    <TextBlock Margin="2" TextWrapping="Wrap">MeowBit is a gift to the world from THE BEASTLICK INTERNET POLICY COMMISSION outreach team:</TextBlock>
+                    <TextBlock Margin="1" TextWrapping="Wrap">MeowBit is a gift to the world from THE BEASTLICK INTERNET POLICY COMMISSION outreach team:</TextBlock>
                 </WrapPanel>
                 <WrapPanel>
                     <Label>Michael W. Dean:</Label>
