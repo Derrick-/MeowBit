@@ -15,7 +15,8 @@ namespace dotBitNS.UI.ApiControllers
         public bool Ns { get; set; }
         public bool CacheHook { get; set; }
         public DateTime? LastBlockTime { get; set; }
-        public bool Logging { get; set; }
+        public bool? Logging { get; set; }
+        public string LogFolder { get; set; }
     }
 
     public class MonitorController : ApiController
@@ -30,7 +31,8 @@ namespace dotBitNS.UI.ApiControllers
                 Ns = Monitor.NameServerOnline, 
                 CacheHook = WindowsNameServicesManager.AnyDotBitCacheConfigKeys(),
                 LastBlockTime = Monitor.LastBlockTimeGMT,
-                Logging = Program.LoggingEnabled
+                Logging = Program.LoggingEnabled,
+                LogFolder= System.IO.Directory.Exists(Program.LogFolder) ? Program.LogFolder : null
             };
         }
 

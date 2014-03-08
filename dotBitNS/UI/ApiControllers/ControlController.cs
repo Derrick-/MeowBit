@@ -29,9 +29,14 @@ namespace dotBitNS.UI.ApiControllers
         // POST api/Control 
         public dynamic Post(NmcConfigJson value)
         {
-            if (!string.IsNullOrWhiteSpace(value.User)) NmcConfig.RpcUser = value.User;
-            if (!string.IsNullOrWhiteSpace(value.Pass)) NmcConfig.RpcPass = value.Pass;
-            if (!string.IsNullOrWhiteSpace(value.Port)) NmcConfig.RpcPort = value.Port;
+            if (!string.IsNullOrWhiteSpace(value.User)) Properties.Settings.Default.RpcUsername = value.User;
+            if (!string.IsNullOrWhiteSpace(value.Pass)) Properties.Settings.Default.RpcPassword = value.Pass;
+            if (!string.IsNullOrWhiteSpace(value.Port))
+            {
+                ushort port;
+                if (ushort.TryParse(value.Port, out port))
+                    Properties.Settings.Default.RpcPort = port;
+            }
             if (!string.IsNullOrWhiteSpace(value.Logging))
             {
                 bool logging;

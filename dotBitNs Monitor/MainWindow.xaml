@@ -21,11 +21,6 @@
                         <MenuItem.Icon>
                             <Image Width="16" Height="16" Source="Resources/updates_icon.png" />
                         </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="_Settings" Command="{commands:ShowSettingsCommand}" CommandParameter="{Binding}">
-                        <MenuItem.Icon>
-                            <Image Width="16" Height="16" Source="Resources/gear_icon.png" />
-                        </MenuItem.Icon>
                     </MenuItem>-->
                     <MenuItem Header="_Help">
                         <MenuItem.Icon>
@@ -48,6 +43,13 @@
                         </MenuItem>
                     </MenuItem>
 
+                    <Separator />
+
+                    <MenuItem Header="_Settings" Command="{commands:ShowSettingsCommand}" CommandParameter="{Binding}">
+                        <MenuItem.Icon>
+                            <Image Width="16" Height="16" Source="Resources/gear_16.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Header="_About MeowBit"
                               Command="{commands:ShowAboutCommand}" CommandParameter="{Binding}">
                         <MenuItem.Icon>

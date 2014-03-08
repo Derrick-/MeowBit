@@ -50,6 +50,8 @@ namespace dotBitNS
             set { if (m_Logger != null) m_Logger.Enabled = value; }
         }
 
+        public static string LogFolder { get { return m_Logger == null ? null : Path.GetDirectoryName(m_Logger.FileName); } }
+
         private static long m_CycleIndex = 1;
         private static float[] m_CyclesPerSecond = new float[100];
 
@@ -258,7 +260,8 @@ namespace dotBitNS
         internal static void Run()
         {
 
-            LoadSettings();
+            Properties.Settings.Default.SettingsLoaded += Default_SettingsLoaded;
+
             InitializeLogging();
 
             Console.WriteLine("Starting...");
@@ -335,9 +338,14 @@ namespace dotBitNS
             Invoke(new Assembly[] { Assembly }, "Configure");
         }
 
-        private static void LoadSettings()
+        static void Default_SettingsLoaded(object sender, System.Configuration.SettingsLoadedEventArgs e)
         {
-            LoggingRequested |= IsService && ConfigurationManager.AppSettings.Get("ServiceLogging") == "true";
+            LoggingRequested |= IsService && Properties.Settings.Default.ServiceLogging;
+        }
+
+        private static void SaveSettings()
+        {
+            Properties.Settings.Default.Save();
         }
 
         private static void Initialize()
@@ -401,7 +409,10 @@ namespace dotBitNS
             Console.Write("Exiting...");
 
             if (!m_Crashed)
+            {
                 EventSink.InvokeShutdown(new ShutdownEventArgs());
+                SaveSettings();
+            }
 
             Timer.TimerThread.Set();
 

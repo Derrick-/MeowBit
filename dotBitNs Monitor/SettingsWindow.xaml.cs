@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,18 +56,18 @@ namespace dotBitNs_Monitor
 
         public void SwitchToTab(TabName tab)
         {
-            //object select=null;
-            //switch (tab)
-            //{
-            //    case TabName.About:
-            //        select = About;
-            //        break;
-            //    case TabName.Settings:
-            //        select=Settings;
-            //        break;
-            //}
-            //if (select != null)
-            //    Tabs.SelectedValue = select;
+            object select = null;
+            switch (tab)
+            {
+                case TabName.About:
+                    select = About;
+                    break;
+                case TabName.Settings:
+                    select = Settings;
+                    break;
+            }
+            if (select != null)
+                Tabs.SelectedValue = select;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -75,8 +76,51 @@ namespace dotBitNs_Monitor
             e.Handled = true;
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void ButtonOpenLogFolder_Click(object sender, RoutedEventArgs e)
         {
+            var folder = Monitor.LogFolder;
+            if(folder!=null && Directory.Exists(folder))
+                Process.Start(new ProcessStartInfo("file://" + folder));
+            e.Handled = true;
+
+        }
+
+        private void ButtonOpenLog_Click(object sender, RoutedEventArgs e)
+        {
+            string filename = GetNewestLogFile();
+            if (filename != null && File.Exists(filename))
+                Process.Start(new ProcessStartInfo("file://" + filename));
+            e.Handled = true;
+        }
+
+        private string GetNewestLogFile()
+        {
+            string folder = Monitor.LogFolder;
+            if (folder != null && Directory.Exists(folder))
+            {
+                var filenames = Directory.EnumerateFiles(folder, "*.log", SearchOption.TopDirectoryOnly);
+                if (filenames.Count() > 0)
+                {
+                    var files = filenames.Select(m => new { name = m, date = Directory.GetLastWriteTime(m) });
+                    var newest = files.Max(m => m.date);
+                    var file = files.Where(m => m.date == newest).LastOrDefault();
+                        return file.name;
+                }
+
+            }
+            return null;
+        }
+
+        private void ButtonCopyLatest_Click(object sender, RoutedEventArgs e)
+        {
+            string filename = GetNewestLogFile();
+            if (filename != null && File.Exists(filename))
+            {
+                string contents;
+                using (StreamReader sr = new StreamReader(filename))
+                    contents = sr.ReadToEnd();
+                Clipboard.SetText(contents);
+            }
 
         }
     }

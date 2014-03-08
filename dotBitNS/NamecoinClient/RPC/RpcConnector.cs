@@ -17,10 +17,10 @@ namespace NamecoinLib.RPC
 
     public sealed class RpcConnector : IRpcConnector
     {
-        private string _daemonUrl { get { return ConfigurationManager.AppSettings.Get("DaemonUrl"); } }
-        private string _rpcPassword { get { return  ConfigurationManager.AppSettings.Get("RpcPassword");} }
-        private string _rpcUsername { get { return ConfigurationManager.AppSettings.Get("RpcUsername"); } }
-        private readonly Int16 _rpcRequestTimeoutInSeconds = Int16.Parse(ConfigurationManager.AppSettings.Get("RpcRequestTimeoutInSeconds"));
+        private string _daemonUrl { get { return "http://127.0.0.1:" + dotBitNS.Properties.Settings.Default.RpcPort.ToString(); } }
+        private string _rpcPassword { get { return  dotBitNS.Properties.Settings.Default.RpcPassword;} }
+        private string _rpcUsername { get { return dotBitNS.Properties.Settings.Default.RpcUsername; } }
+        private readonly Int16 _rpcRequestTimeoutInSeconds = dotBitNS.Properties.Settings.Default.RpcRequestTimeoutInSeconds;
 
         public T MakeRequest<T>(RpcMethods rpcMethod, params object[] parameters)
         {

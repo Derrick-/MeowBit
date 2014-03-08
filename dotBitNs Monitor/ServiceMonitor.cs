@@ -42,7 +42,8 @@ namespace dotBitNs_Monitor
 
         public static DependencyPropertyKey LastBlockTimeProperty = DependencyProperty.RegisterReadOnly("LastBlockTime", typeof(DateTime?), typeof(ServiceMonitor), new PropertyMetadata(null, OnPropertyChanged));
 
-        public static DependencyProperty LoggingProperty = DependencyProperty.Register("Logging", typeof(bool), typeof(ServiceMonitor), new PropertyMetadata(false, OnLoggingChanged));
+        public static DependencyProperty LoggingProperty = DependencyProperty.Register("Logging", typeof(bool?), typeof(ServiceMonitor), new PropertyMetadata(null, OnLoggingChanged));
+        public static DependencyProperty LogFolderProperty = DependencyProperty.Register("LogFolder", typeof(string), typeof(ServiceMonitor), new PropertyMetadata(null));
 
         private static void OnLoggingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -51,15 +52,21 @@ namespace dotBitNs_Monitor
                 target.SendConfig(
                     new dotBitNS.UI.ApiControllers.NmcConfigJson()
                     {
-                        Logging = e.NewValue.ToString()
+                        Logging = e.NewValue == null ? null : e.NewValue.ToString()
                     });
 
         }
 
-        public bool Logging
+        public bool? Logging
         {
-            get { return (bool)GetValue(LoggingProperty); }
+            get { return (bool?)GetValue(LoggingProperty); }
             set { SetValue(LoggingProperty, value); }
+        }
+
+        public string LogFolder
+        {
+            get { return (string)GetValue(LogFolderProperty); }
+            set { SetValue(LogFolderProperty, value); }
         }
 
         public class SystemGoEventArgs : EventArgs
@@ -102,14 +109,7 @@ namespace dotBitNs_Monitor
             ServiceInstalled = ServiceMonitor.GetServiceController() != null;
             ServiceIsAuto = ServiceMonitor.ServiceIsAutostart();
 
-            //if (ServiceRunning)
-                UpdateApiStatus();
-            //else
-            //{
-            //    ApiOnline = false;
-            //    NameCoinOnline = false;
-            //    NameServerOnline = false;
-            //}
+            UpdateApiStatus();
 
             SystemGo = NameCoinOnline && NameServerOnline;
 
@@ -125,6 +125,8 @@ namespace dotBitNs_Monitor
                 NameCoinOnline = status.Nmc;
                 NameServerOnline = status.Ns;
                 LastBlockTime = status.LastBlockTime;
+                Logging = status.Logging;
+                LogFolder = status.LogFolder;
             }
             if (!NameCoinOnline)
             {
@@ -133,7 +135,7 @@ namespace dotBitNs_Monitor
                     User = NmcConfigSettings.RpcUser,
                     Pass = NmcConfigSettings.RpcPass,
                     Port = NmcConfigSettings.RpcPort,
-                    //Logging = Logging.ToString(),
+                    Logging = Logging.ToString(),
                 });
             }
         }
