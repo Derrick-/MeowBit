@@ -71,6 +71,15 @@ namespace dotBitNs_Monitor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Blop {
+            get {
+                return ResourceManager.GetStream("Blop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Cat48_clear {
@@ -287,6 +296,15 @@ namespace dotBitNs_Monitor.Properties {
             get {
                 object obj = ResourceManager.GetObject("Warning_125", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Woosh {
+            get {
+                return ResourceManager.GetStream("Woosh", resourceCulture);
             }
         }
     }

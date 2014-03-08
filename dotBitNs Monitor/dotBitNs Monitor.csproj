@@ -77,6 +77,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Audio.cs" />
     <Compile Include="Converters\VisibilityConverters.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -245,6 +246,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\gear_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Woosh.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Blop.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

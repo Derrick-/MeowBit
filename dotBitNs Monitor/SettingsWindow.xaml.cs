@@ -119,7 +119,15 @@ namespace dotBitNs_Monitor
                 string contents;
                 using (StreamReader sr = new StreamReader(filename))
                     contents = sr.ReadToEnd();
-                Clipboard.SetText(contents);
+                try
+                {
+                    Clipboard.SetText(contents);
+                    Audio.PlaySuccess();
+                }
+                catch (System.Runtime.InteropServices.COMException ex)
+                {
+                    Audio.PlayFail();
+                }
             }
 
         }
