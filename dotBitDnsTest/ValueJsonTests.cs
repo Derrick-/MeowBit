@@ -54,7 +54,7 @@ namespace dotBitDnsTest
             Assert.AreEqual("", result.GetMapValue("*").First().alias);
             Assert.AreEqual(ipWWW, (string)result.GetMapValue("us").First().ip);
 
-            Assert.AreEqual("On sale.", result.GetInfoValue("status").First());
+            //Assert.AreEqual("On sale.", result.GetInfoValue("status").First());
         }
 
         [TestMethod]

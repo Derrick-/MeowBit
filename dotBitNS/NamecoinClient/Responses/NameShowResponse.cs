@@ -48,7 +48,7 @@ namespace NamecoinLib.Responses
         public dynamic ip { get; set; }
         public dynamic ip6 { get; set; }
         public string email { get; set; }
-        public JObject info { get; set; }
+        public dynamic info { get; set; }
         public NameDatas map { get; set; }
         public string @delegate { get; set; }
         public string import { get; set; }
@@ -118,14 +118,14 @@ namespace NamecoinLib.Responses
             }
         }
 
-        public IEnumerable<string> Infos
-        {
-            get
-            {
-                if (info == null) return Lists<string>.Empty;
-                return info.Properties().Select(m => m.Name);
-            }
-        }
+        //public IEnumerable<string> Infos
+        //{
+        //    get
+        //    {
+        //        if (info == null) return Lists<string>.Empty;
+        //        return info.Properties().Select(m => m.Name);
+        //    }
+        //}
 
         public IEnumerable<NameValue> GetMapValue(string name)
         {
@@ -134,11 +134,11 @@ namespace NamecoinLib.Responses
         }
 
 
-        public IEnumerable<string> GetInfoValue(string name)
-        {
-            if (info == null) return Lists<string>.Empty;
-            return info.Properties().Where(m => m.Name == name && m.Value.Type == JTokenType.String).Select(m => (string)m.Value);
-        }
+        //public IEnumerable<string> GetInfoValue(string name)
+        //{
+        //    if (info == null) return Lists<string>.Empty;
+        //    return info.Properties().Where(m => m.Name == name && m.Value.Type == JTokenType.String).Select(m => (string)m.Value);
+        //}
     }
 
     [JsonConverter(typeof(MyCustomClassConverter))]
