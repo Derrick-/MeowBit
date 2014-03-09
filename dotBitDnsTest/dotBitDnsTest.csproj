@@ -58,6 +58,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ResolveDomainTests.cs" />
+    <Compile Include="DomainReaderTests.cs" />
     <Compile Include="ValueJsonTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
