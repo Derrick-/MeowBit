@@ -33,17 +33,29 @@ namespace dotBitDnsTest
 }";
 
 
-        // http://forum.namecoin.info/viewtopic.php?f=5&t=1137
-//    tls (http://dot-bit.org/Namespace:Domain_names_v2.0#TLS_support)
-//    Specifies one or more certificate fingerprints and allow to enforce secured connections (see HSTS)
-//    Allowed values :
-//    - sha1 : upper or lower case, with or without ':'
-//    - enforce : "self" (current FQDN) or "*" (all subdomains)
-
+// TLS 2.5:  http://forum.namecoin.info/viewtopic.php?f=5&t=1137
 //    "tls": {
-//    "sha1": ["15:91:52:97:10:88:CD:44:9C:F7:23:81:78:C3:50:3B:09:20:56:2A", "630884E279CB1107F1FB8A6B11A64D1B14763F8E"],
-//    "enforce": "*"
+//        "protocol": {
+//            port: [[matchtype, "matchvalue", includeSubdomains],[matchtype, "matchvalue", includeSubdomains]]
+//        } {
+//            port: [[matchtype, "matchvalue", includeSubdomains]]
+//        }
 //    }
+//    Port:
+//        Decimal representation of the port number on which a TLS-based service is assumed to exist. The number has no leading zeros. 
+//    Protocol:
+//        Lower or uppercase string: tcp, udp, sctp
+//    matchtype: 
+//        0: Exact match (the entire certificate)
+//        1: SHA-256
+//        2: SHA-512 
+//    matchvalue:
+//        The hash or certificate in hex without any delimiters, as a string in hex digits. 
+//    includeSubdomains:
+//        0: do not enforce this rule for subdomains
+//        1: enforce this rule for subdomains
+//        The includeSubdomains rule cannot be revoked by a subdomains that turn it off. 
+
 
         [TestMethod]
         public void ReadJson()
