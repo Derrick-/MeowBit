@@ -42,11 +42,14 @@ namespace dotBitNS.UI.ApiControllers
                 bool logging;
                 if (bool.TryParse(value.Logging, out logging))
                 {
-                    if (!logging)
-                        Console.WriteLine("Logging disabled by Api command.");
-                    Program.LoggingEnabled = logging;
-                    if (logging)
-                        Console.WriteLine("Logging enabled by Api command.");
+                    if (Program.LoggingEnabled != logging)
+                    {
+                        if (!logging)
+                            Console.WriteLine("Logging disabled by Api command.");
+                        Program.LoggingEnabled = logging;
+                        if (logging)
+                            Console.WriteLine("Logging enabled by Api command.");
+                    }
 
                 }
             }
