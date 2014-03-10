@@ -4,6 +4,7 @@
 // March 4, 2014
 
 using ARSoft.Tools.Net.Dns;
+using dotBitNS.Models;
 using NamecoinLib.Responses;
 using System;
 using System.Collections.Generic;
@@ -184,7 +185,7 @@ namespace dotBitNS.Server
                     if (domainparts.Length < 2 || domainparts[domainparts.Length - 1] != "bit")
                         return null;
 
-                    NameValue value = GetNameValueForDomainname(domainparts);
+                    DomainValue value = GetNameValueForDomainname(domainparts);
 
                     if (value == null)
                         return null;
@@ -192,25 +193,25 @@ namespace dotBitNS.Server
                     DnsMessage answer = null;
 
                     //TODO: delegate not implemented
-                    if (!string.IsNullOrWhiteSpace(value.@delegate))
-                        ConsoleUtils.WriteWarning("delegate setting not implemented: {0}", value.import);
+                    if (!string.IsNullOrWhiteSpace(value.@Delegate))
+                        ConsoleUtils.WriteWarning("delegate setting not implemented: {0}", value.Import);
 
                     //TODO: import not implemented
-                    if (!string.IsNullOrWhiteSpace(value.import))
-                        ConsoleUtils.WriteWarning("import setting not implemented: {0}", value.import);
+                    if (!string.IsNullOrWhiteSpace(value.Import))
+                        ConsoleUtils.WriteWarning("import setting not implemented: {0}", value.Import);
 
-                    if (value.alias != null)
+                    if (value.Alias != null)
                     {
                         string newLookup;
-                        if (value.alias.EndsWith(".")) // absolute
+                        if (value.Alias.EndsWith(".")) // absolute
                         {
-                            newLookup = value.alias;
+                            newLookup = value.Alias;
                         }
                         else // sub domain
                         {
-                            newLookup = value.alias + '.';
+                            newLookup = value.Alias + '.';
                         }
-                        DnsQuestion newQuestion = new DnsQuestion(value.alias, question.RecordType, question.RecordClass);
+                        DnsQuestion newQuestion = new DnsQuestion(value.Alias, question.RecordType, question.RecordClass);
                         return InternalGetAnswer(newQuestion);
                     }
 
@@ -221,15 +222,15 @@ namespace dotBitNS.Server
 
                     bool any = question.RecordType == RecordType.Any;
 
-                    var nsnames = value.GetNsNames();
+                    var nsnames = value.Ns;
                     if (nsnames != null && nsnames.Count() > 0) // NS overrides all
                     {
-                        List<IPAddress> nameservers = GetDotBitNameservers(value);
+                        List<IPAddress> nameservers = GetDotBitNameservers(nsnames);
                         if (nameservers.Count() > 0)
                         {
                             var client = new DnsClient(nameservers, 2000);
-                            if (!string.IsNullOrWhiteSpace(value.translate))
-                                name = value.translate;
+                            if (!string.IsNullOrWhiteSpace(value.Translate))
+                                name = value.Translate;
                             answer = client.Resolve(name, question.RecordType, question.RecordClass);
                         }
                     }
@@ -237,14 +238,14 @@ namespace dotBitNS.Server
                     {
                         if (any || question.RecordType == RecordType.A)
                         {
-                            var addresses = value.GetIp4Addresses();
+                            var addresses = value.Ips;
                             if (addresses.Count() > 0)
                                 foreach (var address in addresses)
                                     answer.AnswerRecords.Add(new ARecord(name, 60, address));
                         }
                         if (any || question.RecordType == RecordType.Aaaa)
                         {
-                            var addresses = value.GetIp6Addresses();
+                            var addresses = value.Ip6s;
                             if (addresses.Count() > 0)
                                 foreach (var address in addresses)
                                     answer.AnswerRecords.Add(new AaaaRecord(name, 60, address));
@@ -259,9 +260,9 @@ namespace dotBitNS.Server
                 }
             }
 
-            private static NameValue GetNameValueForDomainname(string[] domainparts)
+            private static DomainValue GetNameValueForDomainname(string[] domainparts)
             {
-                NameValue value;
+                DomainValue value;
                 var info = NmcClient.Instance.LookupRootName(domainparts[domainparts.Length - 2]);
                 if (info == null)
                     value = null;
@@ -273,7 +274,7 @@ namespace dotBitNS.Server
                 return value;
             }
 
-            internal static NameValue ResolveSubdomain(string[] domainparts, NameValue value)
+            internal static DomainValue ResolveSubdomain(string[] domainparts, DomainValue value)
             {
                 if (domainparts.Length > 2) // sub-domain
                 {
@@ -285,12 +286,12 @@ namespace dotBitNS.Server
                             break;
                         }
 
-                        var sub = value.GetMapValue(domainparts[i]).FirstOrDefault();
+                        var sub = value.GetMap(domainparts[i]);
                         if (sub == null)
-                            sub = value.GetMapValue("*").FirstOrDefault();
+                            sub = value.GetMap("*");
                         if (sub == null)
                             // TODO: What is the specification for ""
-                            sub = value.GetMapValue("").FirstOrDefault();
+                            sub = value.GetMap("");
                         if (sub == null)
                         {
                             // TODO: What is the specification for an undeclared domain with no "*" or ""
@@ -303,10 +304,10 @@ namespace dotBitNS.Server
                 return value;
             }
 
-            private List<IPAddress> GetDotBitNameservers(NameValue value)
+            private List<IPAddress> GetDotBitNameservers(IEnumerable<string> nsnames)
             {
                 List<IPAddress> nameservers = new List<IPAddress>();
-                foreach (var ns in value.GetNsNames())
+                foreach (var ns in nsnames)
                 {
                     IPAddress ip;
                     if (IPAddress.TryParse(ns, out ip))

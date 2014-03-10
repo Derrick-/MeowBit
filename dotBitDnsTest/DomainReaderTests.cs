@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using dotBitNS.Models;
+using System.Net;
 
 namespace dotBitDnsTest
 {
@@ -38,6 +40,10 @@ namespace dotBitDnsTest
     }
 }";
 
+        string Example_nameservers =
+@"{
+    ""ns""      : [""192.168.1.1"",""10.2.3.4""],
+}";
 
 // TLS 2.5:  http://forum.namecoin.info/viewtopic.php?f=5&t=1137
 //    "tls": {
@@ -75,11 +81,33 @@ namespace dotBitDnsTest
         {
             var domain = new DomainValue(Example_2_5_generic);
 
-            Assert.AreEqual("192.168.1.1", domain.Ip.First());
-            Assert.AreEqual("2001:4860:0:1001::68", domain.Ip6.First());
+            Assert.AreEqual("192.168.1.1", domain.IpNames.First());
+            Assert.AreEqual("2001:4860:0:1001::68", domain.Ip6Names.First());
             Assert.AreEqual("eqt5g4fuenphqinx.onion", domain.Tor);
             Assert.AreEqual("hostmaster@example.bit", domain.Email);
             Assert.AreEqual("Example & Sons Co.", domain.Info.First());
+        }
+
+        [TestMethod]
+        public void ReadIpLists()
+        {
+            var domain = new DomainValue(Example_2_5_generic);
+
+            IPAddress ip4expected = IPAddress.Parse("192.168.1.1");
+            IPAddress ip6expected = IPAddress.Parse("2001:4860:0:1001::68");
+
+            Assert.AreEqual(ip4expected, domain.Ips.First());
+            Assert.AreEqual(ip6expected, domain.Ip6s.First());
+        }
+
+        [TestMethod]
+        public void ReadNameServerList()
+        {
+            var domain = new DomainValue(Example_nameservers);
+            var nameservers = domain.Ns;
+            Assert.AreEqual("192.168.1.1", nameservers.First());
+            Assert.AreEqual("10.2.3.4", nameservers.Last());
+
         }
 
         [TestMethod]
@@ -131,7 +159,7 @@ namespace dotBitDnsTest
             Assert.AreEqual("", wwwAlias);
 
             var ftp = domain.GetMap("ftp");
-            var ftpIp = ftp.Ip;
+            var ftpIp = ftp.IpNames;
             Assert.AreEqual("10.2.3.4", ftpIp.First());
             Assert.AreEqual("10.4.3.2", ftpIp.Skip(1).First());
 
