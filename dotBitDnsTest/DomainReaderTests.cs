@@ -1,8 +1,14 @@
-﻿using System;
+﻿// Derrick Slopey | derrick@alienseed.com
+// Feb 8 2014
+// Tests for DomainValue object
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace dotBitDnsTest
 {
@@ -60,92 +66,244 @@ namespace dotBitDnsTest
         [TestMethod]
         public void ReadJson()
         {
-            var domain = JsonDeserialize(Example_2_5_generic);
+            var domain = DomainValue.JsonDeserialize(Example_2_5_generic);
             Assert.IsNotNull(domain);
         }
 
         [TestMethod]
         public void ReadDomain_V2_5()
         {
-            var domain = JsonDeserialize(Example_2_5_generic);
+            var domain = new DomainValue(Example_2_5_generic);
 
-            Assert.AreEqual("192.168.1.1", (string)domain.ip);
-            Assert.AreEqual("2001:4860:0:1001::68", (string)domain.ip6);
-            Assert.AreEqual("eqt5g4fuenphqinx.onion", (string)domain.tor);
-            Assert.AreEqual("eqt5g4fuenphqinx.onion", (string)domain.tor);
-            Assert.AreEqual("hostmaster@example.bit", (string)domain.email);
-            Assert.AreEqual("Example & Sons Co.", (string)domain.info);
+            Assert.AreEqual("192.168.1.1", domain.Ip.First());
+            Assert.AreEqual("2001:4860:0:1001::68", domain.Ip6.First());
+            Assert.AreEqual("eqt5g4fuenphqinx.onion", domain.Tor);
+            Assert.AreEqual("hostmaster@example.bit", domain.Email);
+            Assert.AreEqual("Example & Sons Co.", domain.Info.First());
+        }
 
-            var servicerecord = domain.service[0];
-            Assert.AreEqual("smtp", (string)servicerecord[0]);
-            Assert.AreEqual("tcp", (string)servicerecord[1]);
-            Assert.AreEqual(10, (int)servicerecord[2]);
-            Assert.AreEqual(0, (int)servicerecord[3]);
-            Assert.AreEqual(25, (int)servicerecord[4]);
-            Assert.AreEqual("mail", (string)servicerecord[5]);
+        [TestMethod]
+        public void ReadServiceRecord()
+        {
+            var domain = new DomainValue(Example_2_5_generic);
 
-            var p443 = GetTlsForPort(domain, "tcp", "443");
+            ServiceRecord servicerecord = domain.Service.First();
+            Assert.AreEqual("smtp", servicerecord.SrvName);
+            Assert.AreEqual("tcp", servicerecord.Protocol);
+            Assert.AreEqual(10, servicerecord.Priority);
+            Assert.AreEqual(0, servicerecord.Weight);
+            Assert.AreEqual(25, servicerecord.Port);
+            Assert.AreEqual("mail", servicerecord.Target);
+        }
+
+        [TestMethod]
+        public void ReadTLSRecord()
+        {
+            var domain = new DomainValue(Example_2_5_generic);
+
+            var p443 = domain.GetTlsForPort("tcp", "443");
             var p443first = p443.First;
             Assert.AreEqual(1, (int)p443first[0]);
             Assert.AreEqual("660008F91C07DCF9058CDD5AD2BAF6CC9EAE0F912B8B54744CB7643D7621B787", (string)p443first[1]);
             Assert.AreEqual(1, (int)p443first[2]);
 
-            var p25 = GetTlsForPort(domain, "tcp","25");
+            var p25 = domain.GetTlsForPort("tcp", "25");
             var p25first = p25.First;
             Assert.AreEqual(1, (int)p25first[0]);
             Assert.AreEqual("660008F91C07DCF9058CDD5AD2BAF6CC9EAE0F912B8B54744CB7643D7621B787", (string)p25first[1]);
             Assert.AreEqual(1, (int)p25first[2]);
 
-            var www = GetMap(domain, "www");
-            var wwwAlias = GetAlias(www);
-            Assert.AreEqual("", (string)wwwAlias);
+            var p123 = domain.GetTlsForPort("tcp", "123");
+            Assert.IsNull(p123);
 
-            var ftp = GetMap(domain, "ftp");
-            var ftpIp = GetIp(ftp);
-            Assert.AreEqual("10.2.3.4", (string)ftpIp[0]);
-            Assert.AreEqual("10.4.3.2", (string)ftpIp[1]);
-            
-            var mail = GetMap(domain, "mail");
-            var mailNs = GetNs(mail);
-            Assert.AreEqual("ns1.host.net", (string)mailNs[0]);
-            Assert.AreEqual("ns12.host.net", (string)mailNs[1]);
+            var p321 = domain.GetTlsForPort("bull", "321");
+            Assert.IsNull(p321);
+
         }
 
-        private object GetAlias(dynamic domain)
+        [TestMethod]
+        public void ReadMaps()
         {
-            return domain.alias;
+            var domain = new DomainValue(Example_2_5_generic);
+
+            var www = domain.GetMap("www");
+            var wwwAlias = www.Alias;
+            Assert.AreEqual("", wwwAlias);
+
+            var ftp = domain.GetMap("ftp");
+            var ftpIp = ftp.Ip;
+            Assert.AreEqual("10.2.3.4", ftpIp.First());
+            Assert.AreEqual("10.4.3.2", ftpIp.Skip(1).First());
+
+            var mail = domain.GetMap("mail");
+            var mailNs = mail.Ns;
+            Assert.AreEqual("ns1.host.net", mailNs.First());
+            Assert.AreEqual("ns12.host.net", mailNs.Skip(1).First());
+
+            var none = domain.GetMap("none");
+            Assert.IsNull(none);
         }
 
-        private object GetIp(dynamic domain)
+        public class DomainValue
         {
-            return domain.ip;
-        }
+            JObject domain;
 
-        private object GetNs(dynamic domain)
-        {
-            return domain.ns;
-        }
-        
-        private static dynamic GetTlsForPort(dynamic domain, string protocol, string port)
-        {
-            return domain.tls[protocol][port];
-        }
-
-        private object GetMap(dynamic domain, string subdomain)
-        {
-            return domain.map[subdomain];
-        }
-
-
-        dynamic JsonDeserialize(string json)
-        {
-            using (var sr = new StringReader(json))
-            using (var reader = new JsonTextReader(sr))
+            public DomainValue(string json)
             {
-                var ser = JsonSerializer.Create();
-                return ser.Deserialize<dynamic>(reader);
+                domain = JsonDeserialize(json);
             }
+
+            public string Alias
+            {
+                get { return GetString("alias"); }
+            }
+
+            public IEnumerable<string> Ip 
+            { get { return GetStringList("ip"); } }
+
+            public IEnumerable<string> Ip6 
+            { get { return GetStringList("ip6"); } }
+
+            public string Email
+            { get { return GetString("email"); } }
+
+            public string Tor 
+            { get { return GetString("tor"); } }
+
+            public IEnumerable<string> Ns
+            { get { return GetStringList("ns"); } }
+
+            public IEnumerable<string> Info
+            { get { return GetStringList("info"); } }
+
+            public IEnumerable<ServiceRecord> Service
+            {
+                get
+                {
+                    string propName = "service";
+                    if (DomainHasProperty(propName))
+                    {
+                        JToken services = domain.GetValue(propName);
+                        if (services.Type == JTokenType.Array)
+                        {
+                            return services.Select(m => ServiceRecord.FromToken(m)).Where(m => m != null);
+                        }
+                    }
+                    return null;
+                }
+            }
+
+            public dynamic GetTlsForPort(string protocol, string port)
+            {
+                var tls = domain.GetValue("tls");
+                if (tls != null)
+                {
+                    var protObj = tls[protocol];
+                    if (protObj != null)
+                        return protObj[port];
+                }
+                return null;
+            }
+
+            public DomainValue GetMap(string subdomain)
+            {
+                string propName = "map";
+                JToken maps = domain.GetValue(propName);
+                if (maps != null && maps.Type == JTokenType.Object)
+                {
+                    var map = maps[subdomain];
+                    if (map != null && map.Type == JTokenType.Object)
+                        return new DomainValue(map.ToString());
+                }
+                return null;
+            }
+
+            private string GetString(string propName)
+            {
+                if (DomainHasProperty(propName))
+                {
+                    JToken value = domain.GetValue(propName);
+                    if (value.Type == JTokenType.String)
+                        return value.ToString();
+                }
+                return null;
+            }
+
+            private IEnumerable<string> GetStringList(string propName)
+            {
+                if (DomainHasProperty(propName))
+                {
+                    JToken value = domain.GetValue(propName);
+                    if (value.Type == JTokenType.Array)
+                        return value.Select(m => m.ToString());
+                    return new string[] { value.ToString() };
+                }
+                return null;
+            }
+
+            private bool DomainHasProperty(string propName)
+            {
+                return HasProperty(domain, propName);
+            }
+
+            private static bool HasProperty(JObject obj, string propName)
+            {
+                return obj.Properties().Any(m => m.Name == propName);
+            }
+            
+            public static dynamic JsonDeserialize(string json)
+            {
+                using (var sr = new StringReader(json))
+                using (var reader = new JsonTextReader(sr))
+                {
+                    var ser = JsonSerializer.Create();
+                    return ser.Deserialize<JObject>(reader);
+                }
+            }
+
         }
+
+        public class ServiceRecord
+        {
+
+            public static ServiceRecord FromToken(JToken item)
+            {
+                ServiceRecord srv = null;
+                if (item[0].Type == JTokenType.String
+                    && item[1].Type == JTokenType.String
+                    && item[2].Type == JTokenType.Integer
+                    && item[3].Type == JTokenType.Integer
+                    && item[4].Type == JTokenType.Integer
+                    && item[5].Type == JTokenType.String)
+                {
+                    srv = new ServiceRecord((string)item[0], (string)item[1], (int)item[2], (int)item[3], (int)item[4], (string)item[5]);
+                }
+                return srv;
+            }
+            
+            public ServiceRecord(string SrvName, string Protocol, int Priority, int Weight, int Port, string Target)
+            {
+                this.SrvName = SrvName;
+                this.Protocol = Protocol;
+                this.Priority = Priority;
+                this.Weight = Weight;
+                this.Port = Port;
+                this.Target = Target;
+            }
+
+            public string SrvName { get; set; }
+
+            public string Protocol { get; set; }
+
+            public int Priority { get; set; }
+
+            public int Weight { get; set; }
+
+            public int Port { get; set; }
+
+            public string Target { get; set; }
+        }
+
     }
 
 }
