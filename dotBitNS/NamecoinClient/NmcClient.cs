@@ -70,7 +70,7 @@ namespace dotBitNS
         }
 
         private object lockLookup = new object();
-        public NameShowResponse LookupRootName(string root)
+        public NameShowResponse LookupDomainValueRoot(string root)
         {
             if (!string.IsNullOrWhiteSpace(root))
             {

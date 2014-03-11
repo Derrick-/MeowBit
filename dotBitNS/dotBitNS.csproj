@@ -135,6 +135,7 @@
     <Compile Include="NamecoinClient\Services\RpcExtenderService.cs" />
     <Compile Include="NamecoinClient\Services\RpcService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\DotBitResolver.cs" />
     <Compile Include="Server\NameServer.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

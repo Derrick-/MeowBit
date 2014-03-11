@@ -1,81 +1,106 @@
-﻿//using System;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using NamecoinLib.Responses;
-//using dotBitNS.Server;
-//using System.Linq;
-//using System.Net;
+﻿using ARSoft.Tools.Net.Dns;
+using dotBitNS.Server;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NamecoinLib.Responses;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 
-//namespace dotBitDnsTest
-//{
-//    [TestClass]
-//    public class ResolveDomainTests
-//    {
-//        const string email = "my@testemail.net";
-//        const string ip = "78.47.86.43";
-//        const string ipWWW = "78.47.86.44";
-//        const string ipWWW2 = "1.2.3.4";
+namespace dotBitDnsTest
+{
+    [TestClass]
+    public class ResolveDomainTests
+    {
+        const string email = "my@testemail.net";
+        const string ip = "78.47.86.43";
+        const string ipWWW = "78.47.86.44";
+        const string ipWWW2 = "1.2.3.4";
 
-//        string Json1 = "{" +
-//            "    \"ip\" : \"" + ip + "\"," +
-//            "    \"email\": \"" + email + "\"," +
-//            "    \"info\": { \"status\": \"On sale.\" }," +
-//            "    \"map\":" +
-//            "    {" +
-//            "        \"us\":" +
-//            "        {" +
-//            "            \"ip\" : \"" + ipWWW + "\"," +
-//            "            \"map\": { \"www\": { \"alias\": \"\" } }" +
-//            "        }," +
-//            "        \"eu\":" +
-//            "        {" +
-//            "            \"map\": { \"www\": { \"alias\": \"us.@\" } }" +
-//            "        }," +
-//            "        \"many\":" +
-//            "        {" +
-//            "            \"ip\" : [\"" + ipWWW + "\",\"" + ipWWW2 + "\"]" +
-//            "        }," +
-//            "        \"*\": { \"alias\": \"json1.com.\" }" +
-//            "    }" +
-//            "}";
+        string Json1 = "{" +
+            "    \"ip\" : \"" + ip + "\"," +
+            "    \"email\": \"" + email + "\"," +
+            "    \"info\": { \"status\": \"On sale.\" }," +
+            "    \"map\":" +
+            "    {" +
+            "        \"us\":" +
+            "        {" +
+            "            \"ip\" : \"" + ipWWW + "\"," +
+            "            \"map\": { \"www\": { \"alias\": \"\" } }" +
+            "        }," +
+            "        \"eu\":" +
+            "        {" +
+            "            \"map\": { \"www\": { \"alias\": \"us.@\" } }" +
+            "        }," +
+            "        \"many\":" +
+            "        {" +
+            "            \"ip\" : [\"" + ipWWW + "\",\"" + ipWWW2 + "\"]" +
+            "        }," +
+            "        \"*\": { \"alias\": \"json1.com.\" }" +
+            "    }" +
+            "}";
 
 
-//        [TestMethod]
-//        public void ResolveSubdomainsTest()
-//        {
-//            NameShowResponse Response1 = new NameShowResponse()
-//            {
-//                address = "Json1.bit",
-//                value = Json1
-//            };
+        static readonly Dictionary<string, IPAddress> dnsMockRecords = new Dictionary<string, IPAddress>()
+        {
+            {"json1.com.", new IPAddress(new byte[]{0,0,0,1})}
+        };
 
-//            NameValue value = Response1.GetValue();
+        [TestMethod]
+        public void ResolveRootTest()
+        {
+            var resolver = new DotBitResolver(mockResolveDns, new dotBitNS.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
 
-//            NameValue valueRoot = NameServer.Resolver.ResolveSubdomain(new string[] { "Json1", "bit" }, value);
+            var qRoot = new DnsQuestion("json1.bit", RecordType.Any, RecordClass.Any);
+            var answer = resolver.GetAnswer(qRoot);
+            var expectedRootName = "json1.bit";
+            var expectedRootAddress = IPAddress.Parse(ip);
 
-//            NameValue valueUs = NameServer.Resolver.ResolveSubdomain(new string[] {"us", "Json1", "bit" }, value);
-//            NameValue valueUsWww = NameServer.Resolver.ResolveSubdomain(new string[] { "www", "us", "Json1", "bit" }, value);
+            Assert.IsInstanceOfType(answer.AnswerRecords.First(), typeof(ARecord));
+            Assert.AreEqual(expectedRootName, answer.AnswerRecords.First().Name);
+            Assert.AreEqual(expectedRootAddress, ((ARecord)answer.AnswerRecords.First()).Address);
 
-//            NameValue valueEu = NameServer.Resolver.ResolveSubdomain(new string[] { "eu", "Json1", "bit" }, value);
-//            NameValue valueEuWww = NameServer.Resolver.ResolveSubdomain(new string[] { "www", "eu", "Json1", "bit" }, value);
+        }
 
-//            NameValue valueMany = NameServer.Resolver.ResolveSubdomain(new string[] { "many", "Json1", "bit" }, value);
+        [TestMethod]
+        public void ResolveSubdomainsTest()
+        {
 
-//            NameValue valueOther = NameServer.Resolver.ResolveSubdomain(new string[] { "blah", "Json1", "bit" }, value);
+            var resolver = new DotBitResolver(mockResolveDns, new dotBitNS.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
 
-//            Assert.AreEqual(ip, (String)valueRoot.ip);
+            var qWww = new DnsQuestion("www.Json1.bit", RecordType.Any, RecordClass.Any);
+            var answer = resolver.GetAnswer(qWww);
+            var expectedWwwName = "json1.com.";
+            var expectedWwwAddress = dnsMockRecords[expectedWwwName];
 
-//            Assert.AreEqual(ipWWW, (String)valueUs.ip);
-//            Assert.AreEqual(null, (String)valueUsWww.ip);
-//            Assert.AreEqual("", (String)valueUsWww.alias);
+            Assert.IsNotNull(answer);
+            Assert.IsInstanceOfType(answer.AnswerRecords.First(), typeof(ARecord));
+            Assert.AreEqual(expectedWwwName, answer.AnswerRecords.First().Name);
+            Assert.AreEqual(expectedWwwAddress, ((ARecord)answer.AnswerRecords.First()).Address);
 
-//            Assert.AreEqual(null, (String)valueEu.ip);
-//            Assert.AreEqual("us.@", (String)valueEuWww.alias);
+        }
 
-//            var ipMany=valueMany.GetIp4Addresses();
-//            Assert.IsTrue(ipMany.Any(m => m.Equals(IPAddress.Parse(ipWWW))));
-//            Assert.IsTrue(ipMany.Any(m => m.Equals(IPAddress.Parse(ipWWW2))));
+        private NameShowResponse mockLookupDotBit(string root)
+        {
+            return new NameShowResponse()
+            {
+                name = "d/" + root,
+                value = Json1,
+            };
+        }
 
-//            Assert.AreEqual("json1.com.", valueOther.alias);
-//        }
-//    }
-//}
+        private DnsMessage mockResolveDns(string name, RecordType recordType, RecordClass recordClass)
+        {
+            DnsMessage answer = null;
+            bool any = recordType == RecordType.Any;
+            if ((any || recordType == RecordType.A) && dnsMockRecords.ContainsKey(name))
+            {
+                var ip = dnsMockRecords[name];
+                answer = new DnsMessage();
+                answer.AnswerRecords.Add(new ARecord(name, 0, ip));
+            }
+            return answer;
+        }
+
+    }
+}
