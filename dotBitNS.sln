@@ -22,6 +22,12 @@ Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "MeowBitSetup", "MeowBitSetu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DumpInterfaceManagementObjects", "DumpInterfaceManagementObjects\DumpInterfaceManagementObjects.csproj", "{24F3DA2B-2007-45A7-A8D8-3D4D0A915BFA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4937D1CB-A5A3-4359-A973-D38B20626280}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU

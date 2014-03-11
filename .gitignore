@@ -6,10 +6,13 @@
 /TestResults
 /bin
 
+/dotBitNS/bin
 /dotBitNS/obj
+/dotBitNs Monitor/bin
 /dotBitNs Monitor/obj
 /dotBitDnsTest/bin
 /dotBitDnsTest/obj
+/DumpInterfaceManagementObjects/bin
 /DumpInterfaceManagementObjects/obj
 /MeowBitSetup/MeowBitSetup
 
