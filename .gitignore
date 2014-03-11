@@ -1,3 +1,18 @@
 /Media
 /Releases
 /Libraries
+/packages
+/Docs
+/TestResults
+/bin
+
+/dotBitNS/obj
+/dotBitNs Monitor/obj
+/dotBitDnsTest/bin
+/dotBitDnsTest/obj
+/DumpInterfaceManagementObjects/obj
+/MeowBitSetup/MeowBitSetup
+
+/.svn
+/*.suo
+*.csproj.user
