@@ -91,7 +91,10 @@
     <Compile Include="Core\Program.cs" />
     <Compile Include="Core\ServiceInstaller.cs" />
     <Compile Include="Core\Timer.cs" />
-    <Compile Include="Models\Domain\DomainValue.cs" />
+    <Compile Include="Models\NmcNamespaces\BaseNameValue.cs" />
+    <Compile Include="Models\NmcNamespaces\Domain\DomainValue.cs" />
+    <Compile Include="Models\NmcNamespaces\Domain\ServiceRecord.cs" />
+    <Compile Include="Models\NmcNamespaces\Product\ProductValue.cs" />
     <Compile Include="NamecoinClient\Auxiliary\ConsoleVisualizations.cs" />
     <Compile Include="NamecoinClient\Auxiliary\UnixTime.cs" />
     <Compile Include="NamecoinClient\ExceptionHandling\RpcException.cs" />

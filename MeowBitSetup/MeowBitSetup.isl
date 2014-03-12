@@ -1893,6 +1893,8 @@
 		<row><td>dotbitns.primary_output</td><td>dotBitNS.Primary_output</td><td>dotBitNS.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNS&gt;|Built</td><td>3</td><td/></row>
 		<row><td>dotbitns_monitor.primary_out</td><td>dotBitNs_Monitor.Primary_output</td><td>dotBitNs Monitor.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNs Monitor&gt;|Built</td><td>3</td><td/></row>
 		<row><td>eula.rtf</td><td>ISX_DEFAULTCOMPONENT1</td><td>Eula.rtf</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\MeowBitSetup\Eula.rtf</td><td>1</td><td/></row>
+		<row><td>license</td><td>ISX_DEFAULTCOMPONENT1</td><td>LICENSE</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\LICENSE</td><td>1</td><td/></row>
+		<row><td>readme.md</td><td>ISX_DEFAULTCOMPONENT1</td><td>README.md</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\README.md</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">

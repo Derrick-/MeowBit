@@ -21,7 +21,7 @@ namespace dotBitNS.Server
         public DotBitResolver(ExternalResolveHandler externalDnsResolver, LookupDomainValueRootHandler lookupDomainValueRootHandler = null)
         {
             DnsResolve = externalDnsResolver;
-            LookupDomainValueRoot = lookupDomainValueRootHandler ?? NmcClient.Instance.LookupDomainValueRoot;
+            LookupDomainValueRoot = lookupDomainValueRootHandler ?? NmcClient.Instance.LookupDomainValue;
         }
 
         private object lockResolver = new object();
@@ -163,7 +163,7 @@ namespace dotBitNS.Server
                 value = null;
             else
             {
-                value = info.GetValue();
+                value = info.GetValue<DomainValue>();
                 value = ResolveSubdomain(domainparts, value);
             }
             return value;

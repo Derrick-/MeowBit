@@ -69,21 +69,35 @@ namespace dotBitNS
             return MakeRequest<GetBlockResponse>(RpcMethods.getblock, hash);
         }
 
-        private object lockLookup = new object();
-        public NameShowResponse LookupDomainValueRoot(string root)
+        public NameShowResponse LookupDomainValue(string root)
         {
-            if (!string.IsNullOrWhiteSpace(root))
-            {
-                string name = "d/" + root;
+            return LookupNameValueInNamespace("d/", root);
+        }
 
-                NameShowResponse info;
-                lock (lockLookup)
-                {
-                    info = MakeRequest<NameShowResponse>(RpcMethods.name_show, name);
-                }
-                return info;
+        public NameShowResponse LookupProductValue(string root)
+        {
+            return LookupNameValueInNamespace("p/", root);
+        }
+
+        private NameShowResponse LookupNameValueInNamespace(string namespacePrexix, string name)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                string fullNamePath = namespacePrexix + name;
+                return LookupNameValue(fullNamePath);
             }
             return null;
+        }
+
+        private object lockLookup = new object();
+        private NameShowResponse LookupNameValue(string fullNamePath)
+        {
+            NameShowResponse info;
+            lock (lockLookup)
+            {
+                info = MakeRequest<NameShowResponse>(RpcMethods.name_show, fullNamePath);
+            }
+            return info;
         }
 
         private readonly IRpcConnector _rpcConnector = new RpcConnector();

@@ -3,23 +3,16 @@
 // DomainValue object
 
 using System;
-using Newtonsoft.Json;
-using System.Linq;
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace dotBitNS.Models
 {
-    public class DomainValue
+    internal class DomainValue : BaseNameValue
     {
-        private readonly JObject domain;
-
-        public DomainValue(string json)
-        {
-            domain = JsonDeserialize(json);
-        }
+        public DomainValue(string json) : base(json) { }
 
         private string _Alias = null;
         private IEnumerable<IPAddress> _Ips = null;
@@ -145,104 +138,7 @@ namespace dotBitNS.Models
                 return null;
         }
 
-        private string GetString(string propName)
-        {
-            if (DomainHasProperty(propName))
-            {
-                JToken value = domain.GetValue(propName);
-                if (value.Type == JTokenType.String)
-                    return value.ToString();
-            }
-            return null;
-        }
-
-        private IEnumerable<string> GetStringList(string propName)
-        {
-            if (DomainHasProperty(propName))
-            {
-                JToken value = domain.GetValue(propName);
-                if (value.Type == JTokenType.Array)
-                    return value.Select(m => m.ToString());
-                return new string[] { value.ToString() };
-            }
-            return null;
-        }
-
-        private static IEnumerable<IPAddress> StringListToIPList(IEnumerable<string> addresses)
-        {
-            List<IPAddress> toReturn = new List<IPAddress>();
-            if (addresses != null)
-                foreach (var name in addresses)
-                {
-                    IPAddress ip;
-                    if (IPAddress.TryParse(name, out ip))
-                        toReturn.Add(ip);
-                }
-            return toReturn;
-        }
-
-        private bool DomainHasProperty(string propName)
-        {
-            return HasProperty(domain, propName);
-        }
-
-        private static bool HasProperty(JObject obj, string propName)
-        {
-            return obj.Properties().Any(m => m.Name == propName);
-        }
-
-        public static dynamic JsonDeserialize(string json)
-        {
-            using (var sr = new StringReader(json))
-            using (var reader = new JsonTextReader(sr))
-            {
-                var ser = JsonSerializer.Create();
-                return ser.Deserialize<JObject>(reader);
-            }
-        }
     }
-
-    public class ServiceRecord
-    {
-
-        public static ServiceRecord FromToken(JToken item)
-        {
-            ServiceRecord srv = null;
-            if (item[0].Type == JTokenType.String
-                && item[1].Type == JTokenType.String
-                && item[2].Type == JTokenType.Integer
-                && item[3].Type == JTokenType.Integer
-                && item[4].Type == JTokenType.Integer
-                && item[5].Type == JTokenType.String)
-            {
-                srv = new ServiceRecord((string)item[0], (string)item[1], (int)item[2], (int)item[3], (int)item[4], (string)item[5]);
-            }
-            return srv;
-        }
-
-        public ServiceRecord(string SrvName, string Protocol, int Priority, int Weight, int Port, string Target)
-        {
-            this.SrvName = SrvName;
-            this.Protocol = Protocol;
-            this.Priority = Priority;
-            this.Weight = Weight;
-            this.Port = Port;
-            this.Target = Target;
-        }
-
-        public string SrvName { get; set; }
-
-        public string Protocol { get; set; }
-
-        public int Priority { get; set; }
-
-        public int Weight { get; set; }
-
-        public int Port { get; set; }
-
-        public string Target { get; set; }
-    }
-
 
 }
 
