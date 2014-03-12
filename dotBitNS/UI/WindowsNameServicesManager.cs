@@ -326,7 +326,7 @@ namespace dotBitNS
 
         private static void DetermineSupport()
         {
-            Console.Write("Dermining client hook method...");
+            Console.Write("Determining client hook method...");
             switch (OSVersion)
             {
                 case OSVersionType.Win8:
@@ -341,7 +341,7 @@ namespace dotBitNS
         // http://msdn.microsoft.com/en-us/library/windows/desktop/ms724832(v=vs.85).aspx
         internal static OSVersionType GetWindowsVersion()
         {
-            Console.Write("Dermining windows version...");
+            Console.Write("Determining windows version...");
             System.OperatingSystem osInfo = System.Environment.OSVersion;
             Console.WriteLine(" {0}", osInfo);
 
