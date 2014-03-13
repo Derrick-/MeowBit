@@ -3,7 +3,7 @@
 // Author: Derrick Slopey derrick@alienseed.com
 // March 4, 2014
 
-using dotBitNS;
+using dotBitNs;
 using System;
 using System.Collections.Generic;
 using System.IO;

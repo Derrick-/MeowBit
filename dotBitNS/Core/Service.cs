@@ -15,13 +15,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace dotBitNS
+namespace dotBitNs
 {
     [System.ComponentModel.DesignerCategory("")]
     public partial class Service : ServiceBase
     {
-        public const string GlobalServiceName = "dotBitNS";
-        public const string GlobalServiceDescription = "MeowBit Name Server for dot-bit name resolution";
+
+        public static string GlobalServiceName { get { return Defaults.GlobalServiceName; } }
+        public static string GlobalServiceDescription { get { return Defaults.GlobalServiceDescription; } }
 
         public Service()
         {

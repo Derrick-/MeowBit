@@ -7,16 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Web.Http;
 
-namespace dotBitNS.UI.ApiControllers
+namespace dotBitNs.UI.ApiControllers
 {
-    public class NmcConfigJson
-    {
-        public string User { get; set; }
-        public string Pass { get; set; }
-        public string Port { get; set; }
-        public string Logging { get; set; }
-    }
-
     public class ControlController : ApiController
     {
         // GET api/Control 

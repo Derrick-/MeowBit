@@ -1,5 +1,5 @@
 ﻿using ARSoft.Tools.Net.Dns;
-using dotBitNS.Models;
+using dotBitNs.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dotBitNS.Server
+namespace dotBitNs.Server
 {
     internal class DotBitResolver
     {

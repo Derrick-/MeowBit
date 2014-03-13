@@ -6,19 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using dotBitNs;
 
-namespace dotBitNS.UI.ApiControllers
+namespace dotBitNs.UI.ApiControllers
 {
-    class ApiMonitorResponse
-    {
-        public bool Nmc { get; set; }
-        public bool Ns { get; set; }
-        public bool CacheHook { get; set; }
-        public DateTime? LastBlockTime { get; set; }
-        public bool? Logging { get; set; }
-        public string LogFolder { get; set; }
-    }
-
     public class MonitorController : ApiController
     {
         // GET api/Monitor 
@@ -32,7 +23,8 @@ namespace dotBitNS.UI.ApiControllers
                 CacheHook = WindowsNameServicesManager.AnyDotBitCacheConfigKeys(),
                 LastBlockTime = Monitor.LastBlockTimeGMT,
                 Logging = Program.LoggingEnabled,
-                LogFolder= System.IO.Directory.Exists(Program.LogFolder) ? Program.LogFolder : null
+                LogFolder= System.IO.Directory.Exists(Program.LogFolder) ? Program.LogFolder : null,
+                Version = Program.Version.ToString()
             };
         }
 

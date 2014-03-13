@@ -14,7 +14,7 @@ using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
 
-namespace dotBitNS
+namespace dotBitNs
 {
     class WindowsNameServicesManager
     {

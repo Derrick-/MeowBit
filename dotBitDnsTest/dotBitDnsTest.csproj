@@ -68,14 +68,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dotBitNsShared\dotBitNsShared.csproj">
+      <Project>{777f4f3a-43c4-45c6-b8a6-7979039586c4}</Project>
+      <Name>dotBitNsShared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dotBitNS\dotBitNS.csproj">
       <Project>{3444e4c6-1b91-4dd9-8d0d-a39c3802fe15}</Project>
       <Name>dotBitNS</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

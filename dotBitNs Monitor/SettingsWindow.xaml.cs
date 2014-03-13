@@ -23,17 +23,23 @@ using System.Windows.Shapes;
 namespace dotBitNs_Monitor
 {
     /// <summary>
-    /// Interaction logic for AboutWindow.xaml
+    /// Interaction logic for SettingsWindow.xaml
     /// </summary>
     public partial class SettingsWindow : Window
     {
         public static DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(ServiceMonitor), typeof(SettingsWindow), new PropertyMetadata(null));
+        public static DependencyProperty ProductInfoProperty = DependencyProperty.Register("ProductInfo", typeof(ProductInfoManager), typeof(SettingsWindow), new PropertyMetadata(null));
 
         internal ServiceMonitor Monitor
         {
             get { return (ServiceMonitor)GetValue(MonitorProperty); }
         }
 
+        internal ProductInfoManager ProductInfo
+        {
+            get { return (ProductInfoManager)GetValue(ProductInfoProperty); }
+        }
+        
         public enum TabName
         {
             DontCare = 0,
@@ -41,9 +47,10 @@ namespace dotBitNs_Monitor
             About
         }
 
-        internal SettingsWindow(ServiceMonitor monitor)
+        internal SettingsWindow(ServiceMonitor monitor, ProductInfoManager productInfoManager)
         {
             SetValue(MonitorProperty, monitor); ;
+            SetValue(ProductInfoProperty, productInfoManager);
             InitializeComponent();
         }
 
@@ -124,12 +131,16 @@ namespace dotBitNs_Monitor
                     Clipboard.SetText(contents);
                     Audio.PlaySuccess();
                 }
-                catch (System.Runtime.InteropServices.COMException ex)
+                catch (System.Runtime.InteropServices.COMException)
                 {
                     Audio.PlayFail();
                 }
             }
+        }
 
+        private void ProductCheck_Click(object sender, RoutedEventArgs e)
+        {
+            ProductInfo.UpdateProducts();
         }
     }
 }

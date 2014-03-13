@@ -1,4 +1,4 @@
-﻿namespace dotBitNS
+﻿namespace dotBitNs
 {
     partial class Service
     {

@@ -8,7 +8,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-namespace dotBitNS
+namespace dotBitNs
 {
     /// <summary>
     /// Summary description for ServiceInstaller.

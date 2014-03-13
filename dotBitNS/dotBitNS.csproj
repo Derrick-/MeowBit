@@ -7,8 +7,8 @@
     <ProjectGuid>{3444E4C6-1B91-4DD9-8D0D-A39C3802FE15}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>dotBitNS</RootNamespace>
-    <AssemblyName>dotBitNS</AssemblyName>
+    <RootNamespace>dotBitNs</RootNamespace>
+    <AssemblyName>dotBitNs</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>dotBitNS.Program</StartupObject>
+    <StartupObject>dotBitNs.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -91,10 +91,6 @@
     <Compile Include="Core\Program.cs" />
     <Compile Include="Core\ServiceInstaller.cs" />
     <Compile Include="Core\Timer.cs" />
-    <Compile Include="Models\NmcNamespaces\BaseNameValue.cs" />
-    <Compile Include="Models\NmcNamespaces\Domain\DomainValue.cs" />
-    <Compile Include="Models\NmcNamespaces\Domain\ServiceRecord.cs" />
-    <Compile Include="Models\NmcNamespaces\Product\ProductValue.cs" />
     <Compile Include="NamecoinClient\Auxiliary\ConsoleVisualizations.cs" />
     <Compile Include="NamecoinClient\Auxiliary\UnixTime.cs" />
     <Compile Include="NamecoinClient\ExceptionHandling\RpcException.cs" />
@@ -147,12 +143,12 @@
     </Compile>
     <Compile Include="UI\ApiControllers\ControlController.cs" />
     <Compile Include="UI\ApiControllers\MonitorController.cs" />
+    <Compile Include="UI\ApiControllers\QueryController.cs" />
     <Compile Include="UI\Monitor.cs" />
     <Compile Include="UI\WebApiHost.cs" />
     <Compile Include="Utils\ConsoleUtils.cs" />
     <Compile Include="Utils\Insensitive.cs" />
     <Compile Include="Utils\ReflectionUtils.cs" />
-    <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\Util.cs" />
     <Compile Include="UI\WindowsNameServicesManager.cs" />
   </ItemGroup>
@@ -165,6 +161,15 @@
     </None>
     <None Include="win8-dot-bit.reg" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dotBitNsShared\dotBitNsShared.csproj">
+      <Project>{777f4f3a-43c4-45c6-b8a6-7979039586c4}</Project>
+      <Name>dotBitNsShared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

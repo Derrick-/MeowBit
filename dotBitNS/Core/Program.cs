@@ -16,7 +16,7 @@ using System.Diagnostics;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace dotBitNS
+namespace dotBitNs
 {
     public delegate void Slice();
 
@@ -268,6 +268,8 @@ namespace dotBitNS
 
             m_Thread = Thread.CurrentThread;
             m_Process = Process.GetCurrentProcess();
+
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             m_Assembly = Assembly.GetEntryAssembly();
 
             if (m_Thread != null)
@@ -322,6 +324,17 @@ namespace dotBitNS
                 UI.Monitor.DisableCacheEntries();
             }
         }
+        
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var domain = (AppDomain)sender;
+            foreach (var assembly in domain.GetAssemblies())
+            {
+                if (assembly.FullName == args.Name)
+                    return assembly;
+            }
+            return null;
+        }
 
         private static void InitializeLogging()
         {
@@ -359,8 +372,18 @@ namespace dotBitNS
 
             for (int a = 0; a < m_Assemblies.Length; ++a)
             {
-                Type[] types = m_Assemblies[a].GetTypes();
-
+                Type[] types = null;
+                {
+                    try
+                    {
+                        types = m_Assemblies[a].GetTypes();
+                    }
+                    catch (Exception ex)
+                    {
+                        ConsoleUtils.WriteWarning("Could not load types from assembly {0}: {1}", m_Assemblies[a], ex.Message);
+                        continue;
+                    }
+                }
                 for (int i = 0; i < types.Length; ++i)
                 {
                     MethodInfo m = types[i].GetMethod(method, BindingFlags.Static | BindingFlags.Public);

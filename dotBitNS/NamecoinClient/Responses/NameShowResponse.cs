@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 using System.Net;
-using dotBitNS;
-using dotBitNS.Models;
+using dotBitNs;
+using dotBitNs.Models;
 
 namespace NamecoinLib.Responses
 {

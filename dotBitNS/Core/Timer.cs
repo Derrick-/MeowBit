@@ -25,7 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
-namespace dotBitNS
+namespace dotBitNs
 {
 	public enum TimerPriority
 	{

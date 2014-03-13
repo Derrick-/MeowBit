@@ -3,7 +3,7 @@
 // Author: Derrick Slopey derrick@alienseed.com
 // March 4, 2014
 
-using dotBitNS.Server;
+using dotBitNs.Server;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dotBitNS.UI
+namespace dotBitNs.UI
 {
     class Monitor
     {

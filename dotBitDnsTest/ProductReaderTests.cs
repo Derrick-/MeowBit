@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using dotBitNS.Models;
+using dotBitNs.Models;
 using System.Linq;
 
 namespace dotBitDnsTest
@@ -38,6 +38,13 @@ namespace dotBitDnsTest
   ]
  }";
 
+        string Example_V_0_1_OutOfSpec =
+@"{
+  ""name"": [""Namecoin"",""NMC""],
+  ""url"": ""https://github.com/khalahan/namecoin"",
+  ""signer"": 20,
+}";
+
         [TestMethod]
         public void ReadJson()
         {
@@ -47,7 +54,7 @@ namespace dotBitDnsTest
 
 
         [TestMethod]
-        public void TestMethod1()
+        public void ReadProductPropertyBasic()
         {
             ProductValue value = new ProductValue(Example_V_0_1_Example);
 
@@ -60,6 +67,19 @@ namespace dotBitDnsTest
             Assert.AreEqual("id/dotbit", value.Producer);
             Assert.AreEqual("id/khal", value.Author);
             Assert.AreEqual("0.3.72", value.Version);
+        }
+
+        [TestMethod]
+        public void ReadProductOutOfSpec()
+        {
+            ProductValue value = new ProductValue(Example_V_0_1_OutOfSpec);
+            Assert.IsNull(value.Name);
+
+            var urls = value.URLs;
+            Assert.AreEqual(1, urls.Count());
+            Assert.AreEqual("https://github.com/khalahan/namecoin", urls.First());
+
+            Assert.IsNull(value.Signer);
         }
     }
 }

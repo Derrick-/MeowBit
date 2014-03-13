@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace dotBitNS
+namespace dotBitNs
 {
     class NmcClient
     {
@@ -90,7 +90,7 @@ namespace dotBitNS
         }
 
         private object lockLookup = new object();
-        private NameShowResponse LookupNameValue(string fullNamePath)
+        public NameShowResponse LookupNameValue(string fullNamePath)
         {
             NameShowResponse info;
             lock (lockLookup)
