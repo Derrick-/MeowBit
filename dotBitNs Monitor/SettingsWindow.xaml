@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Converter="clr-namespace:dotBitNs_Monitor.Converters"
+        xmlns:c="clr-namespace:dotBitNs_Monitor.WPFControls"
         Title="MeowBit Settings" Height="451.637" Width="480.182" ResizeMode="NoResize" Icon="Resources/Info_125.png">
     <Window.Resources>
         <Converter:NullToVisibiltyConverter x:Key="visibilityConverter" />
@@ -88,22 +89,16 @@
                                 <Button Margin="10,0,0,0" Click="ProductCheck_Click">Check Now...</Button>
                             </WrapPanel>
                         </Border>
-                        <WrapPanel>
-                            <Label>MeowBit</Label>
-                            <TextBlock Text="{Binding VersionString,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}" />
-                            <TextBlock Text="Unknown" 
-                                Visibility="{Binding ProductInfo.MeowBit.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}, Converter={StaticResource invVisibilityConverter}}" />
-                            <TextBlock Text="{Binding ProductInfo.MeowBit.Version,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
-                                Visibility="{Binding ProductInfo.MeowBit.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}, Converter={StaticResource visibilityConverter}}" />
-                        </WrapPanel>
-                        <WrapPanel>
-                            <Label>dotBitNS</Label>
-                            <TextBlock Text="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}" />
-                            <TextBlock Text="Unknown" 
-                                Visibility="{Binding ProductInfo.DotBitNs.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}, Converter={StaticResource invVisibilityConverter}}" />
-                            <TextBlock Text="{Binding ProductInfo.DotBitNs.Version,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}" 
-                                Visibility="{Binding ProductInfo.DotBitNs.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}, Converter={StaticResource visibilityConverter}}" />
-                        </WrapPanel>
+                        <c:VersionSummary 
+                            DisplayName="MeowBit"
+                            CurrentVersion="{Binding VersionString, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            LatestVersion="{Binding ProductInfo.MeowBit.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                        />
+                        <c:VersionSummary 
+                            DisplayName="dotBitNs"
+                            CurrentVersion="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            LatestVersion="{Binding ProductInfo.DotBotNs.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                        />
                     </StackPanel>
                 </Border>
             </StackPanel>

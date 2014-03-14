@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="dotBitNs_Monitor.WPFControls.VersionSummary"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Converter="clr-namespace:dotBitNs_Monitor.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converter:NullToVisibiltyConverter x:Key="visibilityConverter" />
+        <Converter:InverseNullToVisibiltyConverter x:Key="invVisibilityConverter" />
+        <Converter:BoolToVisibiltyConverter x:Key="boolVisibilityConverter" />
+        <Converter:InverseBoolToVisibiltyConverter x:Key="invBoolVisibilityConverter" />
+        <BitmapImage x:Key="imageUnknown" UriSource="/MeowBit;component/Resources/question16.png" />
+        <BitmapImage x:Key="imageChecked" UriSource="/MeowBit;component/Resources/ok16.png" />
+        <BitmapImage x:Key="imageUnchecked" UriSource="/MeowBit;component/Resources/error16.png" />
+        <Style x:Key="styleCustomCheckBox" TargetType="{x:Type CheckBox}">
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="image" Source="{StaticResource imageUnknown}" Width="16" Height="16"/>
+                            <ContentPresenter VerticalAlignment="Center" Margin="10,0,0,0" />
+                        </StackPanel>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="image" Property="Source" Value="{StaticResource imageUnchecked}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="image" Property="Source" Value="{StaticResource imageChecked}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <WrapPanel>
+        <Label>
+            <Run Text="{Binding DisplayName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = UserControl}}"/>
+        </Label>
+        <TextBlock Text="{Binding CurrentVersion, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = UserControl}}" />
+        <TextBlock Text="{Binding LatestVersion, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = UserControl}}" />
+        <CheckBox Name="chkUpdated" Style="{StaticResource styleCustomCheckBox}"  IsEnabled="False" IsChecked="{Binding UpToDate, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = UserControl}}" />
+        <TextBlock
+            Visibility="{Binding UpToDate, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = UserControl}, Converter={StaticResource invBoolVisibilityConverter}}">
+            <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding DownloadUrl, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = UserControl}}">Visit Site</Hyperlink></TextBlock>
+    </WrapPanel>
+</UserControl>

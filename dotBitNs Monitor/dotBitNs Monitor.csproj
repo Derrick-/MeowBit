@@ -131,6 +131,9 @@
     <Compile Include="WPFControls\StatusIcon.xaml.cs">
       <DependentUpon>StatusIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPFControls\VersionSummary.xaml.cs">
+      <DependentUpon>VersionSummary.xaml</DependentUpon>
+    </Compile>
     <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -148,6 +151,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="WPFControls\StatusIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPFControls\VersionSummary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -258,6 +265,18 @@
       <Project>{777f4f3a-43c4-45c6-b8a6-7979039586c4}</Project>
       <Name>dotBitNsShared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\warning16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\error16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\forbidden16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ok16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
