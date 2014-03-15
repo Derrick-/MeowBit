@@ -360,6 +360,11 @@ namespace dotBitNs_Monitor
 
         }
 
+        private void Hyperlink_OpenSettings(object sender, RequestNavigateEventArgs e)
+        {
+            ShowSettingsWindow(SettingsWindow.TabName.Settings);
+        }
+
         private void Hyperlink_OpenAbout(object sender, RequestNavigateEventArgs e)
         {
             ShowSettingsWindow(SettingsWindow.TabName.About);

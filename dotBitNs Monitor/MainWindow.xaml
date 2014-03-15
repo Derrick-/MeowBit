@@ -125,12 +125,17 @@
                 </Grid>
             </DockPanel>
             <TextBlock TextAlignment="Center" Margin="0,3,0,0">
+            <TextBlock Margin="20,0,20,0" HorizontalAlignment="Center">
+                <Hyperlink NavigateUri="http://meowbit.com" RequestNavigate="Hyperlink_OpenSettings">
+                    <Image Height="16" Width="16" Source="Resources/gear_16.png" Margin="0,0,0,-3" />Settings
+                </Hyperlink>
+            </TextBlock>
             <TextBlock Margin="20,0,20,0">
                 <Hyperlink NavigateUri="http://meowbit.com" RequestNavigate="Hyperlink_OpenAbout">
                     About MeowBit
                 </Hyperlink>
-                </TextBlock>
-                <TextBlock Margin="20,0,20,0">
+            </TextBlock>
+            <TextBlock Margin="20,0,20,0">
                 <Hyperlink NavigateUri="http://meowbit.com" RequestNavigate="Hyperlink_RequestNavigate">
                     http://meowbit.com
                 </Hyperlink>

@@ -1,8 +1,10 @@
-MeowBit
+﻿MeowBit
 =======
 ###[Censorship-Resistant Web for Windows](http://meowbit.com/press-release/)
 * Website: http://meowbit.com
 * Source: https://github.com/Derrick-/MeowBit
+
+#### v0.4.5186.34450 : March 14, 2014
 
 ## Description
 MeowBit is Free Software for Windows with the goal to allow you to effortlessly view Dot-Bit websites as registered in the [Namecoin](http://namecoin.info) blockchain.
@@ -41,8 +43,8 @@ With MeowBit you can navigate on any browser from the regular web to Dot-Bit sit
  * If you get a message that says “Namecoin config updated. restart wallet”, restart wallet and wait a few minutes.
  * If you are upgrading from a previous version, uninstall the old version first. Click on desktop kitty to open MeowBit monitor. Stop Service. Go into system tray. Right-click on kitty, exit MeowBit. Go to Windows Start / Control Panel, Programs and Features / click MeowBit to uninstall. Then you can install new version.
  
-## v0.4.5186.34450:
-* Next Version:
+## Version History:
+* v0.4.5186.34450 : March 14, 2014
  * Settings window with logging (dis/en)ablement, available from tool tray context menu
  * Open Log Folder, Latest Log File, or Copy Log contents buttons 
  * Sounds to verify log copy
