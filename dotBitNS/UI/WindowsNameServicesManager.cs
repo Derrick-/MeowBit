@@ -153,7 +153,11 @@ namespace dotBitNs
                     if (OriginalDnsConfigs.ContainsKey(config))
                     {
                         string interfacename = config.ToString();
-                        string[] newdns = OriginalDnsConfigs[config].Where(m => m != localip).ToArray();
+                        string[] newdns = null;
+                        var original = OriginalDnsConfigs[config];
+                        bool useDHCPDNS = true.Equals(mo["DHCPEnabled"]);
+                        if (original != null && !useDHCPDNS)
+                            newdns = original.Where(m => m != localip).ToArray();
                         ReplaceDnsOnInterface(mo, interfacename, newdns);
                     }
                 }
@@ -174,7 +178,7 @@ namespace dotBitNs
             {
                 objdns["DNSServerSearchOrder"] = newdns;
                 mo.InvokeMethod("SetDNSServerSearchOrder", objdns, null);
-                Console.WriteLine("DNS is set to {0}", string.Join(", ", newdns));
+                Console.WriteLine("DNS is set to {0}", newdns == null ? "DHCP" : string.Join(", ", newdns));
             }
         }
 
