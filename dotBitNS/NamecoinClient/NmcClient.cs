@@ -122,6 +122,8 @@ namespace dotBitNs
                 if ((ex.InnerException is System.IO.IOException) || (ex.InnerException is WebException && ((WebException)ex.InnerException).Response==null))
                 {
                     Console.WriteLine("Unable to connect to Namecoin client: {0}", ex.Message);
+                    if(ex.InnerException != null)
+                    Console.WriteLine(" Inner: {0}", ex.InnerException.Message);
                     ok = false;
                 }
                 else

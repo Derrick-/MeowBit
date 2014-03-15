@@ -27,6 +27,16 @@ namespace dotBitNs.Models
         public IEnumerable<string> URLs
         { get { return _URLs ?? (_URLs = GetStringList("url")); } }
 
+        public string FirstURL
+        {
+            get
+            {
+                if (URLs == null || URLs.Count() < 1)
+                    return null;
+                return URLs.First();
+            }
+        }
+
         public string Signer
         { get { return _Signer ?? (_Signer = GetString("signer")); } }
 

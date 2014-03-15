@@ -25,7 +25,7 @@ namespace dotBitNs_Monitor
             set { SetValue(DotBitNsProperty, value); }
         }
 
-        public async void UpdateProducts()
+        public async void UpdateProductInfo()
         {
             var apiClient = new ApiClient();
             var meowbit = await apiClient.GetProduct("meowbit");

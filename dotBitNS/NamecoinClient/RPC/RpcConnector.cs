@@ -20,7 +20,7 @@ namespace NamecoinLib.RPC
         private string _daemonUrl { get { return "http://127.0.0.1:" + dotBitNs.Properties.Settings.Default.RpcPort.ToString(); } }
         private string _rpcPassword { get { return  dotBitNs.Properties.Settings.Default.RpcPassword;} }
         private string _rpcUsername { get { return dotBitNs.Properties.Settings.Default.RpcUsername; } }
-        private readonly Int16 _rpcRequestTimeoutInSeconds = dotBitNs.Properties.Settings.Default.RpcRequestTimeoutInSeconds;
+        public static readonly Int16 RpcRequestTimeoutInSeconds = dotBitNs.Properties.Settings.Default.RpcRequestTimeoutInSeconds;
 
         public T MakeRequest<T>(RpcMethods rpcMethod, params object[] parameters)
         {
@@ -45,7 +45,7 @@ namespace NamecoinLib.RPC
             webRequest.Credentials = new NetworkCredential(_rpcUsername, _rpcPassword);
             webRequest.ContentType = "application/json-rpc";
             webRequest.Method = "POST";
-            webRequest.Timeout = _rpcRequestTimeoutInSeconds * 1000;
+            webRequest.Timeout = RpcRequestTimeoutInSeconds * 1000;
 
             Byte[] byteArray = jsonRpcRequest.GetBytes();
             webRequest.ContentLength = byteArray.Length;

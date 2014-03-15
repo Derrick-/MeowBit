@@ -281,6 +281,8 @@ namespace dotBitNs
 
             Version ver = m_Assembly.GetName().Version;
 
+            Timer.DelayCall(TimeSpan.FromSeconds(5.0), () => { Console.WriteLine("RPC Timeout: {0} seconds.", NamecoinLib.RPC.RpcConnector.RpcRequestTimeoutInSeconds); });
+
             Configure();
 
             Initialize();

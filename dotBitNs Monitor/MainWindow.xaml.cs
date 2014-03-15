@@ -166,7 +166,7 @@ namespace dotBitNs_Monitor
             var icon = new System.Drawing.Icon(iconStream);
             MyNotifyIcon.Icon = icon;
 
-            productInfoManager.UpdateProducts();
+            productInfoManager.UpdateProductInfo();
         }
 
         void serviceMonitor_OnStatusUpdated(object sender, EventArgs e)

@@ -41,13 +41,21 @@ With MeowBit you can navigate on any browser from the regular web to Dot-Bit sit
  * If you get a message that says “Namecoin config updated. restart wallet”, restart wallet and wait a few minutes.
  * If you are upgrading from a previous version, uninstall the old version first. Click on desktop kitty to open MeowBit monitor. Stop Service. Go into system tray. Right-click on kitty, exit MeowBit. Go to Windows Start / Control Panel, Programs and Features / click MeowBit to uninstall. Then you can install new version.
  
-## Version history:
+## v0.4.5186.34450:
 * Next Version:
  * Settings window with logging (dis/en)ablement, available from tool tray context menu
  * Open Log Folder, Latest Log File, or Copy Log contents buttons 
  * Sounds to verify log copy
  * Bug Fix: Resolution fail on unexpected domain info format.
  * Internal structural improvements of domain resolution
+ * Fixed repeating Logging dis/enabled messages
+ * Added README.md (this file)
+ * Typo in log output "Determining"... Thanks MWD.
+ * Query product info from blockchain using query api.
+ * Setting page displays current version, and latest version from blockchain
+ * Version info on Settings page offers link to download page if out of date.
+ * Extended default timeout for Namecoin client API calls to 5 seconds
+ * System status interval extended to 6 seconds (RpcConnectorTimeout * 1.2)
 	
 * v0.3.5179.694 : March 7, 2014
  * Better windows management via tray icon

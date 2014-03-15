@@ -23,7 +23,7 @@ namespace dotBitNs.UI
         public static DateTime? LastBlockTimeGMT { get; set; }
 
         static Timer timerNmcCheck = null;
-        static readonly TimeSpan NmcCheckInterval = TimeSpan.FromSeconds(5.0);
+        static readonly TimeSpan NmcCheckInterval = TimeSpan.FromSeconds((Double)NamecoinLib.RPC.RpcConnector.RpcRequestTimeoutInSeconds * 1.2);
         
         public static void Initialize()
         {

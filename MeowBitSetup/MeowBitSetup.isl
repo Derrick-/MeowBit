@@ -344,6 +344,7 @@
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{14CF0C54-A7F9-49A0-B564-6F48FBC974E8}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Primary_output</td><td>{A8CCE3E8-55AD-4642-A8D1-5A28E32B9B98}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNsShared.Primary_output</td><td>{FEA33F23-4711-40E6-89C6-732402369F6D}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Primary_output</td><td>{FC9DE93B-4D80-4A36-8263-1A71B839CC58}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
@@ -1875,6 +1876,7 @@
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNS.Primary_output</td></row>
+		<row><td>AlwaysInstall</td><td>dotBitNsShared.Primary_output</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNs_Monitor.Primary_output</td></row>
 	</table>
 
@@ -1892,6 +1894,7 @@
 		<col def="S72">ISComponentSubFolder_</col>
 		<row><td>dotbitns.primary_output</td><td>dotBitNS.Primary_output</td><td>dotBitNS.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNS&gt;|Built</td><td>3</td><td/></row>
 		<row><td>dotbitns_monitor.primary_out</td><td>dotBitNs_Monitor.Primary_output</td><td>dotBitNs Monitor.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNs Monitor&gt;|Built</td><td>3</td><td/></row>
+		<row><td>dotbitnsshared.primary_outpu</td><td>dotBitNsShared.Primary_output</td><td>dotBitNsShared.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNsShared&gt;|Built</td><td>3</td><td/></row>
 		<row><td>eula.rtf</td><td>ISX_DEFAULTCOMPONENT1</td><td>Eula.rtf</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\MeowBitSetup\Eula.rtf</td><td>1</td><td/></row>
 		<row><td>license</td><td>ISX_DEFAULTCOMPONENT1</td><td>LICENSE</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\LICENSE</td><td>1</td><td/></row>
 		<row><td>readme.md</td><td>ISX_DEFAULTCOMPONENT1</td><td>README.md</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\README.md</td><td>1</td><td/></row>
@@ -2040,6 +2043,7 @@
 		<col def="S0">Miscellaneous</col>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_7396FFA0_33D3_4706_AA0E_A099E89969E0_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Primary_output</td><td/><td/><td>_A204BD01_22A1_4543_9C80_CE117BDB404C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNsShared.Primary_output</td><td/><td/><td>_536D9C1C_305A_4FD6_9F0C_20C7B1017C33_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Primary_output</td><td/><td/><td>_87D5FE8E_FA6A_49A7_952E_6E17A0742EB3_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
@@ -2351,6 +2355,7 @@
 		<row><td>WindowsFolder</td><td/><td/><td>1</td></row>
 		<row><td>dotBitNS</td><td>dotBitNS\dotBitNS.csproj</td><td/><td>2</td></row>
 		<row><td>dotBitNs Monitor</td><td>dotBitNs Monitor\dotBitNs Monitor.csproj</td><td/><td>2</td></row>
+		<row><td>dotBitNsShared</td><td>dotBitNsShared\dotBitNsShared.csproj</td><td/><td>2</td></row>
 	</table>
 
 	<table name="ISPowerShellWrap">
@@ -4390,7 +4395,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>ProductCode</td><td>{D499045D-EF28-4D03-B772-C4AED53E2FD1}</td><td/></row>
 		<row><td>ProductName</td><td>MeowBit</td><td/></row>
-		<row><td>ProductVersion</td><td>0.03.0000</td><td/></row>
+		<row><td>ProductVersion</td><td>0.04.0000</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
 		<row><td>ProgressType2</td><td>installed</td><td/></row>

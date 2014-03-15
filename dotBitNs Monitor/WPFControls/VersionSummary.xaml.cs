@@ -37,32 +37,37 @@ namespace dotBitNs_Monitor.WPFControls
 
         public string DisplayName
         {
-            get { return (string)GetValue(DisplayNameProperty); }
+            get { return GetValueOrDefault<string>(DisplayNameProperty); }
             set { SetValue(DisplayNameProperty, value); }
         }
 
         public string CurrentVersion
         {
-            get { return (string)GetValue(CurrentVersionProperty); }
+            get { return GetValueOrDefault<string>(CurrentVersionProperty); }
             set { SetValue(CurrentVersionProperty, value); }
         }
 
         public string LatestVersion
         {
-            get { return (string)GetValue(LatestVersionProperty); }
+            get { return GetValueOrDefault<string>(LatestVersionProperty); }
             set { SetValue(LatestVersionProperty, value); }
         }
 
         public bool? UpToDate
         {
-            get { return (bool?)GetValue(UpToDateProperty); }
+            get { return GetValueOrDefault<bool?>(UpToDateProperty); }
             set { SetValue(UpToDateProperty, value); }
         }
 
         public string DownloadUrl
         {
-            get { return (string)GetValue(DownloadUrlProperty); }
+            get { return GetValueOrDefault<string>(DownloadUrlProperty); }
             set { SetValue(DownloadUrlProperty, value); }
+        }
+
+        private T GetValueOrDefault<T>(DependencyProperty depProperty)
+        {
+            return (T)(GetValue(depProperty) ?? depProperty.DefaultMetadata.DefaultValue);
         }
 
         private void OnVersionChange()
@@ -73,11 +78,6 @@ namespace dotBitNs_Monitor.WPFControls
                 UpToDate = current >= latest;
             else
                 UpToDate = null;
-        }
-
-        private void OnUpToDateChanged()
-        {
-
         }
 
         public VersionSummary()
@@ -93,8 +93,6 @@ namespace dotBitNs_Monitor.WPFControls
                 target.OnPropertyChanged(e.Property.Name);
                 if (e.Property == CurrentVersionProperty || e.Property == LatestVersionProperty)
                     target.OnVersionChange();
-                if (e.Property == UpToDateProperty)
-                    target.OnUpToDateChanged();
             }
         }
 

@@ -140,7 +140,7 @@ namespace dotBitNs_Monitor
 
         private void ProductCheck_Click(object sender, RoutedEventArgs e)
         {
-            ProductInfo.UpdateProducts();
+            ProductInfo.UpdateProductInfo();
         }
     }
 }
