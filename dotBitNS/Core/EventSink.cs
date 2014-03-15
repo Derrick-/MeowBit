@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dotBitNS
+namespace dotBitNs
 {
     public delegate void CrashedEventHandler(CrashedEventArgs e);
     public delegate void ShutdownEventHandler(ShutdownEventArgs e);

@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 using System.Net;
-using dotBitNS;
-using dotBitNS.Models;
+using dotBitNs;
+using dotBitNs.Models;
 
 namespace NamecoinLib.Responses
 {
@@ -19,7 +19,7 @@ namespace NamecoinLib.Responses
         public string address { get; set; }
         public Int32 expires_in { get; set; }
 
-        public DomainValue GetValue()
+        public T GetValue<T>() where T : BaseNameValue
         {
             using (var sr = new StringReader(value))
             using (var reader = new JsonTextReader(sr))
@@ -27,7 +27,7 @@ namespace NamecoinLib.Responses
                 var ser = JsonSerializer.Create();
                 try
                 {
-                    return new DomainValue(value);
+                    return BaseNameValue.Instantiate<T>(value);
                 }
             // TODO: Constructor should not throw exceptions
                 catch (JsonSerializationException ex)

@@ -43,9 +43,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Microsoft.Owin, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.2.0.2\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
@@ -57,6 +65,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Printing" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -77,18 +86,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Audio.cs" />
+    <Compile Include="NmcClasses\ProductInfoManager.cs" />
+    <Compile Include="Utils\Audio.cs" />
     <Compile Include="Converters\VisibilityConverters.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ApiClient.cs" />
+    <Compile Include="NmcClasses\ApiClient.cs" />
     <Compile Include="Commands\CheckForUpdatesCommand.cs" />
     <Compile Include="Commands\ShowSettingsCommand.cs" />
     <Compile Include="Commands\OpenBrowserCommand.cs" />
     <Compile Include="Commands\ToggleWindowCommand.cs" />
     <Compile Include="Commands\ShowAboutCommand.cs" />
-    <Compile Include="NmcConfig.cs" />
+    <Compile Include="NmcClasses\NmcConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -121,6 +131,9 @@
     <Compile Include="WPFControls\StatusIcon.xaml.cs">
       <DependentUpon>StatusIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPFControls\VersionSummary.xaml.cs">
+      <DependentUpon>VersionSummary.xaml</DependentUpon>
+    </Compile>
     <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -141,6 +154,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WPFControls\VersionSummary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -155,9 +172,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -185,13 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Warning_125.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\dotBitNS\dotBitNS.csproj">
-      <Project>{3444e4c6-1b91-4dd9-8d0d-a39c3802fe15}</Project>
-      <Name>dotBitNS</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
@@ -252,6 +259,24 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Blop.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dotBitNsShared\dotBitNsShared.csproj">
+      <Project>{777f4f3a-43c4-45c6-b8a6-7979039586c4}</Project>
+      <Name>dotBitNsShared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\warning16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\error16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\forbidden16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ok16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

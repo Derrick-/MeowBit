@@ -9,12 +9,10 @@ using Microsoft.Owin.Hosting;
 using System;
 using System.Net.Http;
 
-namespace dotBitNS.UI
+namespace dotBitNs.UI
 {
     class WebApiHost
     {
-        public const int DefaultPort = 9098;
-
         private static int _Port;
 
         public static int Port
@@ -31,7 +29,7 @@ namespace dotBitNS.UI
 
         public static void Initialize()
         {
-            Port = DefaultPort;
+            Port = dotBitNs.Defaults.DefaultPort;
         }
 
         private static void InitializeApiServer()

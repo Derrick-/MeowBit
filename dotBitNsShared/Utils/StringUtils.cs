@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
-namespace dotBitNS
+namespace dotBitNs
 {
     public static class StringUtils
     {
@@ -34,14 +34,12 @@ namespace dotBitNS
             return (char)(random.Next((int)'A', (int)'Z'));
         }
 
-
-
-        internal static string GenerateSecureRandomKey(int length)
+        public static string GenerateSecureRandomKey(int length)
         {
             return SecureRandomString(length);
         }
 
-        internal static string SecureRandomString(int length, string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+        public static string SecureRandomString(int length, string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
         {
             if (length < 0) throw new ArgumentOutOfRangeException("length", "length cannot be less than zero.");
             if (string.IsNullOrEmpty(allowedChars)) throw new ArgumentException("allowedChars may not be empty.");
@@ -75,7 +73,7 @@ namespace dotBitNS
             }
         }
 
-        internal static string TitleCase(string title)
+        public static string TitleCase(string title)
         {
             if (string.IsNullOrWhiteSpace(title)) return title;
             TextInfo textInfo = cultureInfo.TextInfo;

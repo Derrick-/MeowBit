@@ -1,5 +1,5 @@
 ﻿using ARSoft.Tools.Net.Dns;
-using dotBitNS.Models;
+using dotBitNs.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dotBitNS.Server
+namespace dotBitNs.Server
 {
     internal class DotBitResolver
     {
@@ -21,7 +21,7 @@ namespace dotBitNS.Server
         public DotBitResolver(ExternalResolveHandler externalDnsResolver, LookupDomainValueRootHandler lookupDomainValueRootHandler = null)
         {
             DnsResolve = externalDnsResolver;
-            LookupDomainValueRoot = lookupDomainValueRootHandler ?? NmcClient.Instance.LookupDomainValueRoot;
+            LookupDomainValueRoot = lookupDomainValueRootHandler ?? NmcClient.Instance.LookupDomainValue;
         }
 
         private object lockResolver = new object();
@@ -163,7 +163,7 @@ namespace dotBitNS.Server
                 value = null;
             else
             {
-                value = info.GetValue();
+                value = info.GetValue<DomainValue>();
                 value = ResolveSubdomain(domainparts, value);
             }
             return value;

@@ -14,7 +14,7 @@ using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
 
-namespace dotBitNS
+namespace dotBitNs
 {
     class WindowsNameServicesManager
     {
@@ -153,7 +153,11 @@ namespace dotBitNS
                     if (OriginalDnsConfigs.ContainsKey(config))
                     {
                         string interfacename = config.ToString();
-                        string[] newdns = OriginalDnsConfigs[config].Where(m => m != localip).ToArray();
+                        string[] newdns = null;
+                        var original = OriginalDnsConfigs[config];
+                        bool useDHCPDNS = true.Equals(mo["DHCPEnabled"]);
+                        if (original != null && !useDHCPDNS)
+                            newdns = original.Where(m => m != localip).ToArray();
                         ReplaceDnsOnInterface(mo, interfacename, newdns);
                     }
                 }
@@ -174,7 +178,7 @@ namespace dotBitNS
             {
                 objdns["DNSServerSearchOrder"] = newdns;
                 mo.InvokeMethod("SetDNSServerSearchOrder", objdns, null);
-                Console.WriteLine("DNS is set to {0}", string.Join(", ", newdns));
+                Console.WriteLine("DNS is set to {0}", newdns == null ? "DHCP" : string.Join(", ", newdns));
             }
         }
 
@@ -326,7 +330,7 @@ namespace dotBitNS
 
         private static void DetermineSupport()
         {
-            Console.Write("Dermining client hook method...");
+            Console.Write("Determining client hook method...");
             switch (OSVersion)
             {
                 case OSVersionType.Win8:
@@ -341,7 +345,7 @@ namespace dotBitNS
         // http://msdn.microsoft.com/en-us/library/windows/desktop/ms724832(v=vs.85).aspx
         internal static OSVersionType GetWindowsVersion()
         {
-            Console.Write("Dermining windows version...");
+            Console.Write("Determining windows version...");
             System.OperatingSystem osInfo = System.Environment.OSVersion;
             Console.WriteLine(" {0}", osInfo);
 

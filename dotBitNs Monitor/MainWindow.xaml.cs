@@ -42,6 +42,7 @@ namespace dotBitNs_Monitor
         public const string AppName = "MeowBit";
 
         ServiceMonitor serviceMonitor;
+        ProductInfoManager productInfoManager;
 
         public MainWindow()
         {
@@ -54,6 +55,8 @@ namespace dotBitNs_Monitor
             serviceMonitor = new ServiceMonitor();
             serviceMonitor.OnStatusUpdated += serviceMonitor_OnStatusUpdated;
             serviceMonitor.SystemGoChanged += serviceMonitor_SystemGoChanged;
+
+            productInfoManager = new ProductInfoManager();
 
             NmcConfigSettings.ConfigUpdated += NmcConfigSetter_ConfigUpdated;
             NmcConfigSettings.ValidateNmcConfig();
@@ -87,7 +90,7 @@ namespace dotBitNs_Monitor
         {
             if (about == null)
             {
-                about = new SettingsWindow(serviceMonitor);
+                about = new SettingsWindow(serviceMonitor, productInfoManager);
                 about.Closed += about_Closed;
             }
             EnsureVisible(about);
@@ -162,6 +165,8 @@ namespace dotBitNs_Monitor
             var iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/Resources/" + icoName)).Stream;
             var icon = new System.Drawing.Icon(iconStream);
             MyNotifyIcon.Icon = icon;
+
+            productInfoManager.UpdateProductInfo();
         }
 
         void serviceMonitor_OnStatusUpdated(object sender, EventArgs e)
@@ -353,6 +358,11 @@ namespace dotBitNs_Monitor
         private void MyNotifyIcon_PreviewTrayContextMenuOpen(object sender, System.Windows.RoutedEventArgs e)
         {
 
+        }
+
+        private void Hyperlink_OpenSettings(object sender, RequestNavigateEventArgs e)
+        {
+            ShowSettingsWindow(SettingsWindow.TabName.Settings);
         }
 
         private void Hyperlink_OpenAbout(object sender, RequestNavigateEventArgs e)

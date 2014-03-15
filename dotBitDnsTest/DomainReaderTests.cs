@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using dotBitNS.Models;
+using dotBitNs.Models;
 using System.Net;
 
 namespace dotBitDnsTest

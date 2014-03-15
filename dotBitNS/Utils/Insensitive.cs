@@ -22,7 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace dotBitNS
+namespace dotBitNs
 {
     public class InsensitiveEqualityComparer : IEqualityComparer<string>
     {

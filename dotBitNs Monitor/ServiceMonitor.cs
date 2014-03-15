@@ -17,13 +17,14 @@ using System.Timers;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
+using dotBitNs;
 
 namespace dotBitNs_Monitor
 {
     class ServiceMonitor : DependencyObject, INotifyPropertyChanged, IDisposable
     {
-        static readonly string ProcessName = typeof(dotBitNS.Program).Assembly.GetName().Name;
-        static readonly string ServiceName = dotBitNS.Service.GlobalServiceName;
+        static readonly string ProcessName = dotBitNs.Defaults.dotBitNsProgramName;
+        static readonly string ServiceName = dotBitNs.Defaults.GlobalServiceName;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<SystemGoEventArgs> SystemGoChanged;
@@ -45,12 +46,14 @@ namespace dotBitNs_Monitor
         public static DependencyProperty LoggingProperty = DependencyProperty.Register("Logging", typeof(bool?), typeof(ServiceMonitor), new PropertyMetadata(null, OnLoggingChanged));
         public static DependencyProperty LogFolderProperty = DependencyProperty.Register("LogFolder", typeof(string), typeof(ServiceMonitor), new PropertyMetadata(null));
 
+        public static DependencyProperty dotBitNsVersionProperty = DependencyProperty.Register("dotBitNsVersion", typeof(string), typeof(ServiceMonitor), new PropertyMetadata("unknown"));
+
         private static void OnLoggingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var target = d as ServiceMonitor;
             if (target != null)
                 target.SendConfig(
-                    new dotBitNS.UI.ApiControllers.NmcConfigJson()
+                    new NmcConfigJson()
                     {
                         Logging = e.NewValue == null ? null : e.NewValue.ToString()
                     });
@@ -67,6 +70,12 @@ namespace dotBitNs_Monitor
         {
             get { return (string)GetValue(LogFolderProperty); }
             set { SetValue(LogFolderProperty, value); }
+        }
+
+        public string dotBitNsVersion
+        {
+            get { return (string)GetValue(dotBitNsVersionProperty); }
+            set { SetValue(dotBitNsVersionProperty, value); }
         }
 
         public class SystemGoEventArgs : EventArgs
@@ -119,7 +128,7 @@ namespace dotBitNs_Monitor
 
         async void UpdateApiStatus()
         {
-            dotBitNS.UI.ApiControllers.ApiMonitorResponse status = await apiClient.GetStatus();
+            ApiMonitorResponse status = await apiClient.GetStatus();
             if (ApiOnline = status != null)
             {
                 NameCoinOnline = status.Nmc;
@@ -127,10 +136,11 @@ namespace dotBitNs_Monitor
                 LastBlockTime = status.LastBlockTime;
                 Logging = status.Logging;
                 LogFolder = status.LogFolder;
+                dotBitNsVersion = status.Version;
             }
             if (!NameCoinOnline)
             {
-                SendConfig(new dotBitNS.UI.ApiControllers.NmcConfigJson()
+                SendConfig(new NmcConfigJson()
                 {
                     User = NmcConfigSettings.RpcUser,
                     Pass = NmcConfigSettings.RpcPass,
@@ -140,7 +150,7 @@ namespace dotBitNs_Monitor
             }
         }
 
-        private void SendConfig(dotBitNS.UI.ApiControllers.NmcConfigJson config)
+        private void SendConfig(NmcConfigJson config)
         {
             apiClient.SendConfig(config);
         }

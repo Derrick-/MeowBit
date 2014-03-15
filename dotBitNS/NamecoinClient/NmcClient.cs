@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace dotBitNS
+namespace dotBitNs
 {
     class NmcClient
     {
@@ -69,21 +69,35 @@ namespace dotBitNS
             return MakeRequest<GetBlockResponse>(RpcMethods.getblock, hash);
         }
 
-        private object lockLookup = new object();
-        public NameShowResponse LookupDomainValueRoot(string root)
+        public NameShowResponse LookupDomainValue(string root)
         {
-            if (!string.IsNullOrWhiteSpace(root))
-            {
-                string name = "d/" + root;
+            return LookupNameValueInNamespace("d/", root);
+        }
 
-                NameShowResponse info;
-                lock (lockLookup)
-                {
-                    info = MakeRequest<NameShowResponse>(RpcMethods.name_show, name);
-                }
-                return info;
+        public NameShowResponse LookupProductValue(string root)
+        {
+            return LookupNameValueInNamespace("p/", root);
+        }
+
+        private NameShowResponse LookupNameValueInNamespace(string namespacePrexix, string name)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                string fullNamePath = namespacePrexix + name;
+                return LookupNameValue(fullNamePath);
             }
             return null;
+        }
+
+        private object lockLookup = new object();
+        public NameShowResponse LookupNameValue(string fullNamePath)
+        {
+            NameShowResponse info;
+            lock (lockLookup)
+            {
+                info = MakeRequest<NameShowResponse>(RpcMethods.name_show, fullNamePath);
+            }
+            return info;
         }
 
         private readonly IRpcConnector _rpcConnector = new RpcConnector();
@@ -108,6 +122,8 @@ namespace dotBitNS
                 if ((ex.InnerException is System.IO.IOException) || (ex.InnerException is WebException && ((WebException)ex.InnerException).Response==null))
                 {
                     Console.WriteLine("Unable to connect to Namecoin client: {0}", ex.Message);
+                    if(ex.InnerException != null)
+                    Console.WriteLine(" Inner: {0}", ex.InnerException.Message);
                     ok = false;
                 }
                 else

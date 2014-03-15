@@ -3,7 +3,8 @@
 // Author: Derrick Slopey derrick@alienseed.com
 // March 4, 2014
 
-using dotBitNS.UI.ApiControllers;
+using dotBitNs;
+using dotBitNs.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Web;
 using System.Windows;
 
 namespace dotBitNs_Monitor
@@ -24,7 +26,7 @@ namespace dotBitNs_Monitor
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public static DependencyProperty PortProperty = DependencyProperty.Register("Port", typeof(int), typeof(ApiClient), new PropertyMetadata(dotBitNS.UI.WebApiHost.DefaultPort, OnPropertyChanged));
+        public static DependencyProperty PortProperty = DependencyProperty.Register("Port", typeof(int), typeof(ApiClient), new PropertyMetadata(dotBitNs.Defaults.DefaultPort, OnPropertyChanged));
 
         public ApiClient()
         {
@@ -32,15 +34,59 @@ namespace dotBitNs_Monitor
 
         public async Task<ApiMonitorResponse> GetStatus()
         {
+            string path = "/api/monitor";
+            ApiMonitorResponse toReturn = await ApiGet<ApiMonitorResponse>(path);
+            return toReturn;
+        }
+
+        public async Task<ProductValue> GetProduct(string productname)
+        {
+            NmcNameValuePair result = await QueryValue("p/" + productname);
+            if (result == null)
+                return null;
+            return new ProductValue(result.Value);
+        }
+
+        public async Task<NmcNameValuePair> QueryValue(string namepath)
+        {
+            string path = "/api/query/?name=" + HttpUtility.UrlEncode(namepath);
+            dynamic toReturn = await ApiGet<NmcNameValuePair>(path);
+            return toReturn;
+        }
+
+        private async Task<T> ApiGet<T>(string path)
+        {
+            HttpResponseMessage response = await ApiGetResponse(path);
+            T toReturn = default(T);
+            if (response != null)
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Read Json, getting response...");
+                    string json = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine(json);
+
+                    toReturn = JsonConvert.DeserializeObject<T>(json);
+                }
+                else
+                {
+                    Debug.WriteLine(string.Format("ApiClient.GetStatus(): Http Error: {0}", response.StatusCode));
+                }
+            }
+            return toReturn;
+        }
+
+        private async Task<HttpResponseMessage> ApiGetResponse(string path)
+        {
+            HttpResponseMessage response = null;
             using (var client = new HttpClient())
             {
                 client.Timeout = TimeSpan.FromMilliseconds(3000);
                 var cts = new System.Threading.CancellationTokenSource();
 
-                HttpResponseMessage response=null;
                 try
                 {
-                    response = await client.GetAsync("http://localhost:" + Port + "/api/monitor", cts.Token);
+                    response = await client.GetAsync("http://localhost:" + Port + path, cts.Token);
                 }
                 catch (HttpRequestException ex)
                 {
@@ -50,24 +96,8 @@ namespace dotBitNs_Monitor
                 {
                     Debug.WriteLine(string.Format("ApiClient.GetStatus(): {0}: {1}", ex.GetType().ToString(), ex.Message));
                 }
-                if (response != null)
-                {
-                    if (response.IsSuccessStatusCode)
-                    {
-                        Debug.WriteLine("Read Json, getting response...");
-                        string json = await response.Content.ReadAsStringAsync();
-                        Debug.WriteLine(json);
-
-                        return JsonConvert.DeserializeObject<ApiMonitorResponse>(json);
-                    }
-                    else
-                    {
-                        Debug.WriteLine(string.Format("ApiClient.GetStatus(): Http Error: {0}", response.StatusCode));
-                    }
-                }
             }
-            
-            return null;
+            return response;
         }
 
         public async void SendConfig(NmcConfigJson config)

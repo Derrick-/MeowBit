@@ -3,7 +3,7 @@
 // Author: Derrick Slopey derrick@alienseed.com
 // March 4, 2014
 
-using dotBitNS.Server;
+using dotBitNs.Server;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dotBitNS.UI
+namespace dotBitNs.UI
 {
     class Monitor
     {
@@ -23,7 +23,7 @@ namespace dotBitNS.UI
         public static DateTime? LastBlockTimeGMT { get; set; }
 
         static Timer timerNmcCheck = null;
-        static readonly TimeSpan NmcCheckInterval = TimeSpan.FromSeconds(5.0);
+        static readonly TimeSpan NmcCheckInterval = TimeSpan.FromSeconds((Double)NamecoinLib.RPC.RpcConnector.RpcRequestTimeoutInSeconds * 1.2);
         
         public static void Initialize()
         {

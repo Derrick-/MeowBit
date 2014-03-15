@@ -1,5 +1,5 @@
 ﻿using ARSoft.Tools.Net.Dns;
-using dotBitNS.Server;
+using dotBitNs.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NamecoinLib.Responses;
 using System;
@@ -49,7 +49,7 @@ namespace dotBitDnsTest
         [TestMethod]
         public void ResolveRootTest()
         {
-            var resolver = new DotBitResolver(mockResolveDns, new dotBitNS.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
+            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
 
             var qRoot = new DnsQuestion("json1.bit", RecordType.Any, RecordClass.Any);
             var answer = resolver.GetAnswer(qRoot);
@@ -66,7 +66,7 @@ namespace dotBitDnsTest
         public void ResolveSubdomainsTest()
         {
 
-            var resolver = new DotBitResolver(mockResolveDns, new dotBitNS.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
+            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
 
             var qWww = new DnsQuestion("www.Json1.bit", RecordType.Any, RecordClass.Any);
             var answer = resolver.GetAnswer(qWww);

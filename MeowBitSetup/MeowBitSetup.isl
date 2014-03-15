@@ -344,6 +344,7 @@
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{14CF0C54-A7F9-49A0-B564-6F48FBC974E8}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Primary_output</td><td>{A8CCE3E8-55AD-4642-A8D1-5A28E32B9B98}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNsShared.Primary_output</td><td>{FEA33F23-4711-40E6-89C6-732402369F6D}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Primary_output</td><td>{FC9DE93B-4D80-4A36-8263-1A71B839CC58}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
@@ -1015,8 +1016,9 @@
 		<row><td>SetupCompleteError</td><td>Finish</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupCompleteSuccess</td><td>OK</td><td>DoAction</td><td>CleanUp</td><td>ISSCRIPTRUNNING="1"</td><td>3</td></row>
 		<row><td>SetupCompleteSuccess</td><td>OK</td><td>DoAction</td><td>LaunchProgramFileFromSetupCompleteSuccess</td><td>LAUNCHPROGRAM And PROGRAMFILETOLAUNCHATEND &lt;&gt; "" And NOT Installed</td><td>4</td></row>
-		<row><td>SetupCompleteSuccess</td><td>OK</td><td>DoAction</td><td>ShowMsiLog</td><td>MsiLogFileLocation And (ISSHOWMSILOG="1") And NOT ISENABLEDWUSFINISHDIALOG</td><td>9</td></row>
-		<row><td>SetupCompleteSuccess</td><td>OK</td><td>EndDialog</td><td>Exit</td><td>1</td><td>5</td></row>
+		<row><td>SetupCompleteSuccess</td><td>OK</td><td>DoAction</td><td>LaunchReadmeFileFromSetupCompleteSuccess</td><td>LAUNCHREADME And READMEFILETOLAUNCHATEND &lt;&gt; "" And NOT Installed</td><td>5</td></row>
+		<row><td>SetupCompleteSuccess</td><td>OK</td><td>DoAction</td><td>ShowMsiLog</td><td>MsiLogFileLocation And (ISSHOWMSILOG="1") And NOT ISENABLEDWUSFINISHDIALOG</td><td>10</td></row>
+		<row><td>SetupCompleteSuccess</td><td>OK</td><td>EndDialog</td><td>Exit</td><td>1</td><td>6</td></row>
 		<row><td>SetupError</td><td>A</td><td>EndDialog</td><td>ErrorAbort</td><td>1</td><td>0</td></row>
 		<row><td>SetupError</td><td>C</td><td>EndDialog</td><td>ErrorCancel</td><td>1</td><td>0</td></row>
 		<row><td>SetupError</td><td>I</td><td>EndDialog</td><td>ErrorIgnore</td><td>1</td><td>0</td></row>
@@ -1071,6 +1073,7 @@
 		<row><td>ISSelfRegisterFinalize</td><td>1</td><td>ISSELFREG.DLL</td><td>ISSelfRegisterFinalize</td><td/><td/></row>
 		<row><td>ISUnSelfRegisterFiles</td><td>3073</td><td>ISSELFREG.DLL</td><td>ISUnSelfRegisterFiles</td><td/><td/></row>
 		<row><td>LaunchProgramFileFromSetupCompleteSuccess</td><td>1</td><td>NewBinary20</td><td>LaunchProgram</td><td/><td/></row>
+		<row><td>LaunchReadmeFileFromSetupCompleteSuccess</td><td>1</td><td>NewBinary20</td><td>LaunchReadMe</td><td/><td/></row>
 		<row><td>ServiceSelfInstall</td><td>3170</td><td>INSTALLDIR</td><td>[INSTALLDIR]dotBitNS.exe -install</td><td/><td>Install Service</td></row>
 		<row><td>ServiceSelfUninstall</td><td>3170</td><td>INSTALLDIR</td><td>[INSTALLDIR]dotBitNS.exe -uninstall</td><td/><td>Uninstall Service</td></row>
 		<row><td>ServiceStop</td><td>3170</td><td>INSTALLDIR</td><td>[INSTALLDIR]dotBitNS.exe -stop</td><td/><td>Stop Service</td></row>
@@ -1875,6 +1878,7 @@
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNS.Primary_output</td></row>
+		<row><td>AlwaysInstall</td><td>dotBitNsShared.Primary_output</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNs_Monitor.Primary_output</td></row>
 	</table>
 
@@ -1892,7 +1896,11 @@
 		<col def="S72">ISComponentSubFolder_</col>
 		<row><td>dotbitns.primary_output</td><td>dotBitNS.Primary_output</td><td>dotBitNS.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNS&gt;|Built</td><td>3</td><td/></row>
 		<row><td>dotbitns_monitor.primary_out</td><td>dotBitNs_Monitor.Primary_output</td><td>dotBitNs Monitor.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNs Monitor&gt;|Built</td><td>3</td><td/></row>
+		<row><td>dotbitnsshared.primary_outpu</td><td>dotBitNsShared.Primary_output</td><td>dotBitNsShared.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNsShared&gt;|Built</td><td>3</td><td/></row>
 		<row><td>eula.rtf</td><td>ISX_DEFAULTCOMPONENT1</td><td>Eula.rtf</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\MeowBitSetup\Eula.rtf</td><td>1</td><td/></row>
+		<row><td>license</td><td>ISX_DEFAULTCOMPONENT1</td><td>LICENSE</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\LICENSE</td><td>1</td><td/></row>
+		<row><td>readme.md</td><td>ISX_DEFAULTCOMPONENT1</td><td>README.md</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\README.md</td><td>1</td><td/></row>
+		<row><td>readme.txt</td><td>ISX_DEFAULTCOMPONENT1</td><td>README.txt</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\README.txt</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -2038,6 +2046,7 @@
 		<col def="S0">Miscellaneous</col>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_7396FFA0_33D3_4706_AA0E_A099E89969E0_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Primary_output</td><td/><td/><td>_A204BD01_22A1_4543_9C80_CE117BDB404C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNsShared.Primary_output</td><td/><td/><td>_536D9C1C_305A_4FD6_9F0C_20C7B1017C33_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Primary_output</td><td/><td/><td>_87D5FE8E_FA6A_49A7_952E_6E17A0742EB3_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
@@ -2349,6 +2358,7 @@
 		<row><td>WindowsFolder</td><td/><td/><td>1</td></row>
 		<row><td>dotBitNS</td><td>dotBitNS\dotBitNS.csproj</td><td/><td>2</td></row>
 		<row><td>dotBitNs Monitor</td><td>dotBitNs Monitor\dotBitNs Monitor.csproj</td><td/><td>2</td></row>
+		<row><td>dotBitNsShared</td><td>dotBitNsShared\dotBitNsShared.csproj</td><td/><td>2</td></row>
 	</table>
 
 	<table name="ISPowerShellWrap">
@@ -4008,7 +4018,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ISTheme</td><td>InstallShield Blue.theme</td></row>
 		<row><td>ISUSLock</td><td>{8A99FEBB-BA03-4148-98DF-E8669D1A8853}</td></row>
 		<row><td>ISUSSignature</td><td>{EF122D54-7525-47AE-BD67-00C55604D6B9}</td></row>
-		<row><td>ISVisitedViews</td><td>viewAssistant,viewRealSetupDesign,viewSetupDesign,viewProject,viewUpdateService,viewUpgradePaths,viewSetupTypes,viewObjects,viewDependencies,viewShortcuts,viewFeatureFiles,viewAppFiles,viewCustomActions,viewRegistry,viewSystemSearch,viewUI</td></row>
+		<row><td>ISVisitedViews</td><td>viewAssistant,viewRealSetupDesign,viewSetupDesign,viewProject,viewUpdateService,viewUpgradePaths,viewSetupTypes,viewObjects,viewDependencies,viewShortcuts,viewFeatureFiles,viewAppFiles,viewCustomActions,viewRegistry,viewSystemSearch,viewUI,viewRelease</td></row>
 		<row><td>Limited</td><td>1</td></row>
 		<row><td>LockPermissionMode</td><td>1</td></row>
 		<row><td>MsiExecCmdLineOptions</td><td/></row>
@@ -4323,7 +4333,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>ARPURLINFOABOUT</td><td>##ID_STRING2##</td><td/></row>
 		<row><td>AgreeToLicense</td><td>No</td><td/></row>
 		<row><td>ApplicationUsers</td><td>AllUsers</td><td/></row>
-		<row><td>CMDLINEFORPROGRAMFILE</td><td>[INSTALLDIR]MeowBit.exe</td><td/></row>
+		<row><td>CMDLINEFORPROGRAMFILE</td><td> </td><td/></row>
 		<row><td>DWUSINTERVAL</td><td>30</td><td/></row>
 		<row><td>DWUSLINK</td><td>CE7BE70F7EEB87F8A9ACC0C8EECC978FAEFB408F796BB098CEFB17D8FE6CB09F996B77F86EAC</td><td/></row>
 		<row><td>DefaultUIFont</td><td>ExpressDefault</td><td/></row>
@@ -4357,7 +4367,10 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>IS_SQLSERVER_SERVER</td><td/><td/></row>
 		<row><td>IS_SQLSERVER_USERNAME</td><td>sa</td><td/></row>
 		<row><td>InstallChoice</td><td>AR</td><td/></row>
-		<row><td>LAUNCHPROGRAM</td><td>1</td><td/></row>
+		<row><td>LAUNCHPREADMECOMPCODE</td><td>{14CF0C54-A7F9-49A0-B564-6F48FBC974E8}</td><td/></row>
+		<row><td>LAUNCHPREADMEFILEKEY</td><td>readme.txt</td><td/></row>
+		<row><td>LAUNCHPROGRAMCOMPCODE</td><td>{FC9DE93B-4D80-4A36-8263-1A71B839CC58}</td><td/></row>
+		<row><td>LAUNCHPROGRAMFILEKEY</td><td>dotbitns_monitor.primary_out</td><td/></row>
 		<row><td>LAUNCHREADME</td><td>1</td><td/></row>
 		<row><td>MSIFASTINSTALL</td><td>3</td><td/></row>
 		<row><td>Manufacturer</td><td>##COMPANY_NAME##</td><td/></row>
@@ -4386,13 +4399,15 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>PROGMSG_IIS_ROLLBACKAPPPOOLS</td><td>##IDS_PROGMSG_IIS_ROLLBACKAPPPOOLS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
+		<row><td>PROGRAMFILETOLAUNCHATEND</td><td>[INSTALLDIR]dotBitNs Monitor.Primary output</td><td/></row>
 		<row><td>ProductCode</td><td>{D499045D-EF28-4D03-B772-C4AED53E2FD1}</td><td/></row>
 		<row><td>ProductName</td><td>MeowBit</td><td/></row>
-		<row><td>ProductVersion</td><td>0.03.0000</td><td/></row>
+		<row><td>ProductVersion</td><td>0.04.0000</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
 		<row><td>ProgressType2</td><td>installed</td><td/></row>
 		<row><td>ProgressType3</td><td>installs</td><td/></row>
+		<row><td>READMEFILETOLAUNCHATEND</td><td>[INSTALLDIR]README.txt</td><td/></row>
 		<row><td>RebootYesNo</td><td>Yes</td><td/></row>
 		<row><td>ReinstallFileVersion</td><td>o</td><td/></row>
 		<row><td>ReinstallModeText</td><td>omus</td><td/></row>
@@ -4400,7 +4415,8 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>RestartManagerOption</td><td>CloseRestart</td><td/></row>
 		<row><td>SERIALNUMBER</td><td/><td/></row>
 		<row><td>SERIALNUMVALSUCCESSRETVAL</td><td>1</td><td/></row>
-		<row><td>SHOWLAUNCHPROGRAM</td><td>-1</td><td/></row>
+		<row><td>SHOWLAUNCHPROGRAM</td><td>0</td><td/></row>
+		<row><td>SHOWLAUNCHREADME</td><td>-1</td><td/></row>
 		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR;DOTNETVERSION45FULL</td><td/></row>
 		<row><td>SelectedSetupType</td><td>##IDS__DisplayName_Typical##</td><td/></row>
 		<row><td>SetupType</td><td>Typical</td><td/></row>

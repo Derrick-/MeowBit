@@ -142,9 +142,29 @@ namespace dotBitNs_Monitor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap error16 {
+            get {
+                object obj = ResourceManager.GetObject("error16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Forbidden_125 {
             get {
                 object obj = ResourceManager.GetObject("Forbidden_125", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap forbidden16 {
+            get {
+                object obj = ResourceManager.GetObject("forbidden16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -242,6 +262,16 @@ namespace dotBitNs_Monitor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ok16 {
+            get {
+                object obj = ResourceManager.GetObject("ok16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap page_go {
             get {
                 object obj = ResourceManager.GetObject("page_go", resourceCulture);
@@ -295,6 +325,16 @@ namespace dotBitNs_Monitor.Properties {
         internal static System.Drawing.Bitmap Warning_125 {
             get {
                 object obj = ResourceManager.GetObject("Warning_125", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap warning16 {
+            get {
+                object obj = ResourceManager.GetObject("warning16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

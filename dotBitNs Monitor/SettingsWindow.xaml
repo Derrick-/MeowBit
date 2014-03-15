@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Converter="clr-namespace:dotBitNs_Monitor.Converters"
+        xmlns:c="clr-namespace:dotBitNs_Monitor.WPFControls"
         Title="MeowBit Settings" Height="451.637" Width="480.182" ResizeMode="NoResize" Icon="Resources/Info_125.png">
     <Window.Resources>
         <Converter:NullToVisibiltyConverter x:Key="visibilityConverter" />
@@ -27,9 +28,56 @@
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Margin" Value="0,0,0,0"/>
                     </Style>
+                    <Style TargetType="Border">
+                        <Setter Property="BorderThickness" Value="1,1,1,1"/>
+                        <Setter Property="BorderBrush" Value="Black"/>
+                        <Setter Property="Margin" Value="12,0,2,0"/>
+                    </Style>
                 </StackPanel.Resources>
+                <Label HorizontalAlignment="Left">Software Version:</Label>
+                <Border>
+                    <StackPanel>
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="Label">
+                                <Setter Property="Width" Value="100"/>
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Width" Value="100"/>
+                                <Setter Property="TextAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="Padding" Value="0,3,0,0"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Border Margin="0" BorderThickness="0,0,0,1" BorderBrush="Goldenrod">
+                        <WrapPanel>
+                            <Label>Product</Label>
+                            <TextBlock>Your Version</TextBlock>
+                            <TextBlock>Newest Version</TextBlock>
+                            <!--<Button Margin="10,0,0,0" Click="ProductCheck_Click">Check Now...</Button>-->
+                            </WrapPanel>
+                        </Border>
+                        <c:VersionSummary 
+                            DisplayName="MeowBit"
+                            ToolTip="p/meowbit"
+                            CurrentVersion="{Binding VersionString, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            LatestVersion="{Binding ProductInfo.MeowBit.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            DownloadUrl="{Binding ProductInfo.MeowBit.FirstURL, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                        />
+                        <c:VersionSummary 
+                            DisplayName="dotBitNs"
+                            ToolTip="p/dotbitns"
+                            CurrentVersion="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            LatestVersion="{Binding ProductInfo.DotBitNs.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            DownloadUrl="{Binding ProductInfo.DotBitNs.FirstURL, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                        />
+                        </StackPanel>
+                        <TextBlock HorizontalAlignment="Center" Foreground="#FF91631D">Version information is obtained from the Namecoin blockchain.</TextBlock>
+                    </StackPanel>
+                </Border>
                 <Label HorizontalAlignment="Left">Logging:</Label>
-                <Border BorderThickness="1,1,1,1" BorderBrush="Black" Margin="12,0,2,0">
+                <Border>
                     <StackPanel>
                         <WrapPanel>
                             <Label>Enable Logging</Label>
@@ -55,9 +103,8 @@
                                     ToolTip="{Binding Monitor.LogFolder, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
                                     NavigateUri="#"  RequestNavigate="ButtonOpenLogFolder_Click">
                                     <Run Text="{Binding Monitor.LogFolder, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}" />
-                            </Hyperlink>
+                                </Hyperlink>
                             </TextBlock>
-
                         </WrapPanel>
                     </StackPanel>
                 </Border>
@@ -113,6 +160,8 @@
                 <WrapPanel HorizontalAlignment="Center">
                     <TextBlock Margin="0,5,0,0" FontWeight="Bold">MeowBit Version:</TextBlock>
                     <TextBlock Margin="6,5,0,0" FontWeight="Bold" Text="{Binding VersionString,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"></TextBlock>
+                    <TextBlock Margin="10,5,0,0" FontWeight="Bold">dotBitNs Version:</TextBlock>
+                    <TextBlock Margin="6,5,0,0" FontWeight="Bold" Text="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"></TextBlock>
                 </WrapPanel>
             </StackPanel>
         </TabItem>

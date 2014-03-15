@@ -37,5 +37,9 @@
 			<Name>dotBitNs Monitor</Name>
 			<Project>{C0CFB769-2597-4C50-8154-06DCDA0EA246}</Project>
 		</ProjectReference>
+		<ProjectReference Include="..\dotBitNsShared\dotBitNsShared.csproj">
+			<Name>dotBitNsShared</Name>
+			<Project>{777F4F3A-43C4-45C6-B8A6-7979039586C4}</Project>
+		</ProjectReference>
 	</ItemGroup>
 </Project>

@@ -100,7 +100,7 @@ namespace dotBitNs_Monitor
                 ReadFile();
 
                 EnsureSetting("rpcuser", "dotBitNS", false);
-                EnsureSetting("rpcpassword", dotBitNS.StringUtils.SecureRandomString(16), false);
+                EnsureSetting("rpcpassword", dotBitNs.StringUtils.SecureRandomString(16), false);
                 EnsureSetting("rpcport", "8336", false);
                 EnsureSetting("server", "1", true);
                 EnsureSetting("rpcallowip", "127.0.0.1", true);

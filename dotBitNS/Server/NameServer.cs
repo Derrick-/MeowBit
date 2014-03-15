@@ -10,7 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-namespace dotBitNS.Server
+namespace dotBitNs.Server
 {
     class NameServer
     {
