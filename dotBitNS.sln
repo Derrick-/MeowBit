@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4937D1CB-A
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
 		README.md = README.md
+		MeowBitSetup\ReadMeForXP.rtf = MeowBitSetup\ReadMeForXP.rtf
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotBitNsShared", "dotBitNsShared\dotBitNsShared.csproj", "{777F4F3A-43C4-45C6-B8A6-7979039586C4}"

@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("dotBitNS")]
-[assembly: AssemblyDescription("Provides name resolution against the namecoin blockchain for .bit domains")]
+[assembly: AssemblyDescription("Provides name resolution against the namecoin blockchain for .bit domains (XP Version)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("THE BEASTLICK INTERNET POLICY COMMISSION")]
 [assembly: AssemblyProduct("MeowBit")]

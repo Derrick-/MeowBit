@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("dotBitNsShared")]
-[assembly: AssemblyDescription("Shared classes for MeowBit and dotBitNs")]
+[assembly: AssemblyDescription("Shared classes for MeowBit and dotBitNs (XP Version)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("THE BEASTLICK INTERNET POLICY COMMISSION")]
 [assembly: AssemblyProduct("MeowBit")]

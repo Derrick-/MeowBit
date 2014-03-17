@@ -13,7 +13,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MeowBit Monitor")]
-[assembly: AssemblyDescription("Monitors the dotBitNS service and repairs configuration errors.")]
+[assembly: AssemblyDescription("Monitors the dotBitNS service and repairs configuration errors. (XP Version)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("THE BEASTLICK INTERNET POLICY COMMISSION")]
 [assembly: AssemblyProduct("MeowBit")]

@@ -59,14 +59,14 @@
                             </WrapPanel>
                         </Border>
                         <c:VersionSummary 
-                            DisplayName="MeowBit"
+                            DisplayName="MeowBit XP"
                             ToolTip="p/meowbit"
                             CurrentVersion="{Binding VersionString, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
                             LatestVersion="{Binding ProductInfo.MeowBit.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
                             DownloadUrl="{Binding ProductInfo.MeowBit.FirstURL, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
                         />
                         <c:VersionSummary 
-                            DisplayName="dotBitNs"
+                            DisplayName="dotBitNs XP"
                             ToolTip="p/dotbitns"
                             CurrentVersion="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
                             LatestVersion="{Binding ProductInfo.DotBitNs.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
@@ -158,9 +158,9 @@
                 <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">MeowBit was not created to use for any illegal purpose. Laws vary. If you have questions concerning your intended use of this software, the creators of MeowBit recommend consulting an attorney of your choice</TextBlock>
                 <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">Dot-Bit makes it difficult for your domain to be removed. Used alone, Dot-Bit and MeowBit do NOT make the website owner or viewer invisible. Dot-Bit and MeowBit are not intended to mask the identity of the website owner or viewer.</TextBlock>
                 <WrapPanel HorizontalAlignment="Center">
-                    <TextBlock Margin="0,5,0,0" FontWeight="Bold">MeowBit Version:</TextBlock>
+                    <TextBlock Margin="0,5,0,0" FontWeight="Bold">MeowBit XP Version:</TextBlock>
                     <TextBlock Margin="6,5,0,0" FontWeight="Bold" Text="{Binding VersionString,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"></TextBlock>
-                    <TextBlock Margin="10,5,0,0" FontWeight="Bold">dotBitNs Version:</TextBlock>
+                    <TextBlock Margin="10,5,0,0" FontWeight="Bold">dotBitNs XP Version:</TextBlock>
                     <TextBlock Margin="6,5,0,0" FontWeight="Bold" Text="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"></TextBlock>
                 </WrapPanel>
             </StackPanel>

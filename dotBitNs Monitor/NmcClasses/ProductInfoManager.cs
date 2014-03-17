@@ -13,6 +13,9 @@ namespace dotBitNs_Monitor
         public static DependencyProperty MeowBitProperty = DependencyProperty.Register("MeowBit", typeof(ProductValue), typeof(ProductInfoManager), new PropertyMetadata(null));
         public static DependencyProperty DotBitNsProperty = DependencyProperty.Register("DotBitNs", typeof(ProductValue), typeof(ProductInfoManager), new PropertyMetadata(null));
 
+        public const string prodNameMeowBit = "meowbit_xp";
+        public const string prodNameDotBitNs = "dotbitns_xp";
+
         public ProductValue MeowBit
         {
             get { return (ProductValue)GetValue(MeowBitProperty); }
@@ -28,11 +31,11 @@ namespace dotBitNs_Monitor
         public async void UpdateProductInfo()
         {
             var apiClient = new ApiClient();
-            var meowbit = await apiClient.GetProduct("meowbit");
+            var meowbit = await apiClient.GetProduct(prodNameMeowBit);
             if (meowbit != null)
                 MeowBit = meowbit;
 
-            var dotbitns = await apiClient.GetProduct("dotbitns");
+            var dotbitns = await apiClient.GetProduct(prodNameDotBitNs);
             if (dotbitns != null)
                 DotBitNs = dotbitns;
         }
