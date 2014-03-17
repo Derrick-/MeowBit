@@ -28,7 +28,6 @@
 		</TaggedOutputs> -->
 	</ItemGroup>
 	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2013Limited\InstallShield.targets"/>
-	<ItemGroup/>
 	<ItemGroup>
 		<ProjectReference Include="..\dotBitNS\dotBitNS.csproj">
 			<Name>dotBitNS</Name>

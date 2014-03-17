@@ -225,7 +225,7 @@
 	<table name="AppSearch">
 		<col key="yes" def="s72">Property</col>
 		<col key="yes" def="s72">Signature_</col>
-		<row><td>DOTNETVERSION45FULL</td><td>DotNet45Full</td></row>
+		<row><td>DOTNETVERSION40CLIENT</td><td>DotNet40Client</td></row>
 	</table>
 
 	<table name="BBControl">
@@ -345,26 +345,30 @@
 		<row><td>ISX_DEFAULTCOMPONENT</td><td>{9FD0B563-BE09-40AC-BA81-A1CB26857D41}</td><td>StartMenuFolder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{14CF0C54-A7F9-49A0-B564-6F48FBC974E8}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{48E5554A-7270-437C-87DA-7F442D7237D3}</td><td>DesktopFolder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Microsoft.Threading.Tasks.dll</td><td>{0D9AC17F-BE95-4183-826E-7ABC3D497321}</td><td>INSTALLDIR</td><td>2</td><td/><td>microsoft.threading.tasks.dl</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>System.Net.Http.WebRequest.dll</td><td>{C44A8416-E29B-47CD-A5EE-4F481F66B720}</td><td>INSTALLDIR</td><td>2</td><td/><td>system.net.http.webrequest.d</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>System.Net.Http.dll</td><td>{646A1D5A-1006-4BDD-931C-3F13CAD74249}</td><td>INSTALLDIR</td><td>2</td><td/><td>system.net.http.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>System.Threading.Tasks.dll</td><td>{2CC71F34-E71C-4841-874E-1A89452F3B05}</td><td>INSTALLDIR</td><td>2</td><td/><td>system.threading.tasks.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Debug_Symbols</td><td>{9468830B-7BFD-4DF7-8072-D0B05DFD7B32}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Debug_Symbols1</td><td>{4BDDFAF1-0681-40B7-9439-EF844AD68AC3}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNS.Debug_Symbols2</td><td>{3C0F3260-91B5-4FE2-B6AC-26F344A10E5E}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNS.Debug_Symbols2</td><td>{4594982B-8782-4615-BD9B-11A7790DA119}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Primary_output</td><td>{391E0450-63EC-47AB-B3A6-05A1FDA7ABEE}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Primary_output1</td><td>{8810A02E-37B9-4E45-89C1-C327B8146734}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNS.Primary_output2</td><td>{B35F498E-4C55-458C-AD30-A7052AD20111}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNS.Primary_output2</td><td>{12806D93-0787-4B18-8D6F-51499C1A4DF8}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNsShared.Debug_Symbols</td><td>{4223D413-7437-42D4-9B5F-43C57265FA03}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNsShared.Debug_Symbols1</td><td>{6B15A6CA-A6DB-4BC5-9463-52DA7405E6CC}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNsShared.Debug_Symbols2</td><td>{30FFC1A6-2C14-44FC-8CC7-7880E78D6655}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNsShared.Debug_Symbols2</td><td>{53C144D2-C241-49B4-AD8F-A73D9E10F44A}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNsShared.Primary_output</td><td>{7966A427-0FD3-4317-B171-21E6D732B07C}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNsShared.Primary_output1</td><td>{CBF811B4-1112-4F5A-9442-6D202A8ACAA6}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNsShared.Primary_output2</td><td>{6448D59B-B95B-42E4-B3A3-FD4167BF35AE}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNsShared.Primary_output2</td><td>{054C8089-E3F9-4FC7-9761-D734704F6DFC}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols</td><td>{781C9777-B68F-48A3-9E1B-97311485E83E}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols1</td><td>{FD55B5F6-94F6-4F4F-ABBB-F02277EDCA00}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols2</td><td>{332EDA7F-1DE0-419C-AE9C-D9E910B5F58E}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNs_Monitor.Debug_Symbols3</td><td>{C16318C0-6493-4357-961A-1ABA7345B317}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNs_Monitor.Debug_Symbols3</td><td>{1D8C9702-A501-4C12-8E8D-E6B46309A9D3}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Primary_output</td><td>{0057CF04-3F13-481F-A46B-B777FC242E8B}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Primary_output1</td><td>{3A2325A5-6402-40A3-86EE-AB1859D81405}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Primary_output2</td><td>{258FD97C-3368-4A20-83A5-E2BF89CF6656}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNs_Monitor.Primary_output3</td><td>{28A4397D-1E59-458F-B132-0C3A7D4E4625}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNs_Monitor.Primary_output3</td><td>{4CACBC94-F96F-4964-8CCB-F0BE38A71CDA}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -1897,6 +1901,10 @@
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>AlwaysInstall</td><td>Microsoft.Threading.Tasks.dll</td></row>
+		<row><td>AlwaysInstall</td><td>System.Net.Http.WebRequest.dll</td></row>
+		<row><td>AlwaysInstall</td><td>System.Net.Http.dll</td></row>
+		<row><td>AlwaysInstall</td><td>System.Threading.Tasks.dll</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNS.Debug_Symbols</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNS.Debug_Symbols1</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNS.Debug_Symbols2</td></row>
@@ -1939,8 +1947,12 @@
 		<row><td>dotbitnsshared.primary_outpu</td><td>dotBitNsShared.Primary_output2</td><td>dotBitNsShared.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNsShared&gt;|Built</td><td>3</td><td/></row>
 		<row><td>eula.rtf</td><td>ISX_DEFAULTCOMPONENT1</td><td>Eula.rtf</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\MeowBitSetup\Eula.rtf</td><td>1</td><td/></row>
 		<row><td>license</td><td>ISX_DEFAULTCOMPONENT1</td><td>LICENSE</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\LICENSE</td><td>1</td><td/></row>
+		<row><td>microsoft.threading.tasks.dl</td><td>Microsoft.Threading.Tasks.dll</td><td>MICROS~1.DLL|Microsoft.Threading.Tasks.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\bin\Debug\Microsoft.Threading.Tasks.dll</td><td>1</td><td/></row>
 		<row><td>readme.md</td><td>ISX_DEFAULTCOMPONENT1</td><td>README.md</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\README.md</td><td>1</td><td/></row>
 		<row><td>readme.txt</td><td>ISX_DEFAULTCOMPONENT1</td><td>README.txt</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\README.txt</td><td>1</td><td/></row>
+		<row><td>system.net.http.dll</td><td>System.Net.Http.dll</td><td>SYSTEM~1.DLL|System.Net.Http.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\bin\Debug\System.Net.Http.dll</td><td>1</td><td/></row>
+		<row><td>system.net.http.webrequest.d</td><td>System.Net.Http.WebRequest.dll</td><td>SYSTEM~1.DLL|System.Net.Http.WebRequest.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\bin\Debug\System.Net.Http.WebRequest.dll</td><td>1</td><td/></row>
+		<row><td>system.threading.tasks.dll</td><td>System.Threading.Tasks.dll</td><td>SYSTEM~1.DLL|System.Threading.Tasks.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\bin\Debug\System.Threading.Tasks.dll</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -2091,26 +2103,30 @@
 		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_709761D3_073C_4170_992B_92757D82BE04_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_7396FFA0_33D3_4706_AA0E_A099E89969E0_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_22831914_727A_4DA0_B371_EA6340BC154F_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Microsoft.Threading.Tasks.dll</td><td/><td/><td>_EEAC81F1_5F6F_404B_BA09_DD9204399609_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>System.Net.Http.WebRequest.dll</td><td/><td/><td>_09039B59_95F2_4185_8764_C6BADD56251C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>System.Net.Http.dll</td><td/><td/><td>_B3543E4E_8680_449D_82CA_AF25CBBCE768_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>System.Threading.Tasks.dll</td><td/><td/><td>_3C4FA2CD_1481_4DE5_AB59_E28BF274829F_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Debug_Symbols</td><td/><td/><td>_9B0511F6_0A42_4F2D_8AF9_36A521A8DA43_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Debug_Symbols1</td><td/><td/><td>_6B4D0DD3_577A_4614_8B4B_FA2770E1D8E3_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNS.Debug_Symbols2</td><td/><td/><td>_7B082639_67BC_4A50_9C2B_F4C4D832CF3A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNS.Debug_Symbols2</td><td/><td/><td>_C8A215DA_283E_4843_B990_744E72C1689F_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Primary_output</td><td/><td/><td>_3B9D6933_911D_46E2_AC3E_72A5FF25DAC2_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Primary_output1</td><td/><td/><td>_EBE31A9F_3EB2_4442_BFAB_D1C8C2387BA3_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNS.Primary_output2</td><td/><td/><td>_44B9394B_CC70_4161_B26C_102EB5B33FDB_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNS.Primary_output2</td><td/><td/><td>_C91DCBCA_44DA_4DAE_AF57_64B697998991_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNsShared.Debug_Symbols</td><td/><td/><td>_DAE007AD_5458_41E9_B6D0_84F426167E59_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNsShared.Debug_Symbols1</td><td/><td/><td>_87AA6BF3_DB51_4B6E_AE9B_0CDCA0CA5DAD_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNsShared.Debug_Symbols2</td><td/><td/><td>_30A205F4_FB68_459E_85E0_D43DD64E44CF_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNsShared.Debug_Symbols2</td><td/><td/><td>_6FB841D7_F3DD_43EE_9ADC_487D99C2E35F_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNsShared.Primary_output</td><td/><td/><td>_6FED6D46_1C0C_4B61_9BF5_B2AD22BEBBC2_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNsShared.Primary_output1</td><td/><td/><td>_A669B152_74BC_4F46_85BB_1A25EC95E3E8_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNsShared.Primary_output2</td><td/><td/><td>_A431371C_41E1_40F4_B287_0DF0B301E32E_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNsShared.Primary_output2</td><td/><td/><td>_EFC3F6A0_E326_4AD5_903D_D75CD1994925_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols</td><td/><td/><td>_14A6C76C_5B05_4F15_AAE7_FB0F22DC51A9_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols1</td><td/><td/><td>_5FA24E9F_1535_45ED_9B08_11D8132E9E32_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols2</td><td/><td/><td>_7AD77879_3B19_40D1_8AFB_6DFA2AE46C88_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNs_Monitor.Debug_Symbols3</td><td/><td/><td>_0011F0A1_519F_41D7_B229_BF37DD2E39D4_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNs_Monitor.Debug_Symbols3</td><td/><td/><td>_418EF50E_F91C_400E_9B21_43C1088AC7FE_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Primary_output</td><td/><td/><td>_E3BF9481_75C2_479A_8DEC_E158FBFA4321_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Primary_output1</td><td/><td/><td>_664ACE7D_A20A_4A5B_9457_62DE8FF34E0C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Primary_output2</td><td/><td/><td>_ED52D4A2_0084_4DC6_83FC_F3955445E271_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNs_Monitor.Primary_output3</td><td/><td/><td>_B2063E39_07E0_4A74_8232_642B4471CAA1_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNs_Monitor.Primary_output3</td><td/><td/><td>_52038F96_4AD7_4C70_AB1F_7FB8EC5D791E_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -2419,7 +2435,6 @@
 		<row><td>ProgramFilesFolder</td><td/><td/><td>1</td></row>
 		<row><td>SystemFolder</td><td/><td/><td>1</td></row>
 		<row><td>WindowsFolder</td><td/><td/><td>1</td></row>
-		<row><td>dotBitDnsTest</td><td>dotBitDnsTest\dotBitDnsTest.csproj</td><td/><td>2</td></row>
 		<row><td>dotBitNS</td><td>dotBitNS\dotBitNS.csproj</td><td/><td>2</td></row>
 		<row><td>dotBitNs Monitor</td><td>dotBitNs Monitor\dotBitNs Monitor.csproj</td><td/><td>2</td></row>
 		<row><td>dotBitNsShared</td><td>dotBitNsShared\dotBitNsShared.csproj</td><td/><td>2</td></row>
@@ -2449,8 +2464,8 @@
 		<col key="yes" def="s72">ISProductConfiguration_</col>
 		<col key="yes" def="s72">Property</col>
 		<col def="L255">Value</col>
-		<row><td>Express</td><td>MSIPackageFileName</td><td>MeowBitSetup</td></row>
-		<row><td>Express</td><td>SetupFileName</td><td>MeowBitSetup</td></row>
+		<row><td>Express</td><td>MSIPackageFileName</td><td>MeowBitSetup_XP</td></row>
+		<row><td>Express</td><td>SetupFileName</td><td>MeowBitSetup_XP</td></row>
 	</table>
 
 	<table name="ISRelease">
@@ -2700,7 +2715,7 @@
 		<col def="I2">Order</col>
 		<col def="I2">ISSetupLocation</col>
 		<col def="S255">ISReleaseFlags</col>
-		<row><td>_86E0386B_8542_4BB8_9A87_492E9B1D4081_</td><td>Microsoft .NET Framework 4.5 Full.prq</td><td/><td/><td/></row>
+		<row><td>_738E1696_98F5_4C76_BF1A_C68987512002_</td><td>Microsoft .NET Framework 4.0 Client.prq</td><td/><td/><td/></row>
 	</table>
 
 	<table name="ISSetupType">
@@ -2737,7 +2752,8 @@
 		<row><td>COMPANY_NAME</td><td>1033</td><td>THE BEASTLICK INTERNET POLICY COMMISSION</td><td>0</td><td/><td>2040680658</td></row>
 		<row><td>DN_AlwaysInstall</td><td>1033</td><td>Always Install</td><td>0</td><td/><td>295850097</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>1033</td><td>The color settings of your system are not adequate for running [ProductName].</td><td>0</td><td/><td>295850097</td></row>
-		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL</td><td>1033</td><td>Microsoft .NET Framework 4.5 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>-2120085871</td></row>
+		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40CLIENT</td><td>1033</td><td>Microsoft .NET Framework 4.0 Client Package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>-2120076735</td></row>
+		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL</td><td>1033</td><td>Microsoft .NET Framework 4.5 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>430107147</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_OS</td><td>1033</td><td>The operating system is not adequate for running [ProductName].</td><td>0</td><td/><td>295850097</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_PROCESSOR</td><td>1033</td><td>The processor is not adequate for running [ProductName].</td><td>0</td><td/><td>295850097</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_RAM</td><td>1033</td><td>The amount of RAM is not adequate for running [ProductName].</td><td>0</td><td/><td>295850097</td></row>
@@ -4144,7 +4160,7 @@ RABWAEQALQA1AAEARQB4AHAAcgBlAHMAcwA=
 	<table name="LaunchCondition">
 		<col key="yes" def="s255">Condition</col>
 		<col def="l255">Description</col>
-		<row><td>DOTNETVERSION45FULL&gt;="#1"</td><td>##IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL##</td></row>
+		<row><td>DOTNETVERSION40CLIENT&gt;="#1"</td><td>##IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION40CLIENT##</td></row>
 	</table>
 
 	<table name="ListBox">
@@ -4486,7 +4502,7 @@ RABWAEQALQA1AAEARQB4AHAAcgBlAHMAcwA=
 		<row><td>SERIALNUMVALSUCCESSRETVAL</td><td>1</td><td/></row>
 		<row><td>SHOWLAUNCHPROGRAM</td><td>0</td><td/></row>
 		<row><td>SHOWLAUNCHREADME</td><td>-1</td><td/></row>
-		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR;ISACTIONPROP1;ISACTIONPROP2;DOTNETVERSION45FULL</td><td/></row>
+		<row><td>SecureCustomProperties</td><td>ISFOUNDNEWERPRODUCTVERSION;USERNAME;COMPANYNAME;ISX_SERIALNUM;SUPPORTDIR;ISACTIONPROP1;ISACTIONPROP2;DOTNETVERSION40CLIENT</td><td/></row>
 		<row><td>SelectedSetupType</td><td>##IDS__DisplayName_Typical##</td><td/></row>
 		<row><td>SetupType</td><td>Typical</td><td/></row>
 		<row><td>UpgradeCode</td><td>{ABE4717A-AD5A-4601-8EE8-F7C40FFE1CE3}</td><td/></row>
@@ -4531,7 +4547,7 @@ RABWAEQALQA1AAEARQB4AHAAcgBlAHMAcwA=
 		<col def="s255">Key</col>
 		<col def="S255">Name</col>
 		<col def="I2">Type</col>
-		<row><td>DotNet45Full</td><td>2</td><td>SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full</td><td>Version</td><td>2</td></row>
+		<row><td>DotNet40Client</td><td>2</td><td>SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Client</td><td>Install</td><td>2</td></row>
 	</table>
 
 	<table name="Registry">

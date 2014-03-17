@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SetupPrereq>
+	<conditions>
+		<condition Type="2" Comparison="1" Path="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Client" FileName="Install" ReturnValue="1"></condition>
+		<condition Type="16" Comparison="2" Path="[WindowsFolder]Microsoft.NET\Framework\v4.0.30319" FileName="mscorlib.dll" ReturnValue="4.0.30319.233"></condition>
+		<condition Type="1" Comparison="2" Path="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" FileName="" ReturnValue=""></condition>
+	</conditions>
+	<files>
+		<file LocalFile="&lt;ISProductFolder&gt;\SetupPrerequisites\Microsoft .net\4.0\Update_KB2468871\NDP40-KB2468871-v2-x86.exe" URL="http://download.microsoft.com/download/2/B/F/2BF4D7D1-E781-4EE0-9E4F-FDD44A2F8934/NDP40-KB2468871-v2-x86.exe" CheckSum="89C68B30D4029D665174C5D647115CAE" FileSize="0,19556328"></file>
+	</files>
+	<execute file="NDP40-KB2468871-v2-x86.exe" cmdline="/q /norestart" cmdlinesilent="/q /norestart" returncodetoreboot="1641,3010" requiresmsiengine="1"></execute>
+	<properties Id="{694d865c-00a7-47fb-85b1-f7d5e537d967}" Description="This prerequisite installs the .NET Framework 4.0 client profile update provided in Microsoft KB article 2468871." AltPrqURL="http://saturn.installshield.com/is/prerequisites/microsoft .net framework 4.0 client update kb2468871.prq"></properties>
+	<behavior Reboot="2"></behavior>
+</SetupPrereq>

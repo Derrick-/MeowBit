@@ -21,3 +21,5 @@
 /.svn
 /*.suo
 *.csproj.user
+
+/MeowBitSetup/NDP40-KB2468871-v2-x86.exe
