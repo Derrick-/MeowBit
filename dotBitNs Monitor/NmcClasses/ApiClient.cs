@@ -49,7 +49,7 @@ namespace dotBitNs_Monitor
 
         public async Task<NmcNameValuePair> QueryValue(string namepath)
         {
-            string path = "/api/query/?name=" + HttpUtility.UrlEncode(namepath);
+            string path = "/api/query/?name=" + Uri.EscapeDataString(namepath);
             dynamic toReturn = await ApiGet<NmcNameValuePair>(path);
             return toReturn;
         }
@@ -142,5 +142,6 @@ namespace dotBitNs_Monitor
                 handler(this, new PropertyChangedEventArgs(name));
             }
         }
+
     }
 }

@@ -108,7 +108,7 @@ namespace dotBitNs_Monitor
         void t_Elapsed(object sender, ElapsedEventArgs e)
         {
             t.Stop();
-            Dispatcher.Invoke(UpdateStatus);
+            Dispatcher.Invoke(new Action(UpdateStatus));
             t.Start();
         }
 

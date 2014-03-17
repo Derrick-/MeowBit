@@ -123,7 +123,7 @@ namespace dotBitNs_Monitor
 
         private void OnRequestShow(object sender, EventArgs e)
         {
-            Dispatcher.Invoke(EnsureVisible);
+            Dispatcher.Invoke(new Action(EnsureVisible));
         }
 
         public void EnsureVisible()
@@ -326,28 +326,28 @@ namespace dotBitNs_Monitor
         private void tbtnInstall_Elapsed(object sender, ElapsedEventArgs e)
         {
             ((Timer)sender).Stop();
-            Dispatcher.Invoke(() => { btnInstall.IsEnabled = true; });
+            Dispatcher.Invoke(new Action(() => { btnInstall.IsEnabled = true; }));
             btnInstall.ToolTip = "";
         }
 
         void tbtnStart_Elapsed(object sender, ElapsedEventArgs e)
         {
             ((Timer)sender).Stop();
-            Dispatcher.Invoke(() => { btnStart.IsEnabled = true; });
+            Dispatcher.Invoke(new Action(() => { btnStart.IsEnabled = true; }));
             btnStart.ToolTip = "";
         }
 
         private void tbtnStop_Elapsed(object sender, ElapsedEventArgs e)
         {
             ((Timer)sender).Stop();
-            Dispatcher.Invoke(() => { btnStop.IsEnabled = true; });
+            Dispatcher.Invoke(new Action(() => { btnStop.IsEnabled = true; }));
             btnStop.ToolTip = "";
         }
 
         private void tbtnAutostart_Elapsed(object sender, ElapsedEventArgs e)
         {
             ((Timer)sender).Stop();
-            Dispatcher.Invoke(() => { btnAutostart.IsEnabled = true; });
+            Dispatcher.Invoke(new Action(() => { btnAutostart.IsEnabled = true; }));
         }
 
         private void MyNotifyIcon_TrayContextMenuOpen(object sender, System.Windows.RoutedEventArgs e)
