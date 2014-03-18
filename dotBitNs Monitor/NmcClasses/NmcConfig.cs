@@ -43,6 +43,8 @@ namespace dotBitNs_Monitor
         {
             InvokeNameCoinConfigInfo("Checking Namecoin Configuration...");
 
+
+
             Ok = CheckRPCConfig(AppDataPath);
         }
 
@@ -52,20 +54,24 @@ namespace dotBitNs_Monitor
         static string GetNmcConfigPath(string AppDataPath) { return Path.Combine(AppDataPath, "Namecoin"); }
         static string GetNmcConfigFilePath(string AppDataPath) { return Path.Combine(GetNmcConfigPath(AppDataPath), NmcConfigFileName); }
 
-        private static bool CheckRPCConfig(string AppDataPath)
+        private static bool CheckRPCConfig(string path)
         {
             bool ok = true;
             try
             {
-                var config = new ConfigFile(GetNmcConfigFilePath(AppDataPath));
+                RpcPass = "myPreexistingPassword";
 
-                RpcUser = config.Settings["rpcuser"];
-                RpcPass = config.Settings["rpcpassword"];
-                RpcPort = config.Settings["rpcport"];
+                var config = new ConfigFile(GetNmcConfigFilePath(path));
+
+                config.AddMinimumConfigValues(RpcUser, RpcPass, RpcPort);
+
+                RpcUser = config.GetSetting("rpcuser");
+                RpcPass = config.GetSetting("rpcpassword");
+                RpcPort = config.GetSetting("rpcport");
             }
             catch (IOException ex)
             {
-                InvokeNameCoinConfigInfo(string.Format("Failed to read/verify {0}. {1}", GetNmcConfigFilePath(AppDataPath), ex.Message));
+                InvokeNameCoinConfigInfo(string.Format("Failed to read/verify {0}. {1}", GetNmcConfigFilePath(path), ex.Message));
                 ok = false;
             }
             return ok;
@@ -73,35 +79,50 @@ namespace dotBitNs_Monitor
 
         class ConfigFile
         {
+            private readonly string DefaultUser;
+            private readonly string DefaultPass;
+            private readonly string DefaultPort;
+
             public string Path { get; private set; }
 
-            public ConfigFile(string path, bool CreateAndVerify = true)
+            public bool Read { get; private set; }
+
+            public ConfigFile(string path)
             {
                 Path = path;
-
-                if (CreateAndVerify)
-                {
-                    EnsureFolderExists(System.IO.Path.GetDirectoryName(path));
-                    AddMinimumConfigValues();
-                }
+                Read = false;
             }
 
-            public void EnsureFolderExists(string path)
+            public bool Exists
             {
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
+                get { return File.Exists(Path); }
             }
 
-            public readonly Dictionary<string, string> Settings = new Dictionary<string, string>();
-            Dictionary<string, string> toupdate = new Dictionary<string, string>();
-
-            public void AddMinimumConfigValues()
+            private void EnsureFolderExists()
             {
+                if (!Directory.Exists(System.IO.Path.GetDirectoryName(this.Path)))
+                    Directory.CreateDirectory(Path);
+            }
+
+            class configLine
+            {
+                public string key;
+                public string value;
+                public string originalLine;
+                public string newLine;
+            }
+
+            List<configLine> configData = new List<configLine>();
+
+            public void AddMinimumConfigValues(string forceUser = null, string forcePass = null, string forcePort = null)
+            {
+                EnsureFolderExists();
+                
                 ReadFile();
 
-                EnsureSetting("rpcuser", "dotBitNS", false);
-                EnsureSetting("rpcpassword", dotBitNs.StringUtils.SecureRandomString(16), false);
-                EnsureSetting("rpcport", "8336", false);
+                EnsureSetting("rpcuser", forceUser ?? "dotBitNS", forceUser != null);
+                EnsureSetting("rpcpassword", forcePass ?? dotBitNs.StringUtils.SecureRandomString(16), forcePass != null);
+                EnsureSetting("rpcport", forcePort ?? "8336", forcePort != null);
                 EnsureSetting("server", "1", true);
                 EnsureSetting("rpcallowip", "127.0.0.1", true);
 
@@ -110,39 +131,39 @@ namespace dotBitNs_Monitor
 
             private void ReadFile()
             {
-                Settings.Clear();
-                toupdate.Clear();
-
-                string fileText;
-
+                configData.Clear();
 
                 if (File.Exists(Path))
                 {
+                    List<string> fileLines = new List<string>();
+
                     using (var fs = new FileStream(Path, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
                     using (var sr = new StreamReader(fs))
                     {
-                        fileText = sr.ReadToEnd();
+                        while (!sr.EndOfStream)
+                            fileLines.Add(sr.ReadLine());
                         sr.Close();
                     }
 
-                    var fileLines = fileText.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string line in fileLines)
                     {
+                        configLine data = new configLine();
+                        data.originalLine = line;
+
                         var parts = GetLineParts(line);
                         if (parts != null && parts.Length > 0)
                         {
-                            string key=parts[0].ToLower();
-                            string value = parts.Length > 0 ? parts.Length == 1 ? parts[1] : string.Join(" ", parts.Skip(1)) : null;
-                            if(Settings.ContainsKey(key))
-                                Debug.WriteLine("Duplicate Namecoin key {0}={1}, using first found value of {2}", key, PrintFormatKey(value), PrintFormatKey(Settings[key]), PrintFormatKey(Settings[key]));
-                            Settings[key] = value;
+                            data.key = parts[0].ToLower();
+                            data.value = parts.Length > 0 ? parts.Length == 1 ? parts[1] : string.Join(" ", parts.Skip(1)) : null;
                         }
+                        configData.Add(data);
                     }
                 }
                 else
                 {
                     InvokeNameCoinConfigInfo(string.Format("Creating default config file at {0}", Path));
                 }
+                Read = true;
             }
 
             private string PrintFormatKey(string value)
@@ -153,29 +174,59 @@ namespace dotBitNs_Monitor
             private void EnsureSetting(string key, string defaultvalue, bool forceDefaultValue)
             {
                 key = key.ToLower();
-                if (!Settings.ContainsKey(key) || (forceDefaultValue && Settings[key] != defaultvalue))
+                bool found = false;
+                foreach (var data in configData.ToList())
                 {
-                    InvokeNameCoinConfigInfo(string.Format(" Updating: {0}={1}", key, defaultvalue));
-                    toupdate.Add(key, defaultvalue);
+                    if (string.IsNullOrWhiteSpace(data.key) || data.key.StartsWith("#"))
+                        continue;
+
+                    if (data.key.ToLower() == key)
+                    {
+                        if (found)
+                        {
+                            Debug.WriteLine("Duplicate Namecoin key {0}={1}", key, PrintFormatKey(data.value));
+                            data.newLine = "# MeowBit Removed Duplicate: " + data.originalLine;
+                            continue;
+                        }
+
+                        found = true;
+                        if (forceDefaultValue || string.IsNullOrWhiteSpace(data.value))
+                        {
+                            InvokeNameCoinConfigInfo(string.Format(" Updating: {0}={1}", key, defaultvalue));
+                            data.value = defaultvalue;
+                            data.newLine = data.key + '=' + defaultvalue;
+                        }
+                    }
+                }
+                if (!found)
+                {
+                    InvokeNameCoinConfigInfo(string.Format(" Creating: {0}={1}", key, defaultvalue));
+                    configData.Add(new configLine()
+                    {
+                        key = key,
+                        value = defaultvalue,
+                        originalLine = null,
+                        newLine = key + '=' + defaultvalue
+                    });
                 }
             }
 
             private void SaveChanges()
             {
-                if (toupdate.Count > 0)
+                if (configData.Any(m => m.newLine != null && m.newLine != m.originalLine))
                 {
-                    InvokeNameCoinConfigInfo(string.Format("Saving {0}", Path));
-                    foreach (string key in toupdate.Keys)
-                        Settings[key] = toupdate[key];
                     using (var sw = new StreamWriter(Path, false))
                     {
-                        foreach (var pair in Settings)
-                            sw.WriteLine("{0}={1}", pair.Key, pair.Value);
+                        foreach (var data in configData)
+                        {
+                            sw.WriteLine(data.newLine ?? data.originalLine ?? string.Empty);
+                        }
                     }
                     InvokeConfigUpdated();
                 }
                 else
                     InvokeNameCoinConfigInfo(string.Format("{0} was up to date", Path));
+                Read = true;
             }
 
             private static string[] GetLineParts(string line)
@@ -184,6 +235,14 @@ namespace dotBitNs_Monitor
                 return parts;
             }
 
+
+            internal string GetSetting(string key)
+            {
+                var data = configData.Where(m => m.key == key).FirstOrDefault();
+                if (data == null)
+                    return null;
+                return data.value;
+            }
         }
 
     }
