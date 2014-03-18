@@ -19,8 +19,8 @@ With MeowBit you can navigate on any browser from the regular web to Dot-Bit sit
 
 ## Installation, Getting Help & Tips
 * Requirements
- * Windows 7 or 8+
- * .Net 4.5 (.net 4.0 release planned for Windows XP compatibility)
+ * Windows 7 or 8+ only. (See also: [XP Version](https://github.com/Derrick-/MeowBit/tree/xp))
+ * .Net 4.5
  * Namecoin Wallet software running. [Get it here](http://namecoin.com).
 
 * Installation
