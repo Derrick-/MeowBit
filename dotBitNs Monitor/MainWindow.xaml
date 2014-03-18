@@ -108,7 +108,7 @@
             <WrapPanel>
                 <Label>NameCoin Wallet</Label>
                 <WPFControls:StatusIcon x:Name="iconNmc" Width="32" Status="Question" />
-                <TextBlock Foreground="Red" Name="txtNameCoinInfo"></TextBlock>
+                <TextBlock Foreground="Red" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" Name="txtNameCoinInfo"></TextBlock>
             </WrapPanel>
             <WrapPanel>
                 <Label>Nameserver</Label>

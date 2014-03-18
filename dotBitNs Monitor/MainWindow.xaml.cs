@@ -59,6 +59,7 @@ namespace dotBitNs_Monitor
             productInfoManager = new ProductInfoManager();
 
             NmcConfigSettings.ConfigUpdated += NmcConfigSetter_ConfigUpdated;
+            NmcConfigSettings.NameCoinConfigInfo += NmcConfigSettings_NameCoinConfigInfo;
             NmcConfigSettings.ValidateNmcConfig();
 
             Program.OnAdditionalInstanceSignal += OnRequestShow;
@@ -152,6 +153,12 @@ namespace dotBitNs_Monitor
         void NmcConfigSetter_ConfigUpdated()
         {
             txtNameCoinInfo.Text = "NameCoin config updated: restart wallet.";
+        }
+
+        void NmcConfigSettings_NameCoinConfigInfo(string status, bool important)
+        {
+            if (important)
+                txtNameCoinInfo.Text = status;
         }
 
         void serviceMonitor_SystemGoChanged(object sender, ServiceMonitor.SystemGoEventArgs e)

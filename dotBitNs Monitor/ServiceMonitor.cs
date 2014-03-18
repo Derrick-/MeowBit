@@ -126,6 +126,8 @@ namespace dotBitNs_Monitor
                 OnStatusUpdated(this, new EventArgs() { });
         }
 
+        int namecoinofflinecounter = NamecoinConfigInterval - 2;
+        const int NamecoinConfigInterval = 5;
         async void UpdateApiStatus()
         {
             ApiMonitorResponse status = await apiClient.GetStatus();
@@ -140,13 +142,18 @@ namespace dotBitNs_Monitor
             }
             if (!NameCoinOnline)
             {
-                SendConfig(new NmcConfigJson()
+                if (namecoinofflinecounter++ > NamecoinConfigInterval)
                 {
-                    User = NmcConfigSettings.RpcUser,
-                    Pass = NmcConfigSettings.RpcPass,
-                    Port = NmcConfigSettings.RpcPort,
-                    Logging = Logging.ToString(),
-                });
+                    namecoinofflinecounter = 0;
+                    NmcConfigSettings.ValidateNmcConfig();
+                    SendConfig(new NmcConfigJson()
+                    {
+                        User = NmcConfigSettings.RpcUser,
+                        Pass = NmcConfigSettings.RpcPass,
+                        Port = NmcConfigSettings.RpcPort,
+                        Logging = Logging.ToString(),
+                    });
+                }
             }
         }
 

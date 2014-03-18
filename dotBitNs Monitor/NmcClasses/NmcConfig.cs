@@ -5,24 +5,30 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace dotBitNs_Monitor
 {
     class NmcConfigSettings
     {
+        static string AppDataPath { get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); } }
+        static string NmcConfigFileName { get { return "namecoin.conf"; } }
+        static string DefaultConfigFilePath { get { return Path.Combine(Path.Combine(AppDataPath, "Namecoin"), NmcConfigFileName); } }
+
         public static string RpcUser { get; set; }
         public static string RpcPass { get; set; }
         public static string RpcPort { get; set; }
 
-        public static bool Ok { get; set; }
-
         public delegate void ConfigUpdatedEventHandler();
-        public delegate void NameCoinConfigInfoEventHandler(string status);
+        public delegate void NameCoinConfigInfoEventHandler(string status , bool important=false);
 
         public static event ConfigUpdatedEventHandler ConfigUpdated;
         public static event NameCoinConfigInfoEventHandler NameCoinConfigInfo;
@@ -33,45 +39,135 @@ namespace dotBitNs_Monitor
                 ConfigUpdated();
         }
 
-        private static void InvokeNameCoinConfigInfo(string status)
+        private static void InvokeNameCoinConfigInfo(string status, bool important = false)
         {
             if (NameCoinConfigInfo != null)
-                NameCoinConfigInfo(status);
+                NameCoinConfigInfo(status, important);
         }
 
         public static void ValidateNmcConfig()
         {
             InvokeNameCoinConfigInfo("Checking Namecoin Configuration...");
 
+            bool Ok = false;
 
+            var customDataPath = FindDataPathFromRunningWallet("namecoin-qt");
+            if (customDataPath != null)
+                Ok = CheckRPCConfig(Path.Combine(customDataPath, NmcConfigFileName));
 
-            Ok = CheckRPCConfig(AppDataPath);
+            Ok = CheckRPCConfig(DefaultConfigFilePath) || Ok;
+
+            if(!Ok)
+                InvokeNameCoinConfigInfo("Namecoin Configuration failed...");
         }
 
-        static string AppDataPath { get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); } }
-        static string NmcConfigFileName { get { return "namecoin.conf"; } }
+        private static string FindDataPathFromRunningWallet(string ProcessName)
+        {
+            var processes = System.Diagnostics.Process.GetProcessesByName(ProcessName);
+            int count=processes.Count();
+            if (count<=0) return null;
 
-        static string GetNmcConfigPath(string AppDataPath) { return Path.Combine(AppDataPath, "Namecoin"); }
-        static string GetNmcConfigFilePath(string AppDataPath) { return Path.Combine(GetNmcConfigPath(AppDataPath), NmcConfigFileName); }
+            if (count > 1)
+                MessageBox.Show(string.Format("There may be {0} namecoin wallet processes open. Please close {1} and restart service.", count, count - 1));
+
+            var process = processes.First();
+            string cmdline=GetProcessCommandline(process);
+            if (cmdline == null)
+            {
+                InvokeNameCoinConfigInfo("Run Namecoin as current user.",true);
+                return null;
+            }
+
+            return GetCustomDataDirectory(cmdline);
+        }
+
+        private static string GetCustomDataDirectory(string cmdline)
+        {
+            string argName="-datadir=";
+
+            var args = CommandLineToArgs(cmdline);
+
+            foreach (var arg in args)
+                if (arg.ToLower().StartsWith(argName) && arg.Length > argName.Length)
+                    return arg.Substring(argName.Length);
+
+            return null;
+        }
+
+        private static string GetProcessCommandline(Process process)
+        {
+            try
+            {
+                Console.Write(process.MainModule.FileName + " ");
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id))
+                {
+                    foreach (ManagementObject @object in searcher.Get())
+                    {
+                        return (@object["CommandLine"] + " ").Trim();
+                    }
+
+                    Console.WriteLine();
+                }
+            }
+            catch (Win32Exception ex)
+            {
+                if ((uint)ex.ErrorCode != 0x80004005)
+                {
+                    throw;
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error reading process information for {0} : {1}", process.ToString(), ex.Message);
+            }
+            return null;
+        }
+
+        [DllImport("shell32.dll", SetLastError = true)]
+        static extern IntPtr CommandLineToArgvW(
+            [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine, out int pNumArgs);
+
+        public static string[] CommandLineToArgs(string commandLine)
+        {
+            int argc;
+            var argv = CommandLineToArgvW(commandLine, out argc);
+            if (argv == IntPtr.Zero)
+                throw new System.ComponentModel.Win32Exception();
+            try
+            {
+                var args = new string[argc];
+                for (var i = 0; i < args.Length; i++)
+                {
+                    var p = Marshal.ReadIntPtr(argv, i * IntPtr.Size);
+                    args[i] = Marshal.PtrToStringUni(p);
+                }
+
+                return args;
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(argv);
+            }
+        }
 
         private static bool CheckRPCConfig(string path)
         {
             bool ok = true;
             try
             {
-                RpcPass = "myPreexistingPassword";
-
-                var config = new ConfigFile(GetNmcConfigFilePath(path));
+                var config = new ConfigFile(path);
 
                 config.AddMinimumConfigValues(RpcUser, RpcPass, RpcPort);
-
-                RpcUser = config.GetSetting("rpcuser");
-                RpcPass = config.GetSetting("rpcpassword");
-                RpcPort = config.GetSetting("rpcport");
+                if (ok = config.Read)
+                {
+                    RpcUser = config.GetSetting("rpcuser");
+                    RpcPass = config.GetSetting("rpcpassword");
+                    RpcPort = config.GetSetting("rpcport");
+                }
             }
             catch (IOException ex)
             {
-                InvokeNameCoinConfigInfo(string.Format("Failed to read/verify {0}. {1}", GetNmcConfigFilePath(path), ex.Message));
+                InvokeNameCoinConfigInfo(string.Format("Failed to read/verify {0}. {1}", path, ex.Message));
                 ok = false;
             }
             return ok;
@@ -79,10 +175,6 @@ namespace dotBitNs_Monitor
 
         class ConfigFile
         {
-            private readonly string DefaultUser;
-            private readonly string DefaultPass;
-            private readonly string DefaultPort;
-
             public string Path { get; private set; }
 
             public bool Read { get; private set; }
@@ -100,8 +192,9 @@ namespace dotBitNs_Monitor
 
             private void EnsureFolderExists()
             {
-                if (!Directory.Exists(System.IO.Path.GetDirectoryName(this.Path)))
-                    Directory.CreateDirectory(Path);
+                string path = System.IO.Path.GetDirectoryName(this.Path);
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
             }
 
             class configLine
@@ -126,7 +219,14 @@ namespace dotBitNs_Monitor
                 EnsureSetting("server", "1", true);
                 EnsureSetting("rpcallowip", "127.0.0.1", true);
 
-                SaveChanges();
+                try
+                {
+                    SaveChanges();
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+
+                }
             }
 
             private void ReadFile()
