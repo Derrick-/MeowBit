@@ -3,10 +3,11 @@
 // Author: Derrick Slopey derrick@alienseed.com
 // March 4, 2014
 
+using Owin;
 using System.Web.Http;
+using Microsoft.Owin.Hosting;
 using System;
 using System.Net.Http;
-using System.Web.Http.SelfHost;
 
 namespace dotBitNs.UI
 {
@@ -24,7 +25,7 @@ namespace dotBitNs.UI
             }
         }
 
-        private static HttpSelfHostServer server  = null; 
+        private static IDisposable app;
 
         public static void Initialize()
         {
@@ -33,25 +34,15 @@ namespace dotBitNs.UI
 
         private static void InitializeApiServer()
         {
-            if (server != null)
+            if (app != null)
             {
-                server.Dispose();
-                server = null;
+                app.Dispose();
+                app = null;
             }
             Console.WriteLine("Initializing api on port {0}...", Port);
             try
             {
-                string _baseAddress = "http://localhost:" + Port.ToString();
-                //server = WebApp.Start<WebApiHost>(url: "http://localhost:" + Port.ToString());
-                HttpSelfHostConfiguration config = Configuration(new Uri(_baseAddress));
-
-                // Create server 
-                server = new HttpSelfHostServer(config);
-
-                // Start listening 
-                server.OpenAsync().Wait();
-                Console.WriteLine("Listening on " + _baseAddress); 
-
+                app = WebApp.Start<WebApiHost>(url: "http://localhost:" + Port.ToString());
             }
             catch (Exception ex)
             {
@@ -62,17 +53,17 @@ namespace dotBitNs.UI
 
         // This code configures Web API. The Startup class is specified as a type
         // parameter in the WebApp.Start method.
-        private static HttpSelfHostConfiguration Configuration(Uri baseaddress)
+        public void Configuration(IAppBuilder appBuilder)
         {
             // Configure Web API for self-host. 
-            HttpSelfHostConfiguration config = new HttpSelfHostConfiguration(baseaddress);
+            HttpConfiguration config = new HttpConfiguration();
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            return config;
+            appBuilder.UseWebApi(config);
         }
     }
 

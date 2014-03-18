@@ -347,24 +347,24 @@
 		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{48E5554A-7270-437C-87DA-7F442D7237D3}</td><td>DesktopFolder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Debug_Symbols</td><td>{9468830B-7BFD-4DF7-8072-D0B05DFD7B32}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Debug_Symbols1</td><td>{4BDDFAF1-0681-40B7-9439-EF844AD68AC3}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNS.Debug_Symbols2</td><td>{3C0F3260-91B5-4FE2-B6AC-26F344A10E5E}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNS.Debug_Symbols2</td><td>{55FD6700-F4F7-45F4-A2A4-4CCB8E85D39B}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Primary_output</td><td>{391E0450-63EC-47AB-B3A6-05A1FDA7ABEE}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Primary_output1</td><td>{8810A02E-37B9-4E45-89C1-C327B8146734}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNS.Primary_output2</td><td>{B35F498E-4C55-458C-AD30-A7052AD20111}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNS.Primary_output2</td><td>{3CFC570E-BA78-46E2-B666-4691ECBF1F2B}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNsShared.Debug_Symbols</td><td>{4223D413-7437-42D4-9B5F-43C57265FA03}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNsShared.Debug_Symbols1</td><td>{6B15A6CA-A6DB-4BC5-9463-52DA7405E6CC}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNsShared.Debug_Symbols2</td><td>{30FFC1A6-2C14-44FC-8CC7-7880E78D6655}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNsShared.Debug_Symbols2</td><td>{E5F84320-441E-4B38-9276-BCF28BC6BE9B}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNsShared.Primary_output</td><td>{7966A427-0FD3-4317-B171-21E6D732B07C}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNsShared.Primary_output1</td><td>{CBF811B4-1112-4F5A-9442-6D202A8ACAA6}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNsShared.Primary_output2</td><td>{6448D59B-B95B-42E4-B3A3-FD4167BF35AE}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNsShared.Primary_output2</td><td>{FC5B8288-AF39-48F4-86C3-68B2E2655447}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitnsshared.primary_outpu</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols</td><td>{781C9777-B68F-48A3-9E1B-97311485E83E}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols1</td><td>{FD55B5F6-94F6-4F4F-ABBB-F02277EDCA00}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols2</td><td>{332EDA7F-1DE0-419C-AE9C-D9E910B5F58E}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNs_Monitor.Debug_Symbols3</td><td>{C16318C0-6493-4357-961A-1ABA7345B317}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNs_Monitor.Debug_Symbols3</td><td>{3788445E-F67D-42B8-AD75-0087CBEE08C4}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.debug_symbo</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Primary_output</td><td>{0057CF04-3F13-481F-A46B-B777FC242E8B}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Primary_output1</td><td>{3A2325A5-6402-40A3-86EE-AB1859D81405}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNs_Monitor.Primary_output2</td><td>{258FD97C-3368-4A20-83A5-E2BF89CF6656}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>dotBitNs_Monitor.Primary_output3</td><td>{28A4397D-1E59-458F-B132-0C3A7D4E4625}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>dotBitNs_Monitor.Primary_output3</td><td>{2E9068C0-18C7-4B30-8E12-2FC94A2A0EB5}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns_monitor.primary_out</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -2093,24 +2093,24 @@
 		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_22831914_727A_4DA0_B371_EA6340BC154F_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Debug_Symbols</td><td/><td/><td>_9B0511F6_0A42_4F2D_8AF9_36A521A8DA43_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Debug_Symbols1</td><td/><td/><td>_6B4D0DD3_577A_4614_8B4B_FA2770E1D8E3_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNS.Debug_Symbols2</td><td/><td/><td>_7B082639_67BC_4A50_9C2B_F4C4D832CF3A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNS.Debug_Symbols2</td><td/><td/><td>_B526BA1C_4207_44E4_A67B_488C9B4CE674_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Primary_output</td><td/><td/><td>_3B9D6933_911D_46E2_AC3E_72A5FF25DAC2_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Primary_output1</td><td/><td/><td>_EBE31A9F_3EB2_4442_BFAB_D1C8C2387BA3_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNS.Primary_output2</td><td/><td/><td>_44B9394B_CC70_4161_B26C_102EB5B33FDB_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNS.Primary_output2</td><td/><td/><td>_4E5E9787_FE31_404B_A08B_CA6D8EAD11D0_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNsShared.Debug_Symbols</td><td/><td/><td>_DAE007AD_5458_41E9_B6D0_84F426167E59_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNsShared.Debug_Symbols1</td><td/><td/><td>_87AA6BF3_DB51_4B6E_AE9B_0CDCA0CA5DAD_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNsShared.Debug_Symbols2</td><td/><td/><td>_30A205F4_FB68_459E_85E0_D43DD64E44CF_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNsShared.Debug_Symbols2</td><td/><td/><td>_5F6E5342_80CD_4737_8C84_55BB65708B60_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNsShared.Primary_output</td><td/><td/><td>_6FED6D46_1C0C_4B61_9BF5_B2AD22BEBBC2_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNsShared.Primary_output1</td><td/><td/><td>_A669B152_74BC_4F46_85BB_1A25EC95E3E8_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNsShared.Primary_output2</td><td/><td/><td>_A431371C_41E1_40F4_B287_0DF0B301E32E_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNsShared.Primary_output2</td><td/><td/><td>_041C8320_A344_43F4_83BC_01516A7F09EA_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols</td><td/><td/><td>_14A6C76C_5B05_4F15_AAE7_FB0F22DC51A9_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols1</td><td/><td/><td>_5FA24E9F_1535_45ED_9B08_11D8132E9E32_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Debug_Symbols2</td><td/><td/><td>_7AD77879_3B19_40D1_8AFB_6DFA2AE46C88_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNs_Monitor.Debug_Symbols3</td><td/><td/><td>_0011F0A1_519F_41D7_B229_BF37DD2E39D4_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNs_Monitor.Debug_Symbols3</td><td/><td/><td>_F957A9C4_63BA_41ED_B779_9E0490DEB13E_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Primary_output</td><td/><td/><td>_E3BF9481_75C2_479A_8DEC_E158FBFA4321_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Primary_output1</td><td/><td/><td>_664ACE7D_A20A_4A5B_9457_62DE8FF34E0C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNs_Monitor.Primary_output2</td><td/><td/><td>_ED52D4A2_0084_4DC6_83FC_F3955445E271_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>dotBitNs_Monitor.Primary_output3</td><td/><td/><td>_B2063E39_07E0_4A74_8232_642B4471CAA1_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>dotBitNs_Monitor.Primary_output3</td><td/><td/><td>_753000B0_AF45_403D_85DD_E28D6B134FF3_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -2700,7 +2700,7 @@
 		<col def="I2">Order</col>
 		<col def="I2">ISSetupLocation</col>
 		<col def="S255">ISReleaseFlags</col>
-		<row><td>_86E0386B_8542_4BB8_9A87_492E9B1D4081_</td><td>Microsoft .NET Framework 4.5 Full.prq</td><td/><td/><td/></row>
+		<row><td>_86E0386B_8542_4BB8_9A87_492E9B1D4081_</td><td>Microsoft .NET Framework 4.5 Full.prq</td><td/><td>2</td><td/></row>
 	</table>
 
 	<table name="ISSetupType">
