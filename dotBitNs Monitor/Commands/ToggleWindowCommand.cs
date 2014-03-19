@@ -36,7 +36,7 @@ namespace dotBitNs_Monitor.Commands
         public override bool CanExecute(object parameter)
         {
             Window win = GetTaskbarWindow(parameter);
-            return win != null && !win.IsVisible;
+            return win != null;
         }
     }
 }
