@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotBitNS", "dotBitNS\dotBitNS.csproj", "{3444E4C6-1B91-4DD9-8D0D-A39C3802FE15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotBitNs", "dotBitNS\dotBitNs.csproj", "{3444E4C6-1B91-4DD9-8D0D-A39C3802FE15}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{60B92AB8-A3A2-401E-A167-25353C5D7D2A}"
 	ProjectSection(SolutionItems) = preProject

@@ -371,6 +371,7 @@ namespace dotBitNs_Monitor
                     if (svc != null)
                     {
                         path = svc.GetPropertyValue("PathName") as string;
+                        path = path.Replace("\"", "");
                         path = path.Replace(".exe -service", ".exe");
                     }
                 }

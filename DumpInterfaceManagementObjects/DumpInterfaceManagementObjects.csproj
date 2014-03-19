@@ -56,9 +56,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\dotBitNS\dotBitNS.csproj">
+    <ProjectReference Include="..\dotBitNS\dotBitNs.csproj">
       <Project>{3444e4c6-1b91-4dd9-8d0d-a39c3802fe15}</Project>
-      <Name>dotBitNS</Name>
+      <Name>dotBitNs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

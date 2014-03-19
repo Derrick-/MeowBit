@@ -3842,7 +3842,7 @@
 		<row><td>ID_STRING4</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>295850513</td></row>
 		<row><td>ID_STRING5</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>430057295</td></row>
 		<row><td>ID_STRING6</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>2040692529</td></row>
-		<row><td>ID_STRING7</td><td>1033</td><td>dotBitNS</td><td>0</td><td/><td>2040663251</td></row>
+		<row><td>ID_STRING7</td><td>1033</td><td>dotBitNs</td><td>0</td><td/><td>-1717392174</td></row>
 		<row><td>ID_STRING8</td><td>1033</td><td>MeowBit Name Server for dot-bit name resolution</td><td>0</td><td/><td>2040698035</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1033</td><td>This feature will remain uninstalled.</td><td>0</td><td/><td>295850097</td></row>
 	</table>
