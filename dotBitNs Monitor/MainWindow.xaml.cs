@@ -70,19 +70,32 @@ namespace dotBitNs_Monitor
             this.StateChanged += MainWindow_StateChanged;
 
             MyNotifyIcon.DoubleClickCommandParameter = MyNotifyIcon;
+
+
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (true.Equals(ConfigurationManager.Instance.StartMin))
+                Dispatcher.Invoke(() =>
+                {
+                    this.WindowState = System.Windows.WindowState.Minimized;
+                    this.ShowInTaskbar = false.Equals(ConfigurationManager.Instance.MinToTray);
+                });
         }
 
         void MainWindow_StateChanged(object sender, EventArgs e)
         {
             var window = sender as MainWindow;
             if (window != null)
-                window.ShowInTaskbar = window.WindowState != System.Windows.WindowState.Minimized;
+                window.ShowInTaskbar = false.Equals(ConfigurationManager.Instance.MinToTray) || window.WindowState != System.Windows.WindowState.Minimized;
         }
 
-        bool AllowExit=false;
+        bool IsExplicitExit=false;
         public void Exit()
         {
-            AllowExit=true;
+            IsExplicitExit=true;
             Close();
         }
 
@@ -106,7 +119,7 @@ namespace dotBitNs_Monitor
 
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!AllowExit)
+            if (true.Equals(ConfigurationManager.Instance.MinOnClose) && !IsExplicitExit)
             {
                 this.Hide();
                 e.Cancel = true;
