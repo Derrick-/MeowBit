@@ -3,34 +3,40 @@
 // Author: Derrick Slopey derrick@alienseed.com
 // March 19, 2014
 
+// Additional Author: BoSkjoett via 'Add/Remove Startup Folder Shortcut to Your App' on Code Project,  17 Jan 2011
+
 using dotBitNs.Models;
+using IWshRuntimeLibrary;
+using Shell32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 
 namespace dotBitNs_Monitor
 {
-    class ConfigurationManager : DependencyObject
+    class ConfigurationManager : DependencyObject, IDisposable
     {
 
         private static ConfigurationManager _Instance;
         public static ConfigurationManager Instance
         {
             get { return _Instance ?? (_Instance = new ConfigurationManager()); }
-        } 
+        }
 
 
         static bool? defMinToTray = null;
         static bool? defStartMin = null;
         static bool? defMinOnClose = null;
-        static bool? defAutoStart = null;
 
         public static DependencyProperty MinToTrayProperty = DependencyProperty.Register("MinToTray", typeof(bool?), typeof(ConfigurationManager), new PropertyMetadata(defMinToTray, OnDependencySettingChange));
         public static DependencyProperty MinOnCloseProperty = DependencyProperty.Register("MinOnClose", typeof(bool?), typeof(ConfigurationManager), new PropertyMetadata(defStartMin, OnDependencySettingChange));
         public static DependencyProperty StartMinProperty = DependencyProperty.Register("StartMin", typeof(bool?), typeof(ConfigurationManager), new PropertyMetadata(defMinOnClose, OnDependencySettingChange));
-        public static DependencyProperty AutoStartProperty = DependencyProperty.Register("AutoStart", typeof(bool?), typeof(ConfigurationManager), new PropertyMetadata(defAutoStart, OnDependencySettingChange));
+        public static DependencyProperty AutoStartProperty = DependencyProperty.Register("AutoStart", typeof(bool?), typeof(ConfigurationManager), new PropertyMetadata(null, OnAutostartChanged));
+
+        FileSystemWatcher fsw;
 
         private ConfigurationManager()
         {
@@ -40,10 +46,19 @@ namespace dotBitNs_Monitor
                 Properties.Settings.Default.NeedsUpgrade = false;
             }
 
+            fsw = new FileSystemWatcher(Environment.GetFolderPath(Environment.SpecialFolder.Startup));
+            fsw.Changed += fsw_Changed;
+            fsw.Created += fsw_Changed;
+            fsw.Deleted += fsw_Changed;
+
             LoadSettings();
             Properties.Settings.Default.SettingsLoaded += OnSettingsLoaded;
             Properties.Settings.Default.SettingChanging += OnSavedSettingChanging;
+        }
 
+        void fsw_Changed(object sender, FileSystemEventArgs e)
+        {
+            Dispatcher.Invoke(() => UpdateAutostartProperty());
         }
 
         void OnSettingsLoaded(object sender, System.Configuration.SettingsLoadedEventArgs e)
@@ -57,7 +72,33 @@ namespace dotBitNs_Monitor
             MinToTray = defMinToTray = s.MinToTray;
             StartMin = defStartMin = s.StartMin;
             MinOnClose = defMinOnClose = s.MinOnClose;
-            AutoStart = defAutoStart = s.AutoStart;
+            UpdateAutostartProperty();
+            fsw.EnableRaisingEvents = true;
+            SupressAutostartChange = false;
+        }
+
+        private bool SupressAutostartChange = true;
+        private static void OnAutostartChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ConfigurationManager mgr = d as ConfigurationManager;
+            if (mgr != null)
+            {
+                if (!mgr.SupressAutostartChange)
+                {
+                    if (true.Equals(e.NewValue))
+                    {
+                        if (!ConfigUtils.HasStartupShortcuts())
+                            ConfigUtils.CreateStartupFolderShortcut();
+                    }
+                    else
+                        ConfigUtils.DeleteStartupFolderShortcuts();
+                }
+            }
+        }
+
+        private void UpdateAutostartProperty()
+        {
+            AutoStart = ConfigUtils.HasStartupShortcuts();
         }
 
         private static void OnDependencySettingChange(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -66,10 +107,10 @@ namespace dotBitNs_Monitor
             Properties.Settings.Default[propName] = e.NewValue;
             Properties.Settings.Default.Save();
         }
-        
+
         void OnSavedSettingChanging(object sender, System.Configuration.SettingChangingEventArgs e)
         {
-            if(!e.Cancel)
+            if (!e.Cancel)
                 switch (e.SettingName)
                 {
                     case "MinToTray":
@@ -80,9 +121,6 @@ namespace dotBitNs_Monitor
                         break;
                     case "MinOnClose":
                         MinOnClose = (bool)e.NewValue;
-                        break;
-                    case "AutoStart":
-                        AutoStart = (bool)e.NewValue;
                         break;
                 }
         }
@@ -111,5 +149,99 @@ namespace dotBitNs_Monitor
             set { SetValue(AutoStartProperty, value); }
         }
 
+        public void Dispose()
+        {
+            if (fsw != null)
+            {
+                fsw.Dispose();
+                fsw = null;
+            }
+
+        }
+
+        static class ConfigUtils
+        {
+            static readonly System.Reflection.Assembly Assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            static readonly string ProductName = Assembly.GetName().Name;
+            static readonly System.Diagnostics.ProcessModule Process = System.Diagnostics.Process.GetCurrentProcess().MainModule;
+            static readonly string ExecutablePath = Process.FileName;
+            static readonly string StartupPath = Path.GetDirectoryName(ExecutablePath);
+
+            public static bool HasStartupShortcuts()
+            {
+                return GetStartupLinks(ExecutablePath).Any();
+            }
+
+            public static void DeleteStartupFolderShortcuts()
+            {
+                DeleteStartupFolderShortcuts(ExecutablePath);
+            }
+
+            public static void CreateStartupFolderShortcut()
+            {
+                WshShellClass wshShell = new WshShellClass();
+                IWshRuntimeLibrary.IWshShortcut shortcut;
+                string startUpFolderPath =
+                  Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+
+                // Create the shortcut
+                shortcut =
+                  (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(
+                    startUpFolderPath + "\\" +
+                    ProductName + ".lnk");
+
+                shortcut.TargetPath = ExecutablePath;
+                shortcut.WorkingDirectory = StartupPath;
+                shortcut.Description = "Launch My Application";
+                // shortcut.IconLocation = Application.StartupPath + @"\App.ico";
+                shortcut.Save();
+            }
+
+            private static string GetShortcutTargetFile(string shortcutFilename)
+            {
+                string pathOnly = Path.GetDirectoryName(shortcutFilename);
+                string filenameOnly = Path.GetFileName(shortcutFilename);
+
+                Shell32.Shell shell = new Shell32.ShellClass();
+                Shell32.Folder folder = shell.NameSpace(pathOnly);
+                Shell32.FolderItem folderItem = folder.ParseName(filenameOnly);
+                if (folderItem != null)
+                {
+                    Shell32.ShellLinkObject link =
+                      (Shell32.ShellLinkObject)folderItem.GetLink;
+                    return link.Path;
+                }
+
+                return String.Empty; // Not found
+            }
+
+            private static void DeleteStartupFolderShortcuts(string targetExeName)
+            {
+                foreach (var fi in GetStartupLinks(targetExeName))
+                    System.IO.File.Delete(fi.FullName);
+            }
+
+            private static List<FileInfo> GetStartupLinks(string targetExeName)
+            {
+                string startUpFolderPath =
+                  Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+
+                List<FileInfo> toReturn = new List<FileInfo>();
+
+                DirectoryInfo di = new DirectoryInfo(startUpFolderPath);
+                FileInfo[] files = di.GetFiles("*.lnk");
+                foreach (FileInfo fi in files)
+                {
+                    string shortcutTargetFile = GetShortcutTargetFile(fi.FullName);
+
+                    if (shortcutTargetFile.EndsWith(targetExeName,
+                          StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        toReturn.Add(fi);
+                    }
+                }
+                return toReturn;
+            }
+        }
     }
 }
