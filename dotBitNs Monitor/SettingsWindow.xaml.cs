@@ -29,6 +29,7 @@ namespace dotBitNs_Monitor
     {
         public static DependencyProperty MonitorProperty = DependencyProperty.Register("Monitor", typeof(ServiceMonitor), typeof(SettingsWindow), new PropertyMetadata(null));
         public static DependencyProperty ProductInfoProperty = DependencyProperty.Register("ProductInfo", typeof(ProductInfoManager), typeof(SettingsWindow), new PropertyMetadata(null));
+        public static DependencyProperty ConfigManagerProperty = DependencyProperty.Register("ConfigManager", typeof(ConfigurationManager), typeof(SettingsWindow), new PropertyMetadata(null));
 
         internal ServiceMonitor Monitor
         {
@@ -38,6 +39,11 @@ namespace dotBitNs_Monitor
         internal ProductInfoManager ProductInfo
         {
             get { return (ProductInfoManager)GetValue(ProductInfoProperty); }
+        }
+
+        internal ConfigurationManager ConfigManager
+        {
+            get { return (ConfigurationManager)GetValue(ConfigManagerProperty); }
         }
         
         public enum TabName
@@ -51,6 +57,7 @@ namespace dotBitNs_Monitor
         {
             SetValue(MonitorProperty, monitor); ;
             SetValue(ProductInfoProperty, productInfoManager);
+            SetValue(ConfigManagerProperty, ConfigurationManager.Instance);
             InitializeComponent();
         }
 

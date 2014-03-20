@@ -7,77 +7,30 @@
     <Window.Resources>
         <Converter:NullToVisibiltyConverter x:Key="visibilityConverter" />
         <Converter:InverseNullToVisibiltyConverter x:Key="invVisibilityConverter" />
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="Border" x:Key="section">
+            <Setter Property="BorderThickness" Value="1,1,1,1"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Margin" Value="12,0,2,0"/>
+        </Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
     </Window.Resources>
-    <!--<Window.Background>
-        <ImageBrush ImageSource="Resources/PeanutClimbsIntoTheSink1.jpg" Opacity="0.1"/>
-    </Window.Background>-->
-    <TabControl Name="Tabs">
+    <TabControl Name="Tabs" Margin="0,0,0,0">
         <TabItem Header="Settings" Name="Settings">
             <StackPanel>
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type CheckBox}">
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                    <Style TargetType="{x:Type Label}">
-                        <Setter Property="Width" Value="120"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Margin" Value="0,0,0,0"/>
-                    </Style>
-                    <Style TargetType="Border">
-                        <Setter Property="BorderThickness" Value="1,1,1,1"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
-                        <Setter Property="Margin" Value="12,0,2,0"/>
-                    </Style>
-                </StackPanel.Resources>
-                <Label HorizontalAlignment="Left">Software Version:</Label>
-                <Border>
-                    <StackPanel>
-                    <StackPanel>
-                        <StackPanel.Resources>
-                            <Style TargetType="Label">
-                                <Setter Property="Width" Value="100"/>
-                                <Setter Property="FontWeight" Value="Bold" />
-                            </Style>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Width" Value="100"/>
-                                <Setter Property="TextAlignment" Value="Center"/>
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                                <Setter Property="Padding" Value="0,3,0,0"/>
-                            </Style>
-                        </StackPanel.Resources>
-                        <Border Margin="0" BorderThickness="0,0,0,1" BorderBrush="Goldenrod">
-                        <WrapPanel>
-                            <Label>Product</Label>
-                            <TextBlock>Your Version</TextBlock>
-                            <TextBlock>Newest Version</TextBlock>
-                            <!--<Button Margin="10,0,0,0" Click="ProductCheck_Click">Check Now...</Button>-->
-                            </WrapPanel>
-                        </Border>
-                        <c:VersionSummary 
-                            DisplayName="MeowBit"
-                            ToolTip="p/meowbit"
-                            CurrentVersion="{Binding VersionString, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
-                            LatestVersion="{Binding ProductInfo.MeowBit.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
-                            DownloadUrl="{Binding ProductInfo.MeowBit.FirstURL, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
-                        />
-                        <c:VersionSummary 
-                            DisplayName="dotBitNs"
-                            ToolTip="p/dotbitns"
-                            CurrentVersion="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
-                            LatestVersion="{Binding ProductInfo.DotBitNs.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
-                            DownloadUrl="{Binding ProductInfo.DotBitNs.FirstURL, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
-                        />
-                        </StackPanel>
-                        <TextBlock HorizontalAlignment="Center" Foreground="#FF91631D">Version information is obtained from the Namecoin blockchain.</TextBlock>
-                    </StackPanel>
-                </Border>
                 <Label HorizontalAlignment="Left">Logging:</Label>
-                <Border>
+                <Border Style="{StaticResource section}">
                     <StackPanel>
                         <WrapPanel>
                             <Label>Enable Logging</Label>
@@ -108,61 +61,130 @@
                         </WrapPanel>
                     </StackPanel>
                 </Border>
+                <Label HorizontalAlignment="Left">Window:</Label>
+                <Border Style="{StaticResource section}">
+                    <StackPanel>
+                        <WrapPanel>
+                            <Label>Minimize To Tray:</Label>
+                            <CheckBox IsChecked="{Binding Path=ConfigManager.MinToTray, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"  />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label>Minimize On Close:</Label>
+                            <CheckBox IsChecked="{Binding Path=ConfigManager.MinOnClose, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"  />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label>Start Minimized:</Label>
+                            <CheckBox IsChecked="{Binding Path=ConfigManager.StartMin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"  />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <Label>Start On Login:</Label>
+                            <CheckBox IsChecked="{Binding Path=ConfigManager.AutoStart, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"  />
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </TabItem>
         <TabItem Header="About" Name="About">
-            <StackPanel Margin="5,5,2,0">
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type Label}">
-                        <Setter Property="Width" Value="120"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="FontWeight" Value="Bold"/>
-                    </Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <!--<Setter Property="Width" Value="120"/>-->
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Margin" Value="3 0 0 0"/>
-                    </Style>
-                </StackPanel.Resources>
-                <WrapPanel>
-                    <TextBlock Margin="1" TextWrapping="Wrap">MeowBit is a gift to the world from THE BEASTLICK INTERNET POLICY COMMISSION outreach team:</TextBlock>
-                </WrapPanel>
-                <WrapPanel>
-                    <Label>Michael W. Dean:</Label>
-                    <TextBlock>CAO (Chief Anarchy Officer), cat herder, worm wrangler.</TextBlock>
-                </WrapPanel>
-                <WrapPanel>
-                    <Label>Derrick Slopey:</Label>
-                    <TextBlock>Entropy De-scrambler, Python wrangler.</TextBlock>
-                </WrapPanel>
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="Resources/PeanutClimbsIntoTheSink1.jpg" Opacity="0.082"/>
+                </Grid.Background>
+                <StackPanel Margin="5,5,2,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type Label}">
+                            <Setter Property="Width" Value="120"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <!--<Setter Property="Width" Value="120"/>-->
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <WrapPanel>
+                        <TextBlock Margin="1" TextWrapping="Wrap">MeowBit is a gift to the world from THE BEASTLICK INTERNET POLICY COMMISSION outreach team:</TextBlock>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Label>Michael W. Dean:</Label>
+                        <TextBlock>CAO (Chief Anarchy Officer), cat herder, worm wrangler.</TextBlock>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Label>Derrick Slopey:</Label>
+                        <TextBlock>Entropy De-scrambler, Python wrangler.</TextBlock>
+                    </WrapPanel>
 
-                <TextBlock Margin="0,10,0,0" FontWeight="Bold">MeowBit help, info and donate links:</TextBlock>
-                <TextBlock Margin="10,1,0,0">
+                    <TextBlock Margin="0,10,0,0" FontWeight="Bold">MeowBit help, info and donate links:</TextBlock>
+                    <TextBlock Margin="10,1,0,0">
             <Hyperlink NavigateUri="http://meowbit.com" RequestNavigate="Hyperlink_RequestNavigate">
                 http://meowbit.com
             </Hyperlink>
-                </TextBlock>
-                <TextBlock Margin="10,1,0,0">
+                    </TextBlock>
+                    <TextBlock Margin="10,1,0,0">
             <Hyperlink NavigateUri="http://meowbit.bit" RequestNavigate="Hyperlink_RequestNavigate">
                 http://meowbit.bit
             </Hyperlink>
-                </TextBlock>
-                <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">MeowBit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</TextBlock>
-                <TextBlock Margin="10,1,0,0">
+                    </TextBlock>
+                    <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">MeowBit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</TextBlock>
+                    <TextBlock Margin="10,1,0,0">
             <Hyperlink NavigateUri="https://www.gnu.org/licenses/gpl-3.0.txt" RequestNavigate="Hyperlink_RequestNavigate">
                 https://www.gnu.org/licenses/gpl-3.0.txt
             </Hyperlink>
-                </TextBlock>
-                <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">MeowBit was not created to use for any illegal purpose. Laws vary. If you have questions concerning your intended use of this software, the creators of MeowBit recommend consulting an attorney of your choice</TextBlock>
-                <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">Dot-Bit makes it difficult for your domain to be removed. Used alone, Dot-Bit and MeowBit do NOT make the website owner or viewer invisible. Dot-Bit and MeowBit are not intended to mask the identity of the website owner or viewer.</TextBlock>
-                <WrapPanel HorizontalAlignment="Center">
-                    <TextBlock Margin="0,5,0,0" FontWeight="Bold">MeowBit Version:</TextBlock>
-                    <TextBlock Margin="6,5,0,0" FontWeight="Bold" Text="{Binding VersionString,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"></TextBlock>
-                    <TextBlock Margin="10,5,0,0" FontWeight="Bold">dotBitNs Version:</TextBlock>
-                    <TextBlock Margin="6,5,0,0" FontWeight="Bold" Text="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"></TextBlock>
-                </WrapPanel>
+                    </TextBlock>
+                    <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">MeowBit was not created to use for any illegal purpose. Laws vary. If you have questions concerning your intended use of this software, the creators of MeowBit recommend consulting an attorney of your choice</TextBlock>
+                    <TextBlock Margin="0,10,0,0" TextWrapping="Wrap">Dot-Bit makes it difficult for your domain to be removed. Used alone, Dot-Bit and MeowBit do NOT make the website owner or viewer invisible. Dot-Bit and MeowBit are not intended to mask the identity of the website owner or viewer.</TextBlock>
+                    <WrapPanel HorizontalAlignment="Center">
+                        <TextBlock Margin="0,5,0,0" FontWeight="Bold">MeowBit Version:</TextBlock>
+                        <TextBlock Margin="6,5,0,0" FontWeight="Bold" Text="{Binding VersionString,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"></TextBlock>
+                        <TextBlock Margin="10,5,0,0" FontWeight="Bold">dotBitNs Version:</TextBlock>
+                        <TextBlock Margin="6,5,0,0" FontWeight="Bold" Text="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"></TextBlock>
+                    </WrapPanel>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Version" Name="Version" Height="22" VerticalAlignment="Top">
+            <StackPanel>
+                <Label HorizontalAlignment="Left">Software Version:</Label>
+                <Border Style="{StaticResource section}">
+                    <StackPanel>
+                        <StackPanel>
+                            <StackPanel.Resources>
+                                <Style TargetType="Label">
+                                    <Setter Property="Width" Value="100"/>
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Width" Value="100"/>
+                                    <Setter Property="TextAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="0,3,0,0"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <Border Margin="0" BorderThickness="0,0,0,1" BorderBrush="Goldenrod">
+                                <WrapPanel>
+                                    <Label>Product</Label>
+                                    <TextBlock>Your Version</TextBlock>
+                                    <TextBlock>Newest Version</TextBlock>
+                                    <!--<Button Margin="10,0,0,0" Click="ProductCheck_Click">Check Now...</Button>-->
+                                </WrapPanel>
+                            </Border>
+                            <c:VersionSummary 
+                            DisplayName="MeowBit"
+                            ToolTip="p/meowbit"
+                            CurrentVersion="{Binding VersionString, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            LatestVersion="{Binding ProductInfo.MeowBit.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            DownloadUrl="{Binding ProductInfo.MeowBit.FirstURL, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                        />
+                            <c:VersionSummary 
+                            DisplayName="dotBitNs"
+                            ToolTip="p/dotbitns"
+                            CurrentVersion="{Binding Monitor.dotBitNsVersion,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            LatestVersion="{Binding ProductInfo.DotBitNs.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                            DownloadUrl="{Binding ProductInfo.DotBitNs.FirstURL, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = Window}}"
+                        />
+                        </StackPanel>
+                        <TextBlock HorizontalAlignment="Center" Foreground="#FF91631D">Version information is obtained from the Namecoin blockchain.</TextBlock>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </TabItem>
     </TabControl>

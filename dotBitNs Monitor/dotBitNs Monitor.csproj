@@ -82,6 +82,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConfigurationManager.cs" />
     <Compile Include="NmcClasses\ProductInfoManager.cs" />
     <Compile Include="Utils\Audio.cs" />
     <Compile Include="Converters\VisibilityConverters.cs" />
