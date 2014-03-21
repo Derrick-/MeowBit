@@ -30,10 +30,6 @@
 	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2013Limited\InstallShield.targets"/>
 	<ItemGroup/>
 	<ItemGroup>
-		<ProjectReference Include="..\dotBitNS\dotBitNS.csproj">
-			<Name>dotBitNS</Name>
-			<Project>{3444E4C6-1B91-4DD9-8D0D-A39C3802FE15}</Project>
-		</ProjectReference>
 		<ProjectReference Include="..\dotBitNs Monitor\dotBitNs Monitor.csproj">
 			<Name>dotBitNs Monitor</Name>
 			<Project>{C0CFB769-2597-4C50-8154-06DCDA0EA246}</Project>

@@ -3840,7 +3840,6 @@
 		<row><td>ID_STRING2</td><td>1033</td><td>http://www.THEBEASTLICKINTERNETPOLICYCOMMISSION.com</td><td>0</td><td/><td>2040680658</td></row>
 		<row><td>ID_STRING3</td><td>1033</td><td>THE BEASTLICK INTERNET POLICY COMMISSION</td><td>0</td><td/><td>2040680658</td></row>
 		<row><td>ID_STRING4</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>295850513</td></row>
-		<row><td>ID_STRING5</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>430057295</td></row>
 		<row><td>ID_STRING6</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>2040692529</td></row>
 		<row><td>ID_STRING7</td><td>1033</td><td>dotBitNs</td><td>0</td><td/><td>-1717392174</td></row>
 		<row><td>ID_STRING8</td><td>1033</td><td>MeowBit Name Server for dot-bit name resolution</td><td>0</td><td/><td>2040698035</td></row>
@@ -4325,7 +4324,6 @@ RABWAEQALQA1AAEARQB4AHAAcgBlAHMAcwA=
 		<col def="s0">PropertyKey</col>
 		<col def="s0">PropVariantValue</col>
 		<row><td>ShortcutProperty1</td><td>NewShortcut1</td><td>{9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3}, 12</td><td>1</td></row>
-		<row><td>ShortcutProperty2</td><td>NewShortcut11</td><td>{9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3}, 12</td><td>1</td></row>
 	</table>
 
 	<table name="ODBCAttribute">
@@ -4656,7 +4654,6 @@ RABWAEQALQA1AAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
 		<row><td>NewShortcut1</td><td>DesktopFolder</td><td>##ID_STRING4##</td><td>ISX_DEFAULTCOMPONENT1</td><td>[INSTALLDIR]MeowBit.exe</td><td/><td/><td/><td/><td/><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>NewShortcut11</td><td>StartupFolder</td><td>##ID_STRING5##</td><td>ISX_DEFAULTCOMPONENT1</td><td>[INSTALLDIR]MeowBit.exe</td><td/><td/><td/><td/><td/><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>NewShortcut111</td><td>StartMenuFolder</td><td>##ID_STRING10##</td><td>ISX_DEFAULTCOMPONENT1</td><td>[INSTALLDIR]MeowBit.exe</td><td/><td/><td/><td/><td/><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 

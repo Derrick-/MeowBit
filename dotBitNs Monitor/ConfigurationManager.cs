@@ -46,7 +46,7 @@ namespace dotBitNs_Monitor
                 Properties.Settings.Default.NeedsUpgrade = false;
             }
 
-            fsw = new FileSystemWatcher(Environment.GetFolderPath(Environment.SpecialFolder.Startup));
+            fsw = new FileSystemWatcher(ConfigUtils.StartUpFolderPath);
             fsw.Changed += fsw_Changed;
             fsw.Created += fsw_Changed;
             fsw.Deleted += fsw_Changed;
@@ -165,7 +165,7 @@ namespace dotBitNs_Monitor
             static readonly string ProductName = Assembly.GetName().Name;
             static readonly System.Diagnostics.ProcessModule Process = System.Diagnostics.Process.GetCurrentProcess().MainModule;
             static readonly string ExecutablePath = Process.FileName;
-            static readonly string StartupPath = Path.GetDirectoryName(ExecutablePath);
+            public static readonly string StartUpFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
 
             public static bool HasStartupShortcuts()
             {
@@ -181,19 +181,16 @@ namespace dotBitNs_Monitor
             {
                 WshShellClass wshShell = new WshShellClass();
                 IWshRuntimeLibrary.IWshShortcut shortcut;
-                string startUpFolderPath =
-                  Environment.GetFolderPath(Environment.SpecialFolder.Startup);
 
-                // Create the shortcut
-                shortcut =
-                  (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(
-                    startUpFolderPath + "\\" +
-                    ProductName + ".lnk");
+                string shortcutFilename = StartUpFolderPath + "\\" + ProductName + ".lnk";
+                if (System.IO.File.Exists(shortcutFilename))
+                    System.IO.File.Delete(shortcutFilename);
+
+                shortcut = (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(shortcutFilename);
 
                 shortcut.TargetPath = ExecutablePath;
-                shortcut.WorkingDirectory = StartupPath;
+                shortcut.WorkingDirectory = Path.GetDirectoryName(ExecutablePath);
                 shortcut.Description = "Launch My Application";
-                // shortcut.IconLocation = Application.StartupPath + @"\App.ico";
                 shortcut.Save();
             }
 
@@ -207,8 +204,7 @@ namespace dotBitNs_Monitor
                 Shell32.FolderItem folderItem = folder.ParseName(filenameOnly);
                 if (folderItem != null)
                 {
-                    Shell32.ShellLinkObject link =
-                      (Shell32.ShellLinkObject)folderItem.GetLink;
+                    Shell32.ShellLinkObject link = (Shell32.ShellLinkObject)folderItem.GetLink;
                     return link.Path;
                 }
 
@@ -223,19 +219,15 @@ namespace dotBitNs_Monitor
 
             private static List<FileInfo> GetStartupLinks(string targetExeName)
             {
-                string startUpFolderPath =
-                  Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-
                 List<FileInfo> toReturn = new List<FileInfo>();
 
-                DirectoryInfo di = new DirectoryInfo(startUpFolderPath);
+                DirectoryInfo di = new DirectoryInfo(StartUpFolderPath);
                 FileInfo[] files = di.GetFiles("*.lnk");
                 foreach (FileInfo fi in files)
                 {
                     string shortcutTargetFile = GetShortcutTargetFile(fi.FullName);
 
-                    if (shortcutTargetFile.EndsWith(targetExeName,
-                          StringComparison.InvariantCultureIgnoreCase))
+                    if (shortcutTargetFile.EndsWith(targetExeName, StringComparison.InvariantCultureIgnoreCase))
                     {
                         toReturn.Add(fi);
                     }
