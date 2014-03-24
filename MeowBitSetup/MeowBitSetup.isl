@@ -345,6 +345,7 @@
 		<row><td>ISX_DEFAULTCOMPONENT</td><td>{9FD0B563-BE09-40AC-BA81-A1CB26857D41}</td><td>StartMenuFolder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{14CF0C54-A7F9-49A0-B564-6F48FBC974E8}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{48E5554A-7270-437C-87DA-7F442D7237D3}</td><td>DesktopFolder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Microsoft.Owin.Host.HttpListener.dll</td><td>{470323D3-FAAE-4EE3-BF23-A9591A2FAC44}</td><td>INSTALLDIR</td><td>2</td><td/><td>microsoft.owin.host.httplist</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Debug_Symbols</td><td>{9468830B-7BFD-4DF7-8072-D0B05DFD7B32}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Debug_Symbols1</td><td>{4BDDFAF1-0681-40B7-9439-EF844AD68AC3}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>dotBitNS.Debug_Symbols2</td><td>{55FD6700-F4F7-45F4-A2A4-4CCB8E85D39B}</td><td>INSTALLDIR</td><td>2</td><td/><td>dotbitns.debug_symbols</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -1897,6 +1898,7 @@
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>AlwaysInstall</td><td>Microsoft.Owin.Host.HttpListener.dll</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNS.Debug_Symbols</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNS.Debug_Symbols1</td></row>
 		<row><td>AlwaysInstall</td><td>dotBitNS.Debug_Symbols2</td></row>
@@ -1939,6 +1941,7 @@
 		<row><td>dotbitnsshared.primary_outpu</td><td>dotBitNsShared.Primary_output2</td><td>dotBitNsShared.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;dotBitNsShared&gt;|Built</td><td>3</td><td/></row>
 		<row><td>eula.rtf</td><td>ISX_DEFAULTCOMPONENT1</td><td>Eula.rtf</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\MeowBitSetup\Eula.rtf</td><td>1</td><td/></row>
 		<row><td>license</td><td>ISX_DEFAULTCOMPONENT1</td><td>LICENSE</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\LICENSE</td><td>1</td><td/></row>
+		<row><td>microsoft.owin.host.httplist</td><td>Microsoft.Owin.Host.HttpListener.dll</td><td>MICROS~1.DLL|Microsoft.Owin.Host.HttpListener.dll</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\bin\Debug\Microsoft.Owin.Host.HttpListener.dll</td><td>1</td><td/></row>
 		<row><td>readme.md</td><td>ISX_DEFAULTCOMPONENT1</td><td>README.md</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\README.md</td><td>1</td><td/></row>
 		<row><td>readme.txt</td><td>ISX_DEFAULTCOMPONENT1</td><td>README.txt</td><td>0</td><td/><td/><td/><td>1</td><td>D:\Dev\dotBitNS\README.txt</td><td>1</td><td/></row>
 	</table>
@@ -2091,6 +2094,7 @@
 		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_709761D3_073C_4170_992B_92757D82BE04_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_7396FFA0_33D3_4706_AA0E_A099E89969E0_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_22831914_727A_4DA0_B371_EA6340BC154F_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Microsoft.Owin.Host.HttpListener.dll</td><td/><td/><td>_5B3B3685_0DE5_47A5_981F_1A48BCC3563D_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Debug_Symbols</td><td/><td/><td>_9B0511F6_0A42_4F2D_8AF9_36A521A8DA43_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Debug_Symbols1</td><td/><td/><td>_6B4D0DD3_577A_4614_8B4B_FA2770E1D8E3_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>dotBitNS.Debug_Symbols2</td><td/><td/><td>_B526BA1C_4207_44E4_A67B_488C9B4CE674_FILTER</td><td/><td/><td/><td/></row>

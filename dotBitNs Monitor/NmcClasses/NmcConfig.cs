@@ -3,13 +3,12 @@
 // Author: Derrick Slopey derrick@alienseed.com
 // March 4, 2014
 
+using dotBitNs;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,127 +26,20 @@ namespace dotBitNs_Monitor
         public static string RpcPass { get; set; }
         public static string RpcPort { get; set; }
 
-        public delegate void ConfigUpdatedEventHandler();
-        public delegate void NameCoinConfigInfoEventHandler(string status , bool important=false);
-
-        public static event ConfigUpdatedEventHandler ConfigUpdated;
-        public static event NameCoinConfigInfoEventHandler NameCoinConfigInfo;
-
-        private static void InvokeConfigUpdated()
-        {
-            if (ConfigUpdated != null)
-                ConfigUpdated();
-        }
-
-        private static void InvokeNameCoinConfigInfo(string status, bool important = false)
-        {
-            if (NameCoinConfigInfo != null)
-                NameCoinConfigInfo(status, important);
-        }
-
         public static void ValidateNmcConfig()
         {
-            InvokeNameCoinConfigInfo("Checking Namecoin Configuration...");
+            ConfigFile.InvokeNameCoinConfigInfo("Checking Namecoin Configuration...");
 
             bool Ok = false;
 
-            var customDataPath = FindDataPathFromRunningWallet("namecoin-qt");
+            var customDataPath = ConfigFile.FindDataPathFromRunningWallet("namecoin-qt");
             if (customDataPath != null)
                 Ok = CheckRPCConfig(Path.Combine(customDataPath, NmcConfigFileName));
 
             Ok = CheckRPCConfig(DefaultConfigFilePath) || Ok;
 
-            if(!Ok)
-                InvokeNameCoinConfigInfo("Namecoin Configuration failed...");
-        }
-
-        private static string FindDataPathFromRunningWallet(string ProcessName)
-        {
-            var processes = System.Diagnostics.Process.GetProcessesByName(ProcessName);
-            int count=processes.Count();
-            if (count<=0) return null;
-
-            if (count > 1)
-                MessageBox.Show(string.Format("There may be {0} namecoin wallet processes open. Please close {1} and restart service.", count, count - 1));
-
-            var process = processes.First();
-            string cmdline=GetProcessCommandline(process);
-            if (cmdline == null)
-            {
-                InvokeNameCoinConfigInfo("Run Namecoin as current user.",true);
-                return null;
-            }
-
-            return GetCustomDataDirectory(cmdline);
-        }
-
-        private static string GetCustomDataDirectory(string cmdline)
-        {
-            string argName="-datadir=";
-
-            var args = CommandLineToArgs(cmdline);
-
-            foreach (var arg in args)
-                if (arg.ToLower().StartsWith(argName) && arg.Length > argName.Length)
-                    return arg.Substring(argName.Length);
-
-            return null;
-        }
-
-        private static string GetProcessCommandline(Process process)
-        {
-            try
-            {
-                Console.Write(process.MainModule.FileName + " ");
-                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id))
-                {
-                    foreach (ManagementObject @object in searcher.Get())
-                    {
-                        return (@object["CommandLine"] + " ").Trim();
-                    }
-
-                    Console.WriteLine();
-                }
-            }
-            catch (Win32Exception ex)
-            {
-                if ((uint)ex.ErrorCode != 0x80004005)
-                {
-                    throw;
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("Error reading process information for {0} : {1}", process.ToString(), ex.Message);
-            }
-            return null;
-        }
-
-        [DllImport("shell32.dll", SetLastError = true)]
-        static extern IntPtr CommandLineToArgvW(
-            [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine, out int pNumArgs);
-
-        public static string[] CommandLineToArgs(string commandLine)
-        {
-            int argc;
-            var argv = CommandLineToArgvW(commandLine, out argc);
-            if (argv == IntPtr.Zero)
-                throw new System.ComponentModel.Win32Exception();
-            try
-            {
-                var args = new string[argc];
-                for (var i = 0; i < args.Length; i++)
-                {
-                    var p = Marshal.ReadIntPtr(argv, i * IntPtr.Size);
-                    args[i] = Marshal.PtrToStringUni(p);
-                }
-
-                return args;
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(argv);
-            }
+            if (!Ok)
+                ConfigFile.InvokeNameCoinConfigInfo("Namecoin Configuration failed...");
         }
 
         private static bool CheckRPCConfig(string path)
@@ -167,183 +59,10 @@ namespace dotBitNs_Monitor
             }
             catch (IOException ex)
             {
-                InvokeNameCoinConfigInfo(string.Format("Failed to read/verify {0}. {1}", path, ex.Message));
+                ConfigFile.InvokeNameCoinConfigInfo(string.Format("Failed to read/verify {0}. {1}", path, ex.Message));
                 ok = false;
             }
             return ok;
         }
-
-        class ConfigFile
-        {
-            public string Path { get; private set; }
-
-            public bool Read { get; private set; }
-
-            public ConfigFile(string path)
-            {
-                Path = path;
-                Read = false;
-            }
-
-            public bool Exists
-            {
-                get { return File.Exists(Path); }
-            }
-
-            private void EnsureFolderExists()
-            {
-                string path = System.IO.Path.GetDirectoryName(this.Path);
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-            }
-
-            class configLine
-            {
-                public string key;
-                public string value;
-                public string originalLine;
-                public string newLine;
-            }
-
-            List<configLine> configData = new List<configLine>();
-
-            public void AddMinimumConfigValues(string forceUser = null, string forcePass = null, string forcePort = null)
-            {
-                EnsureFolderExists();
-                
-                ReadFile();
-
-                EnsureSetting("rpcuser", forceUser ?? "dotBitNS", forceUser != null);
-                EnsureSetting("rpcpassword", forcePass ?? dotBitNs.StringUtils.SecureRandomString(16), forcePass != null);
-                EnsureSetting("rpcport", forcePort ?? "8336", forcePort != null);
-                EnsureSetting("server", "1", true);
-                EnsureSetting("rpcallowip", "127.0.0.1", true);
-
-                try
-                {
-                    SaveChanges();
-                }
-                catch (UnauthorizedAccessException ex)
-                {
-
-                }
-            }
-
-            private void ReadFile()
-            {
-                configData.Clear();
-
-                if (File.Exists(Path))
-                {
-                    List<string> fileLines = new List<string>();
-
-                    using (var fs = new FileStream(Path, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
-                    using (var sr = new StreamReader(fs))
-                    {
-                        while (!sr.EndOfStream)
-                            fileLines.Add(sr.ReadLine());
-                        sr.Close();
-                    }
-
-                    foreach (string line in fileLines)
-                    {
-                        configLine data = new configLine();
-                        data.originalLine = line;
-
-                        var parts = GetLineParts(line);
-                        if (parts != null && parts.Length > 0)
-                        {
-                            data.key = parts[0].ToLower();
-                            data.value = parts.Length > 0 ? parts.Length == 1 ? parts[1] : string.Join(" ", parts.Skip(1)) : null;
-                        }
-                        configData.Add(data);
-                    }
-                }
-                else
-                {
-                    InvokeNameCoinConfigInfo(string.Format("Creating default config file at {0}", Path));
-                }
-                Read = true;
-            }
-
-            private string PrintFormatKey(string value)
-            {
-                return value ?? "<NULL>";
-            }
-
-            private void EnsureSetting(string key, string defaultvalue, bool forceDefaultValue)
-            {
-                key = key.ToLower();
-                bool found = false;
-                foreach (var data in configData.ToList())
-                {
-                    if (string.IsNullOrWhiteSpace(data.key) || data.key.StartsWith("#"))
-                        continue;
-
-                    if (data.key.ToLower() == key)
-                    {
-                        if (found)
-                        {
-                            Debug.WriteLine("Duplicate Namecoin key {0}={1}", key, PrintFormatKey(data.value));
-                            data.newLine = "# MeowBit Removed Duplicate: " + data.originalLine;
-                            continue;
-                        }
-
-                        found = true;
-                        if (forceDefaultValue || string.IsNullOrWhiteSpace(data.value))
-                        {
-                            InvokeNameCoinConfigInfo(string.Format(" Updating: {0}={1}", key, defaultvalue));
-                            data.value = defaultvalue;
-                            data.newLine = data.key + '=' + defaultvalue;
-                        }
-                    }
-                }
-                if (!found)
-                {
-                    InvokeNameCoinConfigInfo(string.Format(" Creating: {0}={1}", key, defaultvalue));
-                    configData.Add(new configLine()
-                    {
-                        key = key,
-                        value = defaultvalue,
-                        originalLine = null,
-                        newLine = key + '=' + defaultvalue
-                    });
-                }
-            }
-
-            private void SaveChanges()
-            {
-                if (configData.Any(m => m.newLine != null && m.newLine != m.originalLine))
-                {
-                    using (var sw = new StreamWriter(Path, false))
-                    {
-                        foreach (var data in configData)
-                        {
-                            sw.WriteLine(data.newLine ?? data.originalLine ?? string.Empty);
-                        }
-                    }
-                    InvokeConfigUpdated();
-                }
-                else
-                    InvokeNameCoinConfigInfo(string.Format("{0} was up to date", Path));
-                Read = true;
-            }
-
-            private static string[] GetLineParts(string line)
-            {
-                var parts = line.Split(new char[] { '=', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                return parts;
-            }
-
-
-            internal string GetSetting(string key)
-            {
-                var data = configData.Where(m => m.key == key).FirstOrDefault();
-                if (data == null)
-                    return null;
-                return data.value;
-            }
-        }
-
     }
 }

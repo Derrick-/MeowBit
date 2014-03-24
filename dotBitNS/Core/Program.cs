@@ -355,6 +355,13 @@ namespace dotBitNs
 
         static void Default_SettingsLoaded(object sender, System.Configuration.SettingsLoadedEventArgs e)
         {
+            if (Properties.Settings.Default.NeedsUpgrade)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.NeedsUpgrade = false;
+            }
+
+
             LoggingRequested |= IsService && Properties.Settings.Default.ServiceLogging;
         }
 

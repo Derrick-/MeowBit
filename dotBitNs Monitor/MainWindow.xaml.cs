@@ -3,6 +3,7 @@
 // Author: Derrick Slopey derrick@alienseed.com
 // March 4, 2014
 
+using dotBitNs;
 using dotBitNs_Monitor.WPFControls;
 using System;
 using System.Collections.Generic;
@@ -58,8 +59,8 @@ namespace dotBitNs_Monitor
 
             productInfoManager = new ProductInfoManager();
 
-            NmcConfigSettings.ConfigUpdated += NmcConfigSetter_ConfigUpdated;
-            NmcConfigSettings.NameCoinConfigInfo += NmcConfigSettings_NameCoinConfigInfo;
+            ConfigFile.ConfigUpdated += NmcConfigSetter_ConfigUpdated;
+            ConfigFile.NameCoinConfigInfo += NmcConfigSettings_NameCoinConfigInfo;
             NmcConfigSettings.ValidateNmcConfig();
 
             Program.OnAdditionalInstanceSignal += OnRequestShow;
