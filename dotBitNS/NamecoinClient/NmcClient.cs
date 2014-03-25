@@ -4,16 +4,11 @@
 // March 4, 2014
 
 using NamecoinLib.ExceptionHandling;
-using NamecoinLib.Requests;
 using NamecoinLib.Responses;
 using NamecoinLib.RPC;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace dotBitNs
@@ -124,13 +119,21 @@ namespace dotBitNs
                     Console.WriteLine("Unable to connect to Namecoin client: {0}", ex.Message);
                     if(ex.InnerException != null)
                     Console.WriteLine(" Inner: {0}", ex.InnerException.Message);
-                    ok = false;
                 }
                 else
                 {
-                    Console.WriteLine("An RPC Error Occurred: {0}", ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-                    ok = false;
+                    WebException webEx = ex.InnerException as WebException;
+                    if (webEx != null && webEx.Response is HttpWebResponse && ((HttpWebResponse)webEx.Response).StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        Console.WriteLine(" Not authorized to connect to wallet...");
+                        TryUpdateApiCreds();
+                    }
+                    else
+                    {
+                        Console.WriteLine("An RPC Error Occurred: {0}", ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                    }
                 }
+                ok = false;
             }
 
             if (ok != Available)
@@ -140,6 +143,56 @@ namespace dotBitNs
             }
 
             return result;
+        }
+
+        private void TryUpdateApiCreds()
+        {
+            Debug.WriteLine("Trying to find creds...");
+            string path = 
+                dotBitNs.ConfigFile.FindDataPathFromRunningWallet("namecoind") ??
+                dotBitNs.ConfigFile.FindDataPathFromRunningWallet("namecoin-qt");
+
+            if (path != null)
+            {
+                Debug.WriteLine(string.Format(" Found running wallet using {0}", path));
+                ConfigFile config = new ConfigFile(System.IO.Path.Combine(path,ConfigFile.NmcConfigFileName));
+
+                if (!config.Exists)
+                {
+                    Debug.WriteLine(" Config does not exist.");
+                }
+                else
+                {
+                    try
+                    {
+                        var user = config.GetSetting("rpcuser");
+                        if (config.Read)
+                        {
+                            var pass = config.GetSetting("rpcpassword");
+                            var portstr = config.GetSetting("rpcport");
+
+                            ushort port;
+
+                            if (!string.IsNullOrWhiteSpace(user) && !string.IsNullOrWhiteSpace(pass) && ushort.TryParse(portstr, out port) && port > 0)
+                            {
+                                Properties.Settings.Default.RpcUsername = user;
+                                Properties.Settings.Default.RpcPassword = pass;
+                                Properties.Settings.Default.RpcPort = port;
+
+                                Debug.WriteLine(" Read auth from config.");
+                            }
+                            else
+                                Debug.WriteLine(" Config did not contain auth info.");
+                        }
+                        else
+                            Debug.WriteLine(" Could not open file.");
+                    }
+                    catch (System.IO.IOException ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+                }
+            }
         }
     }
 }

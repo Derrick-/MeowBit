@@ -60,7 +60,7 @@ namespace dotBitNs_Monitor
             productInfoManager = new ProductInfoManager();
 
             ConfigFile.ConfigUpdated += NmcConfigSetter_ConfigUpdated;
-            ConfigFile.NameCoinConfigInfo += NmcConfigSettings_NameCoinConfigInfo;
+            ConfigFile.NamecoinConfigInfo += NmcConfigSettings_NameCoinConfigInfo;
             NmcConfigSettings.ValidateNmcConfig();
 
             Program.OnAdditionalInstanceSignal += OnRequestShow;

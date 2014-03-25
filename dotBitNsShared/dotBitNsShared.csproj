@@ -59,6 +59,7 @@
     <Compile Include="NmcNamespaces\Product\ProductValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConfigFile.cs" />
+    <Compile Include="Utils\ProcessUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,22 +5,14 @@
 
 using dotBitNs;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace dotBitNs_Monitor
 {
     class NmcConfigSettings
     {
         static string AppDataPath { get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); } }
-        static string NmcConfigFileName { get { return "namecoin.conf"; } }
-        static string DefaultConfigFilePath { get { return Path.Combine(Path.Combine(AppDataPath, "Namecoin"), NmcConfigFileName); } }
+        static string DefaultConfigFilePath { get { return Path.Combine(Path.Combine(AppDataPath, ConfigFile.NmcDataFolder), ConfigFile.NmcConfigFileName); } }
 
         public static string RpcUser { get; set; }
         public static string RpcPass { get; set; }
@@ -28,21 +20,21 @@ namespace dotBitNs_Monitor
 
         public static void ValidateNmcConfig()
         {
-            ConfigFile.InvokeNameCoinConfigInfo("Checking Namecoin Configuration...");
+            ConfigFile.InvokeNamecoinConfigInfo("Checking Namecoin Configuration...");
 
             bool Ok = false;
 
             var customDataPath = ConfigFile.FindDataPathFromRunningWallet("namecoin-qt");
             if (customDataPath != null)
-                Ok = CheckRPCConfig(Path.Combine(customDataPath, NmcConfigFileName));
+                Ok = ConfigureAtPath(Path.Combine(customDataPath, ConfigFile.NmcConfigFileName));
 
-            Ok = CheckRPCConfig(DefaultConfigFilePath) || Ok;
+            Ok = ConfigureAtPath(DefaultConfigFilePath) || Ok;
 
             if (!Ok)
-                ConfigFile.InvokeNameCoinConfigInfo("Namecoin Configuration failed...");
+                ConfigFile.InvokeNamecoinConfigInfo("Namecoin Configuration failed...");
         }
 
-        private static bool CheckRPCConfig(string path)
+        private static bool ConfigureAtPath(string path)
         {
             bool ok = true;
             try
@@ -59,7 +51,7 @@ namespace dotBitNs_Monitor
             }
             catch (IOException ex)
             {
-                ConfigFile.InvokeNameCoinConfigInfo(string.Format("Failed to read/verify {0}. {1}", path, ex.Message));
+                ConfigFile.InvokeNamecoinConfigInfo(string.Format("Failed to read/verify {0}. {1}", path, ex.Message));
                 ok = false;
             }
             return ok;

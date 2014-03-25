@@ -1,18 +1,17 @@
-﻿using System;
+﻿using dotBitNs.Utils;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Management;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace dotBitNs
 {
     public class ConfigFile
     {
+        public static string NmcConfigFileName { get { return "namecoin.conf"; } }
+        public static string NmcDataFolder { get { return "Namecoin"; } }
+
         public string Path { get; private set; }
 
         public bool Read { get; private set; }
@@ -56,7 +55,7 @@ namespace dotBitNs
             EnsureSetting("rpcport", forcePort ?? "8336", forcePort != null);
             EnsureSetting("server", "1", true);
             EnsureSetting("rpcallowip", "127.0.0.1", true);
-
+            
             try
             {
                 SaveChanges();
@@ -99,7 +98,7 @@ namespace dotBitNs
             }
             else
             {
-                InvokeNameCoinConfigInfo(string.Format("Creating default config file at {0}", Path));
+                InvokeNamecoinConfigInfo(string.Format("Creating default config file at {0}", Path));
             }
             Read = true;
         }
@@ -130,7 +129,7 @@ namespace dotBitNs
                     found = true;
                     if (forceDefaultValue || string.IsNullOrWhiteSpace(data.value))
                     {
-                        InvokeNameCoinConfigInfo(string.Format(" Updating: {0}={1}", key, defaultvalue));
+                        InvokeNamecoinConfigInfo(string.Format(" Updating: {0}={1}", key, defaultvalue));
                         data.value = defaultvalue;
                         data.newLine = data.key + '=' + defaultvalue;
                     }
@@ -138,7 +137,7 @@ namespace dotBitNs
             }
             if (!found)
             {
-                InvokeNameCoinConfigInfo(string.Format(" Creating: {0}={1}", key, defaultvalue));
+                InvokeNamecoinConfigInfo(string.Format(" Creating: {0}={1}", key, defaultvalue));
                 configData.Add(new configLine()
                 {
                     key = key,
@@ -163,7 +162,7 @@ namespace dotBitNs
                 InvokeConfigUpdated();
             }
             else
-                InvokeNameCoinConfigInfo(string.Format("{0} was up to date", Path));
+                InvokeNamecoinConfigInfo(string.Format("{0} was up to date", Path));
             Read = true;
         }
 
@@ -175,6 +174,8 @@ namespace dotBitNs
 
         public string GetSetting(string key)
         {
+            if (!Read) ReadFile();
+
             var data = configData.Where(m => m.key == key).FirstOrDefault();
             if (data == null)
                 return null;
@@ -182,10 +183,10 @@ namespace dotBitNs
         }
 
         public delegate void ConfigUpdatedEventHandler();
-        public delegate void NameCoinConfigInfoEventHandler(string status, bool important = false);
+        public delegate void NamecoinConfigInfoEventHandler(string status, bool important = false);
 
         public static event ConfigUpdatedEventHandler ConfigUpdated;
-        public static event NameCoinConfigInfoEventHandler NameCoinConfigInfo;
+        public static event NamecoinConfigInfoEventHandler NamecoinConfigInfo;
 
         private static void InvokeConfigUpdated()
         {
@@ -193,99 +194,61 @@ namespace dotBitNs
                 ConfigUpdated();
         }
 
-        public static void InvokeNameCoinConfigInfo(string status, bool important = false)
+        public static void InvokeNamecoinConfigInfo(string status, bool important = false)
         {
-            if (NameCoinConfigInfo != null)
-                NameCoinConfigInfo(status, important);
+            if (NamecoinConfigInfo != null)
+                NamecoinConfigInfo(status, important);
         }
 
         public static string FindDataPathFromRunningWallet(string ProcessName)
         {
+            Debug.WriteLine("Looking for running namecoin wallet...");
+
             var processes = System.Diagnostics.Process.GetProcessesByName(ProcessName);
             int count = processes.Count();
             if (count <= 0) return null;
 
             if (count > 1)
-                InvokeNameCoinConfigInfo(string.Format("There may be {0} namecoin wallet processes open. Please close {1} and restart service.", count, count - 1), true);
+                InvokeNamecoinConfigInfo(string.Format("There may be {0} namecoin wallet processes open. Please close {1} and restart service.", count, count - 1), true);
 
             var process = processes.First();
-            string cmdline = GetProcessCommandline(process);
+            string cmdline = ProcessUtils.GetProcessCommandline(process);
             if (cmdline == null)
             {
-                InvokeNameCoinConfigInfo("Run Namecoin as current user.", true);
+                InvokeNamecoinConfigInfo("Run Namecoin as current user.", true);
                 return null;
             }
 
-            return GetCustomDataDirectory(cmdline);
+            string path = GetCustomDataDirectory(cmdline);
+            if (path != null)
+                return path;
+
+            path = ProcessUtils.TryFindOwnerAppDataPath(process);
+            if (path != null)
+                return System.IO.Path.Combine(path, NmcDataFolder);
+
+            return null;
         }
 
         private static string GetCustomDataDirectory(string cmdline)
         {
             string argName = "-datadir=";
 
-            var args = CommandLineToArgs(cmdline);
+            IEnumerable<string> args;
+            try
+            {
+                args = ProcessUtils.CommandLineToArgs(cmdline);
+            }
+            catch
+            {
+                return null;
+            }
 
             foreach (var arg in args)
-                if (arg.ToLower().StartsWith(argName) && arg.Length > argName.Length)
+                if (!string.IsNullOrWhiteSpace(arg) && arg.ToLower().StartsWith(argName) && arg.Length > argName.Length)
                     return arg.Substring(argName.Length);
 
             return null;
-        }
-
-        private static string GetProcessCommandline(Process process)
-        {
-            try
-            {
-                Console.Write(process.MainModule.FileName + " ");
-                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id))
-                {
-                    foreach (ManagementObject @object in searcher.Get())
-                    {
-                        return (@object["CommandLine"] + " ").Trim();
-                    }
-
-                    Console.WriteLine();
-                }
-            }
-            catch (Win32Exception ex)
-            {
-                if ((uint)ex.ErrorCode != 0x80004005)
-                {
-                    throw;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error reading process information for {0} : {1}", process.ToString(), ex.Message);
-            }
-            return null;
-        }
-
-        [DllImport("shell32.dll", SetLastError = true)]
-        static extern IntPtr CommandLineToArgvW(
-            [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine, out int pNumArgs);
-
-        public static string[] CommandLineToArgs(string commandLine)
-        {
-            int argc;
-            var argv = CommandLineToArgvW(commandLine, out argc);
-            if (argv == IntPtr.Zero)
-                throw new System.ComponentModel.Win32Exception();
-            try
-            {
-                var args = new string[argc];
-                for (var i = 0; i < args.Length; i++)
-                {
-                    var p = Marshal.ReadIntPtr(argv, i * IntPtr.Size);
-                    args[i] = Marshal.PtrToStringUni(p);
-                }
-
-                return args;
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(argv);
-            }
         }
 
     }
