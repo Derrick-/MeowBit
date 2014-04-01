@@ -40,6 +40,7 @@ namespace dotBitDnsTest
             "    }" +
             "}";
 
+        string Example_MapOnly_nx_bit = @"{""map"": {"""":""178.248.244.15""}}";
 
         static readonly Dictionary<string, IPAddress> dnsMockRecords = new Dictionary<string, IPAddress>()
         {
@@ -68,7 +69,7 @@ namespace dotBitDnsTest
 
             var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
 
-            var qWww = new DnsQuestion("www.Json1.bit", RecordType.Any, RecordClass.Any);
+            var qWww = new DnsQuestion("www.json1.bit", RecordType.Any, RecordClass.Any);
             var answer = resolver.GetAnswer(qWww);
             var expectedWwwName = "json1.com.";
             var expectedWwwAddress = dnsMockRecords[expectedWwwName];
@@ -80,12 +81,41 @@ namespace dotBitDnsTest
 
         }
 
+        [TestMethod]
+        public void ResolveMapOnlyTest()
+        {
+            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
+            var q = new DnsQuestion("nx.bit", RecordType.Any, RecordClass.Any);
+            string expectedA = "178.248.244.15";
+            var answer = resolver.GetAnswer(q);
+
+            Assert.IsInstanceOfType(answer.AnswerRecords.First(), typeof(ARecord));
+
+            ARecord a = answer.AnswerRecords.First() as ARecord;
+            Assert.AreEqual(expectedA, a.Address.ToString());
+
+        }
+
         private NameShowResponse mockLookupDotBit(string root)
         {
+            string value;
+
+            switch (root)
+            {
+                case "nx":
+                    value = Example_MapOnly_nx_bit;
+                    break;
+                case "json1":
+                    value = Json1;
+                    break;
+                default:
+                    throw new ArgumentException(root + " is not configured for testing.");
+            }
+
             return new NameShowResponse()
             {
                 name = "d/" + root,
-                value = Json1,
+                value = value,
             };
         }
 

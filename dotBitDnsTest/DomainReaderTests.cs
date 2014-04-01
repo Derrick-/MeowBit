@@ -15,37 +15,10 @@ using System.Net;
 namespace dotBitDnsTest
 {
     [TestClass]
-    public class DomainReaderTests
+    public class DomainReaderTests : BaseDomainTest
     {
-        string Example_2_5_generic =
-@"{
-    ""ip""      : ""192.168.1.1"",
-    ""ip6""     : ""2001:4860:0:1001::68"",
-    ""tor""     : ""eqt5g4fuenphqinx.onion"",
-    ""email""   : ""hostmaster@example.bit"",
-    ""info""    : ""Example & Sons Co."",
-    ""service"" : [ [""smtp"", ""tcp"", 10, 0, 25, ""mail""] ],
-    ""tls"": {
-        ""tcp"": 
-	    {
-            ""443"": [ [1, ""660008F91C07DCF9058CDD5AD2BAF6CC9EAE0F912B8B54744CB7643D7621B787"", 1] ],
-            ""25"": [ [1, ""660008F91C07DCF9058CDD5AD2BAF6CC9EAE0F912B8B54744CB7643D7621B787"", 1] ]
-	    }
-    },
-    ""map"":
-    {
-        ""www"" : { ""alias"": """" },
-        ""ftp"" : { ""ip"": [""10.2.3.4"", ""10.4.3.2""] },
-        ""mail"": { ""ns"": [""ns1.host.net"", ""ns12.host.net""] }
-    }
-}";
 
-        string Example_nameservers =
-@"{
-    ""ns""      : [""192.168.1.1"",""10.2.3.4""],
-}";
-
-// TLS 2.5:  http://forum.namecoin.info/viewtopic.php?f=5&t=1137
+        // TLS 2.5:  http://forum.namecoin.info/viewtopic.php?f=5&t=1137
 //    "tls": {
 //        "protocol": {
 //            port: [[matchtype, "matchvalue", includeSubdomains],[matchtype, "matchvalue", includeSubdomains]]
@@ -81,8 +54,8 @@ namespace dotBitDnsTest
         {
             var domain = new DomainValue(Example_2_5_generic);
 
-            Assert.AreEqual("192.168.1.1", domain.IpNames.First());
-            Assert.AreEqual("2001:4860:0:1001::68", domain.Ip6Names.First());
+            Assert.AreEqual("192.168.1.1", domain.Ips.Select(m=>m.ToString()).First());
+            Assert.AreEqual("2001:4860:0:1001::68", domain.Ip6s.Select(m => m.ToString()).First());
             Assert.AreEqual("eqt5g4fuenphqinx.onion", domain.Tor);
             Assert.AreEqual("hostmaster@example.bit", domain.Email);
             Assert.AreEqual("Example & Sons Co.", domain.Info.First());
@@ -159,7 +132,7 @@ namespace dotBitDnsTest
             Assert.AreEqual("", wwwAlias);
 
             var ftp = domain.GetMap("ftp");
-            var ftpIp = ftp.IpNames;
+            var ftpIp = ftp.Ips.Select(m => m.ToString());
             Assert.AreEqual("10.2.3.4", ftpIp.First());
             Assert.AreEqual("10.4.3.2", ftpIp.Skip(1).First());
 
@@ -171,7 +144,7 @@ namespace dotBitDnsTest
             var none = domain.GetMap("none");
             Assert.IsNull(none);
         }
-    }
+   }
 
 }
 

@@ -70,6 +70,8 @@ namespace dotBitNs.Server
                 if (value == null)
                     return null;
 
+                value.ImportDefaultMap();
+
                 DnsMessage answer = null;
 
                 //TODO: delegate not implemented
@@ -185,13 +187,7 @@ namespace dotBitNs.Server
                     if (sub == null)
                         sub = value.GetMap("*");
                     if (sub == null)
-                        // TODO: What is the specification for ""
-                        sub = value.GetMap("");
-                    if (sub == null)
-                    {
-                        // TODO: What is the specification for an undeclared domain with no "*" or ""
                         break;
-                    }
                     value = sub;
                 }
 

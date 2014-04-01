@@ -17,8 +17,6 @@ namespace dotBitNs.Models
         private string _Alias = null;
         private IEnumerable<IPAddress> _Ips = null;
         private IEnumerable<IPAddress> _Ip6s = null;
-        private IEnumerable<string> _IpNames = null;
-        private IEnumerable<string> _Ip6Names = null;
         private string _Email = null;
         private string _Tor = null;
         private IEnumerable<string> _Ns = null;
@@ -28,6 +26,25 @@ namespace dotBitNs.Models
         private string _Translate = null;
         private IEnumerable<ServiceRecord> _Service = null;
         private JObject _Maps = null;
+
+        private void Invalidate(string p)
+        {
+            switch (p)
+            {
+                case "alias": _Alias = null; break;
+                case "ip": _Ips = null; break;
+                case "ip6": _Ip6s = null; break;
+                case "email": _Email = null; break;
+                case "tor": _Tor = null; break;
+                case "ns": _Ns = null; break;
+                case "info": _Info = null; break;
+                case "delegate": _Delegate = null; break;
+                case "import": _Import = null; break;
+                case "translate": _Translate = null; break;
+                case "service": _Service = null; break;
+                case "maps": _Maps = null; break;
+            }
+        }
 
         public string Alias
         { get { return _Alias ?? (_Alias = GetString("alias")); } }
@@ -53,12 +70,6 @@ namespace dotBitNs.Models
                 return _Ip6s = StringListToIPList(addresses);
             }
         }
-
-        public IEnumerable<string> IpNames
-        { get { return _IpNames ?? (_IpNames = GetStringList("ip")); } }
-
-        public IEnumerable<string> Ip6Names
-        { get { return _Ip6Names ?? (_Ip6Names = GetStringList("ip6")); } }
 
         public string Email
         { get { return _Email ?? (_Email = GetString("email")); } }
@@ -138,6 +149,59 @@ namespace dotBitNs.Models
                 return null;
         }
 
+
+        public void ImportDefaultMap()
+        {
+            if (Maps[""] != null)
+            {
+                if (Ips.Count() == 0)
+                {
+                    string mapValue = TryGetObsoleteDefaultMapAsString();
+                    if (mapValue != null)
+                    {
+                        IPAddress ip;
+                        if (IPAddress.TryParse(mapValue, out ip))
+                        {
+                            if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                            {
+                                domain["ip"] = mapValue;
+                                Invalidate("ip");
+                            }
+                            else if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+                            {
+                                domain["ip6"] = mapValue;
+                                Invalidate("ip6");
+                            }
+                            return;
+                        }
+                    }
+                }
+
+                ImportValues(Maps[""]);
+            }
+        }
+
+        private void ImportValues(JToken from, bool overwrite=false)
+        {
+            foreach (JProperty item in from.Where(m=> m is JProperty))
+            {
+                if (overwrite || domain[item.Name] == null)
+                {
+                    domain[item.Name] = item.Value;
+                    Invalidate(item.Name);
+                }
+            }
+        }
+
+        private string TryGetObsoleteDefaultMapAsString()
+        {
+            string mapValue = null;
+            if (Maps[""] != null && Maps[""].Type == Newtonsoft.Json.Linq.JTokenType.String)
+            {
+                mapValue = (string)Maps[""];
+            }
+            return mapValue;
+        }
     }
 
 }
