@@ -199,15 +199,24 @@ namespace dotBitNs_Monitor
                 string pathOnly = Path.GetDirectoryName(shortcutFilename);
                 string filenameOnly = Path.GetFileName(shortcutFilename);
 
-                Shell32.Shell shell = new Shell32.ShellClass();
-                Shell32.Folder folder = shell.NameSpace(pathOnly);
-                Shell32.FolderItem folderItem = folder.ParseName(filenameOnly);
-                if (folderItem != null)
+                Type ShellAppType = Type.GetTypeFromProgID("Shell.Application");
+                if (ShellAppType != null)
                 {
-                    Shell32.ShellLinkObject link = (Shell32.ShellLinkObject)folderItem.GetLink;
-                    return link.Path;
+                    Shell32.Shell shell = Activator.CreateInstance(ShellAppType) as Shell32.Shell;
+                    if (shell != null)
+                    {
+                        Shell32.Folder folder = shell.NameSpace(pathOnly);
+                        if (folder != null)
+                        {
+                            Shell32.FolderItem folderItem = folder.ParseName(filenameOnly);
+                            if (folderItem != null)
+                            {
+                                Shell32.ShellLinkObject link = (Shell32.ShellLinkObject)folderItem.GetLink;
+                                return link.Path;
+                            }
+                        }
+                    }
                 }
-
                 return String.Empty; // Not found
             }
 
