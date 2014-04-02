@@ -1204,6 +1204,7 @@
 		<row><td>USERPROFILE</td><td>TARGETDIR</td><td>.:USERPR~1|UserProfile</td><td/><td>0</td><td/></row>
 		<row><td>WindowsFolder</td><td>TARGETDIR</td><td>.:Windows</td><td/><td>0</td><td/></row>
 		<row><td>WindowsVolume</td><td>TARGETDIR</td><td>.:WinRoot</td><td/><td>0</td><td/></row>
+		<row><td>newfolder1</td><td>ProgramMenuFolder</td><td>##ID_STRING9##</td><td/><td>1</td><td/></row>
 	</table>
 
 	<table name="DrLocator">
@@ -3841,12 +3842,16 @@
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>1033</td><td>The screen resolution is not adequate for running [ProductName].</td><td>0</td><td/><td>295850097</td></row>
 		<row><td>ID_STRING1</td><td>1033</td><td/><td>0</td><td/><td>295856241</td></row>
 		<row><td>ID_STRING10</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>-2120043358</td></row>
-		<row><td>ID_STRING2</td><td>1033</td><td>http://www.THEBEASTLICKINTERNETPOLICYCOMMISSION.com</td><td>0</td><td/><td>2040680658</td></row>
+		<row><td>ID_STRING11</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>170003255</td></row>
+		<row><td>ID_STRING12</td><td>1033</td><td>Uninstall</td><td>0</td><td/><td>170007351</td></row>
+		<row><td>ID_STRING2</td><td>1033</td><td>http://meowbit.com/meet-the-team/</td><td>0</td><td/><td>170009079</td></row>
 		<row><td>ID_STRING3</td><td>1033</td><td>THE BEASTLICK INTERNET POLICY COMMISSION</td><td>0</td><td/><td>2040680658</td></row>
 		<row><td>ID_STRING4</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>295850513</td></row>
+		<row><td>ID_STRING5</td><td>1033</td><td>http://www.meowbit.com/forums</td><td>0</td><td/><td>170050007</td></row>
 		<row><td>ID_STRING6</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>2040692529</td></row>
 		<row><td>ID_STRING7</td><td>1033</td><td>dotBitNs</td><td>0</td><td/><td>-1717392174</td></row>
 		<row><td>ID_STRING8</td><td>1033</td><td>MeowBit Name Server for dot-bit name resolution</td><td>0</td><td/><td>2040698035</td></row>
+		<row><td>ID_STRING9</td><td>1033</td><td>MeowBit</td><td>0</td><td/><td>170056471</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1033</td><td>This feature will remain uninstalled.</td><td>0</td><td/><td>295850097</td></row>
 	</table>
 
@@ -3955,6 +3960,7 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I2">ISIconIndex</col>
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\setupicon.ico</td><td>0</td></row>
+		<row><td>NewShortcut2_2DBCF650FB74442496AF1B2055917414.exe</td><td/><td>C:\Program Files (x86)\InstallShield\2013LE\Redist\Language Independent\OS Independent\uninstall.ico</td><td>0</td></row>
 	</table>
 
 	<table name="IniFile">
@@ -4396,6 +4402,7 @@ RABWAEQALQA1AAEARQB4AHAAcgBlAHMAcwA=
 		<col def="L0">Value</col>
 		<col def="S255">ISComments</col>
 		<row><td>ALLUSERS</td><td>1</td><td/></row>
+		<row><td>ARPHELPLINK</td><td>##ID_STRING5##</td><td/></row>
 		<row><td>ARPINSTALLLOCATION</td><td/><td/></row>
 		<row><td>ARPNOMODIFY</td><td>1</td><td/></row>
 		<row><td>ARPNOREPAIR</td><td>1</td><td/></row>
@@ -4570,6 +4577,8 @@ RABWAEQALQA1AAEARQB4AHAAcgBlAHMAcwA=
 		<col def="L255">FileName</col>
 		<col def="s72">DirProperty</col>
 		<col def="i2">InstallMode</col>
+		<row><td>NewShortcut1111</td><td>ISX_DEFAULTCOMPONENT1</td><td/><td>newfolder1</td><td>2</td></row>
+		<row><td>NewShortcut2</td><td>ISX_DEFAULTCOMPONENT1</td><td/><td>newfolder1</td><td>2</td></row>
 	</table>
 
 	<table name="RemoveIniFile">
@@ -4659,6 +4668,8 @@ RABWAEQALQA1AAEARQB4AHAAcgBlAHMAcwA=
 		<col def="I4">ISAttributes</col>
 		<row><td>NewShortcut1</td><td>DesktopFolder</td><td>##ID_STRING4##</td><td>ISX_DEFAULTCOMPONENT1</td><td>[INSTALLDIR]MeowBit.exe</td><td/><td/><td/><td/><td/><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>NewShortcut111</td><td>StartMenuFolder</td><td>##ID_STRING10##</td><td>ISX_DEFAULTCOMPONENT1</td><td>[INSTALLDIR]MeowBit.exe</td><td/><td/><td/><td/><td/><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>NewShortcut1111</td><td>newfolder1</td><td>##ID_STRING11##</td><td>ISX_DEFAULTCOMPONENT1</td><td>[INSTALLDIR]MeowBit.exe</td><td/><td/><td/><td/><td/><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>NewShortcut2</td><td>newfolder1</td><td>##ID_STRING12##</td><td>ISX_DEFAULTCOMPONENT1</td><td>[SystemFolder]MsiExec.exe</td><td>/x [ProductCode]</td><td/><td/><td>NewShortcut2_2DBCF650FB74442496AF1B2055917414.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Signature">

@@ -4,7 +4,7 @@
 * Website: http://meowbit.com
 * Source: https://github.com/Derrick-/MeowBit
 
-#### v0.4.5186.41847 : March 14, 2014
+### v0.5 : April 1, 2014
 
 ## Description
 MeowBit is Free Software for Windows with the goal to allow you to effortlessly view Dot-Bit websites as registered in the [Namecoin](http://namecoin.info) blockchain.
@@ -33,10 +33,8 @@ With MeowBit you can navigate on any browser from the regular web to Dot-Bit sit
  * [List of working dot-bit websites](http://meowbit.com/list-of-working-dot-bit-websites/)
 
 ### Known Issues
- * The following apply to Windows 7 and prior. Windows 8 is not affected.
-  * If you are getting a dynamic IP address automatically from a local DHCP server (like your router) but you have specified specific DNS servers, MeowBit will set your DNS server to automatic on exit. This is because Windows does not have a way to detect if your DNS servers are automatically obtained when using a dynamic IP address.
-  * You may not be able to view dot-bit sites via MeowBit when connected to a VPN service. Results vary, this will be addressed in a future version.
- 
+ * You may not be able to view dot-bit sites via MeowBit when connected to a VPN service. Results vary, this will be addressed in a future version.
+
 ### Getting Help
  * Please leave a clear and detailed comment on our [help forum](http://meowbit.com/forums/) if you have any issues with any aspect of running MeowBit. We like bug reports.
 
@@ -49,7 +47,28 @@ With MeowBit you can navigate on any browser from the regular web to Dot-Bit sit
  * If you are upgrading from a previous version, uninstall the old version first. Click on desktop kitty to open MeowBit monitor. Stop Service. Go into system tray. Right-click on kitty, exit MeowBit. Go to Windows Start / Control Panel, Programs and Features / click MeowBit to uninstall. Then you can install new version.
  
 ## Version History:
-### v0.4.5186.41847 : March 14, 2014
+### v0.5 : April 1, 2014
+ * Pre-Windows 8 local nameserver function now restores DNS to use DHCP if the IP Address is obtained via DHCP
+ * Setup installs and starts dotBitNs service: More reliable then previous 'self-install' method.
+ * Setup installs Start menu icon
+ * Fixed System.Net.Http and other .Net framework version compatibility problems
+ * Automatic configuration of namecoin.config file is less intrusive; preserves comments.
+ * Namecoin config manager will search running processes to see if a custom data path is configured. <- Thanks Ian Freeman
+  * Task tray toggle (double click) now works to show window when hidden via minimize
+  * Settings window: Added some persistent settings:
+   * Minimize To Tray
+   * Minimize On Close
+   * Start Minimized
+   * Start On Login
+ * Moved Version info to new tab in settings window
+ * Remove StartUp shortcut from installer, it was being configured for all users, but new config option is per user.
+  * In order to have MeowBit autostart, the user will have to explicitly set that in Settings window.
+ * Start menu folder with Uninstall shortcut.
+ * dotBitNs Service will now try to detect running Namecoin client and find authorization information from config file
+ * Any configuration information that is found by the service is now saved so that it can connect to Namecoin client without the need for MeowBit monitor to be running.
+  * Dot-Bit specification implemented: Empty sub-domain name ("") may be used to configure the domain. Entries specified here have lower precedence.
+
+### v0.4 : March 14, 2014
  * Settings window with logging (dis/en)ablement, available from tool tray context menu
  * Open Log Folder, Latest Log File, or Copy Log contents buttons 
  * Sounds to verify log copy
@@ -64,14 +83,14 @@ With MeowBit you can navigate on any browser from the regular web to Dot-Bit sit
  * Extended default timeout for Namecoin client API calls to 5 seconds
  * System status interval extended to 6 seconds (RpcConnectorTimeout * 1.2)
 	
-### v0.3.5179.694 : March 7, 2014
+### v0.3 : March 7, 2014
  * Better windows management via tray icon
  * Add help sub menu with website links
  * Fix crashed caused by duplicate config keys
  * Unmapped sub-domains default to their parent.
 
-### v0.2.0.0 : March 4, 2014
-  * Initial Release
+### v0.2 : March 4, 2014
+ * Initial Release
 
 ### Credits
 #### MeowBit Team
