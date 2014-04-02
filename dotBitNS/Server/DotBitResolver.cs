@@ -48,14 +48,15 @@ namespace dotBitNs.Server
         private DnsMessage ResolveDotBitAddress(DnsQuestion question)
         {
             string name = question.Name;
-            return GetDotBitAnswerForName(question, name);
+            return GetDotBitAnswerForName(question);
         }
 
         const int maxRecursion = 16;
         private int recursionLevel = 0;
 
-        private DnsMessage GetDotBitAnswerForName(DnsQuestion question, string name)
+        private DnsMessage GetDotBitAnswerForName(DnsQuestion question)
         {
+            string fqdn = question.Name;
             try
             {
                 recursionLevel++;
@@ -66,7 +67,7 @@ namespace dotBitNs.Server
                     return null;
                 }
 
-                DomainValue value = GetDomainValue(name);
+                DomainValue value = GetDomainValue(fqdn);
                 if (value == null)
                     return null;
 
@@ -112,8 +113,8 @@ namespace dotBitNs.Server
                     {
                         var client = new DnsClient(nameservers, 2000);
                         if (!string.IsNullOrWhiteSpace(value.Translate))
-                            name = value.Translate;
-                        answer = client.Resolve(name, question.RecordType, question.RecordClass);
+                            fqdn = value.Translate;
+                        answer = client.Resolve(fqdn, question.RecordType, question.RecordClass);
                     }
                 }
                 else
@@ -123,14 +124,14 @@ namespace dotBitNs.Server
                         var addresses = value.Ips;
                         if (addresses.Count() > 0)
                             foreach (var address in addresses)
-                                answer.AnswerRecords.Add(new ARecord(name, 60, address));
+                                answer.AnswerRecords.Add(new ARecord(fqdn, 60, address));
                     }
                     if (any || question.RecordType == RecordType.Aaaa)
                     {
                         var addresses = value.Ip6s;
                         if (addresses.Count() > 0)
                             foreach (var address in addresses)
-                                answer.AnswerRecords.Add(new AaaaRecord(name, 60, address));
+                                answer.AnswerRecords.Add(new AaaaRecord(fqdn, 60, address));
                     }
                 }
 

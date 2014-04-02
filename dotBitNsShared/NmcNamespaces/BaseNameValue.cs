@@ -24,6 +24,11 @@ namespace dotBitNs.Models
             domain = JsonDeserialize(json);
         }
 
+        public BaseNameValue(JObject domainObject)
+        {
+            domain = domainObject;
+        }
+
         protected string GetString(string propName)
         {
             if (DomainHasProperty(propName))

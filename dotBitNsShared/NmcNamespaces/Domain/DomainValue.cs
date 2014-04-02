@@ -10,9 +10,10 @@ using System.Net;
 
 namespace dotBitNs.Models
 {
-    public class DomainValue : BaseNameValue
+    public partial class DomainValue : BaseNameValue
     {
         public DomainValue(string json) : base(json) { }
+        public DomainValue(JObject domainObject) : base(domainObject) { }
 
         private string _Alias = null;
         private IEnumerable<IPAddress> _Ips = null;
@@ -25,7 +26,7 @@ namespace dotBitNs.Models
         private string _Import = null;
         private string _Translate = null;
         private IEnumerable<ServiceRecord> _Service = null;
-        private JObject _Maps = null;
+        private Dictionary<string, DomainValue> _Maps = null;
 
         private void Invalidate(string p)
         {
@@ -50,8 +51,8 @@ namespace dotBitNs.Models
         { get { return _Alias ?? (_Alias = GetString("alias")); } }
 
         public IEnumerable<IPAddress> Ips
-        { 
-            get 
+        {
+            get
             {
                 if (_Ips != null) return _Ips;
 
@@ -123,67 +124,61 @@ namespace dotBitNs.Models
             return null;
         }
 
-        public JObject Maps
+        public Dictionary<string, DomainValue> Maps
         {
             get
             {
-                if (_Maps != null) return _Maps;
-
-                string propName = "map";
-                JToken maps = domain.GetValue(propName);
-                if (maps != null && maps.Type == JTokenType.Object)
+                if (_Maps == null)
                 {
-                    _Maps = (JObject)maps;
+                    string propName = "map";
+                    JToken maps = domain.GetValue(propName);
+                    _Maps = new Dictionary<string, DomainValue>();
+                    if (maps != null && maps.Type == JTokenType.Object)
+                    {
+                        foreach (JProperty map in maps.Where(m => m is JProperty))
+                        {
+                            if (map.Value.Type == JTokenType.Object)
+                                _Maps.Add(map.Name, new DomainValue(map.Value.ToString()));
+                            else if (map.Value.Type == JTokenType.String)
+                            {
+                                DomainValue newMap = DomainValue.FromIP((string)map.Value);
+                                if (newMap != null)
+                                    _Maps.Add(map.Name, newMap);
+                            }
+                            else if (map.Value.Type == JTokenType.Array)
+                            {
+                                var ipStrings = ((JArray)map.Value).Where(m => m.Type == JTokenType.String).Select(m => m.Value<string>());
+                                DomainValue newMap = DomainValue.FromIP(ipStrings);
+                                if (newMap != null)
+                                    _Maps.Add(map.Name, newMap);
+                            }
+
+                        }
+                    }
                 }
-                else
-                    _Maps = new JObject();
                 return _Maps;
             }
         }
 
         public DomainValue GetMap(string subdomain)
         {
-                var map = Maps[subdomain];
-                if (map != null && map.Type == JTokenType.Object)
-                    return new DomainValue(map.ToString());
-                return null;
+            DomainValue value;
+            if (Maps.TryGetValue(subdomain, out value))
+                return value;
+            return null;
         }
-
 
         public void ImportDefaultMap()
         {
-            if (Maps[""] != null)
+            if (GetMap("") != null)
             {
-                if (Ips.Count() == 0)
-                {
-                    string mapValue = TryGetObsoleteDefaultMapAsString();
-                    if (mapValue != null)
-                    {
-                        IPAddress ip;
-                        if (IPAddress.TryParse(mapValue, out ip))
-                        {
-                            if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                            {
-                                domain["ip"] = mapValue;
-                                Invalidate("ip");
-                            }
-                            else if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
-                            {
-                                domain["ip6"] = mapValue;
-                                Invalidate("ip6");
-                            }
-                            return;
-                        }
-                    }
-                }
-
                 ImportValues(Maps[""]);
             }
         }
 
-        private void ImportValues(JToken from, bool overwrite=false)
+        private void ImportValues(DomainValue from, bool overwrite = false)
         {
-            foreach (JProperty item in from.Where(m=> m is JProperty))
+            foreach (JProperty item in from.domain.Properties())
             {
                 if (overwrite || domain[item.Name] == null)
                 {
@@ -191,16 +186,6 @@ namespace dotBitNs.Models
                     Invalidate(item.Name);
                 }
             }
-        }
-
-        private string TryGetObsoleteDefaultMapAsString()
-        {
-            string mapValue = null;
-            if (Maps[""] != null && Maps[""].Type == Newtonsoft.Json.Linq.JTokenType.String)
-            {
-                mapValue = (string)Maps[""];
-            }
-            return mapValue;
         }
     }
 

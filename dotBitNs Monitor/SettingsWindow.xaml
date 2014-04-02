@@ -105,12 +105,16 @@
                         <TextBlock Margin="1" TextWrapping="Wrap">MeowBit is a gift to the world from THE BEASTLICK INTERNET POLICY COMMISSION outreach team:</TextBlock>
                     </WrapPanel>
                     <WrapPanel>
-                        <Label>Michael W. Dean:</Label>
+                        <Label>
+                            <TextBlock><Hyperlink NavigateUri="http://www.michaelwdean.com/">Michael W. Dean</Hyperlink> :</TextBlock>
+                        </Label>
                         <TextBlock>CAO (Chief Anarchy Officer), cat herder, worm wrangler.</TextBlock>
                     </WrapPanel>
                     <WrapPanel>
-                        <Label>Derrick Slopey:</Label>
-                        <TextBlock>Entropy De-scrambler, Python wrangler.</TextBlock>
+                        <Label>
+                            <TextBlock><Hyperlink NavigateUri="http://alienseed.com/">Derrick Slopey</Hyperlink> :</TextBlock>
+                        </Label>
+                        <TextBlock>Developer</TextBlock>
                     </WrapPanel>
 
                     <TextBlock Margin="0,10,0,0" FontWeight="Bold">MeowBit help, info and donate links:</TextBlock>

@@ -60,7 +60,7 @@ namespace dotBitNs
             {
                 SaveChanges();
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
 
             }

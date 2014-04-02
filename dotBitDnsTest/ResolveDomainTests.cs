@@ -42,6 +42,10 @@ namespace dotBitDnsTest
 
         string Example_MapOnly_nx_bit = @"{""map"": {"""":""178.248.244.15""}}";
 
+        string Example_MapOnly_maponlyarray_bit = @"{""map"": {"""":[""1.2.3.4"",""4.3.2.1"",""2400:cb00:2049:1::adf5:3b6b""]}}";
+
+        string Example_MapOnly_www_nest_bit = @"{""map"": {""www"":{""map"": {"""":""178.248.244.15""}}}}";
+
         static readonly Dictionary<string, IPAddress> dnsMockRecords = new Dictionary<string, IPAddress>()
         {
             {"json1.com.", new IPAddress(new byte[]{0,0,0,1})}
@@ -96,6 +100,51 @@ namespace dotBitDnsTest
 
         }
 
+        [TestMethod]
+        public void ResolveMapNestTest()
+        {
+            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
+            var q = new DnsQuestion("www.nest.bit", RecordType.Any, RecordClass.Any);
+            string expectedA = "178.248.244.15";
+            var answer = resolver.GetAnswer(q);
+
+            Assert.IsInstanceOfType(answer.AnswerRecords.First(), typeof(ARecord));
+
+            ARecord a = answer.AnswerRecords.First() as ARecord;
+            Assert.AreEqual(expectedA, a.Address.ToString());
+
+        }
+
+        [TestMethod]
+        public void ResolveMapOnlyArrayTest()
+        {
+            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
+            var q = new DnsQuestion("maponlyarray.bit", RecordType.Any, RecordClass.Any);
+
+            string expectedA1 = "1.2.3.4";
+            string expectedA2 = "4.3.2.1";
+
+            string expectedAAAA = "2400:cb00:2049:1::adf5:3b6b";
+
+            var answer = resolver.GetAnswer(q);
+
+            var Aanswers = answer.AnswerRecords.Where(m => m.RecordType == RecordType.A);
+            var AAAAanswers = answer.AnswerRecords.Where(m => m.RecordType == RecordType.Aaaa);
+
+            Assert.IsInstanceOfType(Aanswers.First(), typeof(ARecord));
+
+            ARecord a1 = Aanswers.First() as ARecord;
+            ARecord a2 = Aanswers.Last() as ARecord;
+
+            AaaaRecord aaaa = AAAAanswers.First() as AaaaRecord;
+
+            Assert.AreEqual(expectedA1, a1.Address.ToString());
+            Assert.AreEqual(expectedA2, a2.Address.ToString());
+
+            Assert.AreEqual(expectedAAAA, aaaa.Address.ToString());
+        }
+
+
         private NameShowResponse mockLookupDotBit(string root)
         {
             string value;
@@ -104,6 +153,12 @@ namespace dotBitDnsTest
             {
                 case "nx":
                     value = Example_MapOnly_nx_bit;
+                    break;
+                case "nest":
+                    value = Example_MapOnly_www_nest_bit;
+                    break;
+                case "maponlyarray":
+                    value = Example_MapOnly_maponlyarray_bit;
                     break;
                 case "json1":
                     value = Json1;

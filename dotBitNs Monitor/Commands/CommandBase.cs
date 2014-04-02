@@ -108,8 +108,8 @@ namespace dotBitNs_Monitor.Commands
         /// <returns>The first parent item that matches the submitted
         /// type parameter. If not matching item can be found, a null
         /// reference is being returned.</returns>
-        public static T TryFindParent<T>(DependencyObject child)
-            where T : DependencyObject
+        public static Tparent TryFindParent<Tparent>(DependencyObject child)
+            where Tparent : DependencyObject
         {
             //get parent item
             DependencyObject parentObject = GetParentObject(child);
@@ -118,7 +118,7 @@ namespace dotBitNs_Monitor.Commands
             if (parentObject == null) return null;
 
             //check if the parent matches the type we're looking for
-            T parent = parentObject as T;
+            Tparent parent = parentObject as Tparent;
             if (parent != null)
             {
                 return parent;
@@ -126,7 +126,7 @@ namespace dotBitNs_Monitor.Commands
             else
             {
                 //use recursion to proceed with next level
-                return TryFindParent<T>(parentObject);
+                return TryFindParent<Tparent>(parentObject);
             }
         }
 

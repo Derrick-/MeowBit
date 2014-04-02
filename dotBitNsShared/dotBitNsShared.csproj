@@ -54,6 +54,7 @@
     <Compile Include="InteropClasses.cs" />
     <Compile Include="NmcNamespaces\BaseNameValue.cs" />
     <Compile Include="NmcNamespaces\Domain\DomainValue.cs" />
+    <Compile Include="NmcNamespaces\Domain\DomainValue_Utils.cs" />
     <Compile Include="NmcNamespaces\Domain\ServiceRecord.cs" />
     <Compile Include="NmcNamespaces\NmcNameValuePair.cs" />
     <Compile Include="NmcNamespaces\Product\ProductValue.cs" />
