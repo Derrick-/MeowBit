@@ -1,4 +1,5 @@
 ﻿using ARSoft.Tools.Net.Dns;
+using dotBitNs;
 using dotBitNs.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NamecoinLib.Responses;
@@ -12,6 +13,24 @@ namespace dotBitDnsTest
     [TestClass]
     public class ResolveDomainTests
     {
+        Mocks.NmcClientMock client;
+        DotBitResolver resolver;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            client = new Mocks.NmcClientMock();
+
+            client.addName("d/nx", Example_MapOnly_nx_bit);
+            client.addName("d/nest", Example_MapOnly_www_nest_bit);
+            client.addName("d/maponlyarray", Example_MapOnly_maponlyarray_bit);
+            client.addName("d/json1", Json1);
+
+            client.addDnsRecord("json1.com.", new IPAddress(new byte[] { 0, 0, 0, 1 }));
+
+            resolver = new DotBitResolver(client.DnsLookup, client);
+        }
+
         const string email = "my@testemail.net";
         const string ip = "78.47.86.43";
         const string ipWWW = "78.47.86.44";
@@ -46,16 +65,9 @@ namespace dotBitDnsTest
 
         string Example_MapOnly_www_nest_bit = @"{""map"": {""www"":{""map"": {"""":""178.248.244.15""}}}}";
 
-        static readonly Dictionary<string, IPAddress> dnsMockRecords = new Dictionary<string, IPAddress>()
-        {
-            {"json1.com.", new IPAddress(new byte[]{0,0,0,1})}
-        };
-
         [TestMethod]
         public void ResolveRootTest()
         {
-            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
-
             var qRoot = new DnsQuestion("json1.bit", RecordType.Any, RecordClass.Any);
             var answer = resolver.GetAnswer(qRoot);
             var expectedRootName = "json1.bit";
@@ -70,25 +82,22 @@ namespace dotBitDnsTest
         [TestMethod]
         public void ResolveSubdomainsTest()
         {
-
-            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
-
             var qWww = new DnsQuestion("www.json1.bit", RecordType.Any, RecordClass.Any);
             var answer = resolver.GetAnswer(qWww);
             var expectedWwwName = "json1.com.";
-            var expectedWwwAddress = dnsMockRecords[expectedWwwName];
+            var expectedWwwAddress = "0.0.0.1";
 
             Assert.IsNotNull(answer);
             Assert.IsInstanceOfType(answer.AnswerRecords.First(), typeof(ARecord));
             Assert.AreEqual(expectedWwwName, answer.AnswerRecords.First().Name);
-            Assert.AreEqual(expectedWwwAddress, ((ARecord)answer.AnswerRecords.First()).Address);
+            Assert.AreEqual(expectedWwwAddress, ((ARecord)answer.AnswerRecords.First()).Address.ToString());
 
         }
 
         [TestMethod]
         public void ResolveMapOnlyTest()
         {
-            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
+
             var q = new DnsQuestion("nx.bit", RecordType.Any, RecordClass.Any);
             string expectedA = "178.248.244.15";
             var answer = resolver.GetAnswer(q);
@@ -103,7 +112,7 @@ namespace dotBitDnsTest
         [TestMethod]
         public void ResolveMapNestTest()
         {
-            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
+
             var q = new DnsQuestion("www.nest.bit", RecordType.Any, RecordClass.Any);
             string expectedA = "178.248.244.15";
             var answer = resolver.GetAnswer(q);
@@ -118,7 +127,7 @@ namespace dotBitDnsTest
         [TestMethod]
         public void ResolveMapOnlyArrayTest()
         {
-            var resolver = new DotBitResolver(mockResolveDns, new dotBitNs.Server.DotBitResolver.LookupDomainValueRootHandler(mockLookupDotBit));
+
             var q = new DnsQuestion("maponlyarray.bit", RecordType.Any, RecordClass.Any);
 
             string expectedA1 = "1.2.3.4";
@@ -142,49 +151,6 @@ namespace dotBitDnsTest
             Assert.AreEqual(expectedA2, a2.Address.ToString());
 
             Assert.AreEqual(expectedAAAA, aaaa.Address.ToString());
-        }
-
-
-        private NameShowResponse mockLookupDotBit(string root)
-        {
-            string value;
-
-            switch (root)
-            {
-                case "nx":
-                    value = Example_MapOnly_nx_bit;
-                    break;
-                case "nest":
-                    value = Example_MapOnly_www_nest_bit;
-                    break;
-                case "maponlyarray":
-                    value = Example_MapOnly_maponlyarray_bit;
-                    break;
-                case "json1":
-                    value = Json1;
-                    break;
-                default:
-                    throw new ArgumentException(root + " is not configured for testing.");
-            }
-
-            return new NameShowResponse()
-            {
-                name = "d/" + root,
-                value = value,
-            };
-        }
-
-        private DnsMessage mockResolveDns(string name, RecordType recordType, RecordClass recordClass)
-        {
-            DnsMessage answer = null;
-            bool any = recordType == RecordType.Any;
-            if ((any || recordType == RecordType.A) && dnsMockRecords.ContainsKey(name))
-            {
-                var ip = dnsMockRecords[name];
-                answer = new DnsMessage();
-                answer.AnswerRecords.Add(new ARecord(name, 0, ip));
-            }
-            return answer;
         }
 
     }

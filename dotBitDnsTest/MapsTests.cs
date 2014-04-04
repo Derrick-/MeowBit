@@ -8,7 +8,7 @@ namespace dotBitDnsTest
 {
 
     [TestClass]
-    public class DomainValueOperations :BaseDomainTest
+    public class MapsTests :BaseDomainTest
     {
 
         public string Example_mapsonly1 =
@@ -29,20 +29,6 @@ namespace dotBitDnsTest
         """"    : { ""ns"": [""ns1.host.net"", ""ns12.host.net""], ""ip"": [""10.2.3.4"", ""10.4.3.2""] },
     }
 }";
-
-        //[TestMethod]
-        //public void TestAddDomainIp()
-        //{
-        //    DomainValue domain = new DomainValue(Example_2_5_generic);
-
-        //    int initialCount=domain.Ips.Count();
-
-        //    domain.AddIp(new IPAddress(new byte[] { 1, 1, 1, 1 }));
-
-        //    int finalCount=domain.Ips.Count();
-
-        //    Assert.AreEqual(initialCount + 1, finalCount);
-        //}
 
         [TestMethod]
         public void ReadMapsOnly1()

@@ -13,7 +13,20 @@ using System.Net;
 
 namespace dotBitNs
 {
-    class NmcClient
+    interface INmcClient
+    {
+        bool Available { get; }
+        long? GetBlockCount();
+        string GetBlockHash(long blockid);
+        NamecoinLib.Responses.GetBlockResponse GetBlockInfo(string hash);
+        NamecoinLib.Responses.GetInfoResponse GetInfo();
+        NamecoinLib.Responses.GetBlockResponse GetLastBlock();
+        NamecoinLib.Responses.NameShowResponse LookupDomainValue(string root);
+        NamecoinLib.Responses.NameShowResponse LookupNameValue(string fullNamePath);
+        NamecoinLib.Responses.NameShowResponse LookupProductValue(string root);
+    }
+    
+    class NmcClient : INmcClient
     {
 
         private static NmcClient _Instance=null;

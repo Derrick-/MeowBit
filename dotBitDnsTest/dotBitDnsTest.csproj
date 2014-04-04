@@ -66,11 +66,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ImportResolveTests.cs" />
+    <Compile Include="Mocks\mockResolver.cs" />
     <Compile Include="ResolveDomainTests.cs" />
     <Compile Include="DomainReaderTests.cs" />
     <Compile Include="ProductReaderTests.cs" />
-    <Compile Include="DomainValueOperations.cs" />
+    <Compile Include="MapsTests.cs" />
     <Compile Include="BaseDomainTest.cs" />
+    <Compile Include="ImportParseTests.cs" />
     <Compile Include="ValueJsonTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

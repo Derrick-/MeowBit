@@ -15,13 +15,13 @@ namespace dotBitNs.Server
         
         public delegate NamecoinLib.Responses.NameShowResponse LookupDomainValueRootHandler(string root);
 
-        private readonly ExternalResolveHandler DnsResolve;
-        private readonly LookupDomainValueRootHandler LookupDomainValueRoot;
+        private readonly ExternalResolveHandler ExternalDnsResolve;
+        private readonly INmcClient Client;
 
-        public DotBitResolver(ExternalResolveHandler externalDnsResolver, LookupDomainValueRootHandler lookupDomainValueRootHandler = null)
+        public DotBitResolver(ExternalResolveHandler externalDnsResolver, INmcClient client = null)
         {
-            DnsResolve = externalDnsResolver;
-            LookupDomainValueRoot = lookupDomainValueRootHandler ?? NmcClient.Instance.LookupDomainValue;
+            ExternalDnsResolve = externalDnsResolver;
+            this.Client = client ?? NmcClient.Instance;
         }
 
         private object lockResolver = new object();
@@ -34,21 +34,12 @@ namespace dotBitNs.Server
 
         private DnsMessage InternalGetAnswer(DnsQuestion question)
         {
-            DnsMessage answer = ResolveDotBitAddress(question);
+            DnsMessage answer = GetDotBitAnswerForName(question);
 
             if (answer == null)
-            {
-                // send query to upstream server
-                answer = DnsResolve(question.Name, question.RecordType, question.RecordClass);
-            }
+                answer = ExternalDnsResolve(question.Name, question.RecordType, question.RecordClass);
 
             return answer;
-        }
-
-        private DnsMessage ResolveDotBitAddress(DnsQuestion question)
-        {
-            string name = question.Name;
-            return GetDotBitAnswerForName(question);
         }
 
         const int maxRecursion = 16;
@@ -71,17 +62,12 @@ namespace dotBitNs.Server
                 if (value == null)
                     return null;
 
+                if (!string.IsNullOrWhiteSpace(value.@Delegate))
+                    ConsoleUtils.WriteWarning("delegate setting not implemented: {0}", value.@Delegate);
+
                 value.ImportDefaultMap();
 
                 DnsMessage answer = null;
-
-                //TODO: delegate not implemented
-                if (!string.IsNullOrWhiteSpace(value.@Delegate))
-                    ConsoleUtils.WriteWarning("delegate setting not implemented: {0}", value.Import);
-
-                //TODO: import not implemented
-                if (!string.IsNullOrWhiteSpace(value.Import))
-                    ConsoleUtils.WriteWarning("import setting not implemented: {0}", value.Import);
 
                 if (value.Alias != null)
                 {
@@ -161,12 +147,45 @@ namespace dotBitNs.Server
             DomainValue value;
             var root = domainparts[domainparts.Length - 2];
 
-            var info = LookupDomainValueRoot(root);
+            var info = Client.LookupDomainValue(root);
+
             if (info == null)
                 value = null;
             else
             {
                 value = info.GetValue<DomainValue>();
+
+                if (value.Import != null && value.Import.Count() > 0)
+                {
+                    var key = domainparts.Length > 2 ? domainparts[domainparts.Length - 3] : "";
+                    foreach (var domain in value.Import.Keys)
+                    {
+                        if (domain == key)
+                        {
+                            var name = value.Import[domain];
+                            var info2 = Client.LookupNameValue(name);
+                            if (info2 != null)
+                            {
+                                DomainValue import = info2.GetValue<DomainValue>();
+                                if (import != null)
+                                {
+                                    value.ImportValues(import, overwrite: false);
+                                    var importMap = import.Maps[domain];
+                                    if (importMap != null)
+                                    {
+                                        var valueMap = value.Maps[domain];
+                                        if (valueMap == null)
+                                            value.Maps[domain] = importMap;
+                                        else
+                                            valueMap.ImportValues(importMap, overwrite: false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
                 value = ResolveSubdomain(domainparts, value);
             }
             return value;

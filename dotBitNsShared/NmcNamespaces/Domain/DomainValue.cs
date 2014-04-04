@@ -23,14 +23,14 @@ namespace dotBitNs.Models
         private IEnumerable<string> _Ns = null;
         private IEnumerable<string> _Info = null;
         private string _Delegate = null;
-        private string _Import = null;
+        private Dictionary<string, string> _Import = null;
         private string _Translate = null;
         private IEnumerable<ServiceRecord> _Service = null;
         private Dictionary<string, DomainValue> _Maps = null;
 
-        private void Invalidate(string p)
+        private void Invalidate(string property)
         {
-            switch (p)
+            switch (property)
             {
                 case "alias": _Alias = null; break;
                 case "ip": _Ips = null; break;
@@ -87,8 +87,15 @@ namespace dotBitNs.Models
         public string @Delegate
         { get { return _Delegate ?? (_Delegate = GetString("delegate")); } }
 
-        public string Import
-        { get { return _Import ?? (_Import = GetString("import")); } }
+        public Dictionary<string, string> Import
+        {
+            get
+            {
+                if (_Import == null)
+                    _Import = ParseImport(domain.GetValue("import"));
+                return _Import;
+            }
+        }
 
         public string Translate
         { get { return _Translate ?? (_Translate = GetString("translate")); } }
@@ -129,33 +136,7 @@ namespace dotBitNs.Models
             get
             {
                 if (_Maps == null)
-                {
-                    string propName = "map";
-                    JToken maps = domain.GetValue(propName);
-                    _Maps = new Dictionary<string, DomainValue>();
-                    if (maps != null && maps.Type == JTokenType.Object)
-                    {
-                        foreach (JProperty map in maps.Where(m => m is JProperty))
-                        {
-                            if (map.Value.Type == JTokenType.Object)
-                                _Maps.Add(map.Name, new DomainValue(map.Value.ToString()));
-                            else if (map.Value.Type == JTokenType.String)
-                            {
-                                DomainValue newMap = DomainValue.FromIP((string)map.Value);
-                                if (newMap != null)
-                                    _Maps.Add(map.Name, newMap);
-                            }
-                            else if (map.Value.Type == JTokenType.Array)
-                            {
-                                var ipStrings = ((JArray)map.Value).Where(m => m.Type == JTokenType.String).Select(m => m.Value<string>());
-                                DomainValue newMap = DomainValue.FromIP(ipStrings);
-                                if (newMap != null)
-                                    _Maps.Add(map.Name, newMap);
-                            }
-
-                        }
-                    }
-                }
+                    _Maps = ParseMaps(domain.GetValue("map"));
                 return _Maps;
             }
         }
@@ -176,7 +157,7 @@ namespace dotBitNs.Models
             }
         }
 
-        private void ImportValues(DomainValue from, bool overwrite = false)
+        public void ImportValues(DomainValue from, bool overwrite = false)
         {
             foreach (JProperty item in from.domain.Properties())
             {
@@ -187,6 +168,87 @@ namespace dotBitNs.Models
                 }
             }
         }
+
+        private static Dictionary<string, string> ParseImport(JToken import)
+        {
+            var toReturn = new Dictionary<string, string>();
+            if (import != null)
+            {
+                if (import.Type == JTokenType.String)
+                {
+                    toReturn[""] = import.Value<string>();
+                }
+                else if (import.Type == JTokenType.Array)
+                {
+                    if (import.Count() > 0)
+                    {
+                        if (import.First().Type == JTokenType.String)
+                        {
+                            if (import.Count() == 2 && import.Last().Type == JTokenType.String)
+                            {
+                                string name = import.First().Value<string>();
+                                string map = import.Last().Value<string>();
+                                if (name != null && map != null)
+                                {
+                                    toReturn[map] = name;
+                                }
+                            }
+                        }
+                        else if (import.First().Type == JTokenType.Array)
+                        {
+                            foreach (var entry in import)
+                                if (entry.Type == JTokenType.Array)
+                                {
+                                    var items = entry.Values();
+                                    int count = items.Count();
+                                    if (count == 1 || count == 2)
+                                    {
+                                        string name = items.First().Value<string>();
+                                        string map;
+                                        if (count == 2)
+                                            map = items.Last().Value<string>();
+                                        else
+                                            map = "";
+
+                                        if (name != null && map != null)
+                                            toReturn[map] = name;
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+            return toReturn;
+        }
+
+        private static Dictionary<string, DomainValue> ParseMaps(JToken maps)
+        {
+            var toReturn = new Dictionary<string, DomainValue>();
+            if (maps != null && maps.Type == JTokenType.Object)
+            {
+                foreach (JProperty map in maps.Where(m => m is JProperty))
+                {
+                    if (map.Value.Type == JTokenType.Object)
+                        toReturn.Add(map.Name, new DomainValue(map.Value.ToString()));
+                    else if (map.Value.Type == JTokenType.String)
+                    {
+                        DomainValue newMap = DomainValue.FromIP((string)map.Value);
+                        if (newMap != null)
+                            toReturn.Add(map.Name, newMap);
+                    }
+                    else if (map.Value.Type == JTokenType.Array)
+                    {
+                        var ipStrings = ((JArray)map.Value).Where(m => m.Type == JTokenType.String).Select(m => m.Value<string>());
+                        DomainValue newMap = DomainValue.FromIP(ipStrings);
+                        if (newMap != null)
+                            toReturn.Add(map.Name, newMap);
+                    }
+
+                }
+            }
+            return toReturn;
+        }
+
     }
 
 }
