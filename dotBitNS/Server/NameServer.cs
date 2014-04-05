@@ -108,7 +108,7 @@ namespace dotBitNs.Server
         }
 
 
-        static DnsMessage DnsResolve(string name, RecordType recordType, RecordClass recordClass)
+        internal static DnsMessage DnsResolve(string name, RecordType recordType, RecordClass recordClass)
         {
             DnsClient dnsClient;
             if (WindowsNameServicesManager.NameServerHookMethod != WindowsNameServicesManager.NameServerHookMethodType.ChangeNS)

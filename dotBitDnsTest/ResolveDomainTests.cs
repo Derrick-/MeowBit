@@ -26,7 +26,7 @@ namespace dotBitDnsTest
             client.addName("d/maponlyarray", Example_MapOnly_maponlyarray_bit);
             client.addName("d/json1", Json1);
 
-            client.addDnsRecord("json1.com.", new IPAddress(new byte[] { 0, 0, 0, 1 }));
+            client.addDnsRecord("json1.com", new IPAddress(new byte[] { 0, 0, 0, 1 }));
 
             resolver = new DotBitResolver(client.DnsLookup, client);
         }
@@ -84,13 +84,38 @@ namespace dotBitDnsTest
         {
             var qWww = new DnsQuestion("www.json1.bit", RecordType.Any, RecordClass.Any);
             var answer = resolver.GetAnswer(qWww);
-            var expectedWwwName = "json1.com.";
+            var expectedWwwName = "json1.com";
             var expectedWwwAddress = "0.0.0.1";
 
             Assert.IsNotNull(answer);
-            Assert.IsInstanceOfType(answer.AnswerRecords.First(), typeof(ARecord));
-            Assert.AreEqual(expectedWwwName, answer.AnswerRecords.First().Name);
-            Assert.AreEqual(expectedWwwAddress, ((ARecord)answer.AnswerRecords.First()).Address.ToString());
+ 
+            Assert.IsInstanceOfType(answer.AnswerRecords.First(), typeof(CNameRecord));
+            Assert.AreEqual("www.json1.bit", answer.AnswerRecords.First().Name);
+            Assert.AreEqual(expectedWwwName, ((CNameRecord)answer.AnswerRecords.First()).CanonicalName);
+
+            Assert.IsInstanceOfType(answer.AdditionalRecords.First(), typeof(ARecord));
+            Assert.AreEqual(expectedWwwName, answer.AdditionalRecords.First().Name);
+            Assert.AreEqual(expectedWwwAddress, ((ARecord)answer.AdditionalRecords.First()).Address.ToString());
+
+        }
+
+        [TestMethod]
+        public void ResolveRealCnameTest()
+        {
+            resolver = new DotBitResolver(NameServer.DnsResolve, client);
+
+            var qWww = new DnsQuestion("www.hackmaine.org", RecordType.Any, RecordClass.Any);
+            var answer = resolver.GetAnswer(qWww);
+            var expectedWwwName = "hackmaine.org";
+
+            Assert.IsNotNull(answer);
+
+            Assert.IsInstanceOfType(answer.AnswerRecords.First(), typeof(CNameRecord));
+            Assert.AreEqual("www.hackmaine.org", answer.AnswerRecords.First().Name);
+            Assert.AreEqual(expectedWwwName, ((CNameRecord)answer.AnswerRecords.First()).CanonicalName);
+ 
+            Assert.IsInstanceOfType(answer.AdditionalRecords.First(), typeof(ARecord));
+            Assert.AreEqual(expectedWwwName, answer.AdditionalRecords.First().Name);
 
         }
 

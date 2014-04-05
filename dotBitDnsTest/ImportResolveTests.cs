@@ -44,12 +44,20 @@ namespace dotBitDnsTest
         public void ImportToMapTest()
         {
             var qFtp = new DnsQuestion("ftp.import_www.bit", RecordType.Any, RecordClass.Any);
+            var qWww = new DnsQuestion("www.import_www.bit", RecordType.Any, RecordClass.Any);
 
-            var answer = resolver.GetAnswer(qFtp);
+            var answerFtp = resolver.GetAnswer(qFtp);
+            var answerWww = resolver.GetAnswer(qWww);
 
-            ARecord a = answer.AnswerRecords.FirstOrDefault() as ARecord;
+            ARecord aFtp = answerFtp.AnswerRecords.FirstOrDefault() as ARecord;
+            CNameRecord cWww = answerWww.AnswerRecords.FirstOrDefault() as CNameRecord;
+            ARecord aWww = answerWww.AdditionalRecords.FirstOrDefault() as ARecord;
 
-            Assert.AreEqual("10.0.1.2", a.Address.ToString());
+            Assert.AreEqual("10.0.1.2", aFtp.Address.ToString());
+
+            Assert.AreEqual("www.import_www.bit", cWww.Name);
+            Assert.AreEqual("import_www.bit", cWww.CanonicalName);
+            Assert.AreEqual("10.2.3.4", aWww.Address.ToString());
 
         }
 

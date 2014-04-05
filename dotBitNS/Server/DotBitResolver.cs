@@ -11,6 +11,8 @@ namespace dotBitNs.Server
 {
     internal class DotBitResolver
     {
+        int defaultTTL = 300;
+
         public delegate DnsMessage ExternalResolveHandler(string name, RecordType recordType, RecordClass recordClass);
         
         public delegate NamecoinLib.Responses.NameShowResponse LookupDomainValueRootHandler(string root);
@@ -72,16 +74,30 @@ namespace dotBitNs.Server
                 if (value.Alias != null)
                 {
                     string newLookup;
-                    if (value.Alias.EndsWith(".")) // absolute
+                    if (value.Alias == "")
                     {
-                        newLookup = value.Alias;
+                        var sa = fqdn.Split('.');
+                        newLookup = string.Format("{0}.{1}", sa[sa.Length - 2], sa[sa.Length - 1]);
+                    }
+                    else if (value.Alias.EndsWith(".")) // absolute
+                    {
+                        newLookup = value.Alias.Substring(0,value.Alias.Length-1);
                     }
                     else // sub domain
                     {
-                        newLookup = value.Alias + '.';
+                        var sa = fqdn.Split('.');
+                        sa[0] = value.Alias;
+                        newLookup = string.Join(".", sa);
                     }
-                    DnsQuestion newQuestion = new DnsQuestion(value.Alias, question.RecordType, question.RecordClass);
-                    return InternalGetAnswer(newQuestion);
+                    DnsQuestion newQuestion = new DnsQuestion(newLookup, question.RecordType, question.RecordClass);
+
+                    DnsMessage toReturn = new DnsMessage();
+                    toReturn.AnswerRecords.Add(new CNameRecord(fqdn, 300, newLookup));
+
+                    var additional = InternalGetAnswer(newQuestion);
+                    toReturn.AdditionalRecords = additional.AnswerRecords;
+
+                    return toReturn;
                 }
 
                 answer = new DnsMessage()
@@ -173,7 +189,7 @@ namespace dotBitNs.Server
                                     var importMap = import.Maps[domain];
                                     if (importMap != null)
                                     {
-                                        var valueMap = value.Maps[domain];
+                                        var valueMap = value.GetMap(domain);
                                         if (valueMap == null)
                                             value.Maps[domain] = importMap;
                                         else
