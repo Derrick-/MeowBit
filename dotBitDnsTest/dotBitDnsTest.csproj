@@ -74,6 +74,7 @@
     <Compile Include="MapsTests.cs" />
     <Compile Include="BaseDomainTest.cs" />
     <Compile Include="ImportParseTests.cs" />
+    <Compile Include="TranslateTests.cs" />
     <Compile Include="ValueJsonTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -264,7 +264,7 @@ namespace dotBitNs_Monitor
                 pbStatus.Maximum = total;
                 pbStatus.Value = current - start;
                 TimeSpan behind = TimeSpan.FromTicks(now - current);
-                if(behind > TimeSpan.FromMinutes(10))
+                if(behind > TimeSpan.FromMinutes(15))
                     txtBlockStatus.Text = FriendlyTimeString(behind) + " behind.";
                 else
                     txtBlockStatus.Text = "Up to date";
@@ -298,7 +298,9 @@ namespace dotBitNs_Monitor
                 return weeks.ToString() + " weeks";
             if (days > 2)
                 return days.ToString() + " days";
-            if(ts.TotalHours > 1)
+            if ((int)ts.TotalHours == 1)
+                return " 1 hour";
+            if ((int)ts.TotalHours > 1)
                 return ((int)ts.TotalHours).ToString() + " hours";
             return ((int)ts.TotalMinutes).ToString() + " minutes";
         }

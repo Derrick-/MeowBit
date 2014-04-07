@@ -11,7 +11,7 @@ namespace dotBitNs.Server
 {
     internal class DotBitResolver
     {
-        int defaultTTL = 300;
+        int defaultTTL = 60;
 
         public delegate DnsMessage ExternalResolveHandler(string name, RecordType recordType, RecordClass recordClass);
         
@@ -69,6 +69,17 @@ namespace dotBitNs.Server
 
                 value.ImportDefaultMap();
 
+                if (!string.IsNullOrWhiteSpace(value.Translate))
+                {
+                    string newLookup;
+                    if (value.Translate.EndsWith("."))
+                        newLookup = value.Translate.Substring(0, value.Translate.Length - 1);
+                    else
+                        newLookup = value.Translate + '.' + fqdn;
+                    DnsQuestion newQuestion = new DnsQuestion(newLookup, question.RecordType, question.RecordClass);
+                    return InternalGetAnswer(newQuestion);
+                }
+
                 DnsMessage answer = null;
 
                 if (value.Alias != null)
@@ -92,7 +103,7 @@ namespace dotBitNs.Server
                     DnsQuestion newQuestion = new DnsQuestion(newLookup, question.RecordType, question.RecordClass);
 
                     DnsMessage toReturn = new DnsMessage();
-                    toReturn.AnswerRecords.Add(new CNameRecord(fqdn, 300, newLookup));
+                    toReturn.AnswerRecords.Add(new CNameRecord(fqdn, defaultTTL, newLookup));
 
                     var additional = InternalGetAnswer(newQuestion);
                     toReturn.AdditionalRecords = additional.AnswerRecords;
@@ -110,13 +121,12 @@ namespace dotBitNs.Server
                 var nsnames = value.Ns;
                 if (nsnames != null && nsnames.Count() > 0) // NS overrides all
                 {
-                    List<IPAddress> nameservers = GetDotBitNameservers(nsnames);
+                    List<IPAddress> nameservers = GetNameserverAddresses(nsnames);
                     if (nameservers.Count() > 0)
                     {
-                        var client = new DnsClient(nameservers, 2000);
                         if (!string.IsNullOrWhiteSpace(value.Translate))
                             fqdn = value.Translate;
-                        answer = client.Resolve(fqdn, question.RecordType, question.RecordClass);
+                        answer = NameServer.DnsResolve(nameservers, fqdn, question.RecordType, question.RecordClass);
                     }
                 }
                 else
@@ -126,14 +136,14 @@ namespace dotBitNs.Server
                         var addresses = value.Ips;
                         if (addresses.Count() > 0)
                             foreach (var address in addresses)
-                                answer.AnswerRecords.Add(new ARecord(fqdn, 60, address));
+                                answer.AnswerRecords.Add(new ARecord(fqdn, defaultTTL, address));
                     }
                     if (any || question.RecordType == RecordType.Aaaa)
                     {
                         var addresses = value.Ip6s;
                         if (addresses.Count() > 0)
                             foreach (var address in addresses)
-                                answer.AnswerRecords.Add(new AaaaRecord(fqdn, 60, address));
+                                answer.AnswerRecords.Add(new AaaaRecord(fqdn, defaultTTL, address));
                     }
                 }
 
@@ -231,7 +241,7 @@ namespace dotBitNs.Server
             return value;
         }
 
-        private List<IPAddress> GetDotBitNameservers(IEnumerable<string> nsnames)
+        private List<IPAddress> GetNameserverAddresses(IEnumerable<string> nsnames)
         {
             List<IPAddress> nameservers = new List<IPAddress>();
             foreach (var ns in nsnames)

@@ -5,6 +5,7 @@
 
 using ARSoft.Tools.Net.Dns;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -14,6 +15,9 @@ namespace dotBitNs.Server
 {
     class NameServer
     {
+        public const int nsTimeout = 5000;
+        private static IPAddress defaultDnsServer = new IPAddress(new byte[] { 8, 8, 8, 8 });
+        
         public static bool Ok { get; set; }
         
         private static DnsServer server;
@@ -107,6 +111,12 @@ namespace dotBitNs.Server
             return message;
         }
 
+        internal static DnsMessage DnsResolve(List<IPAddress> nameservers, string name, RecordType recordType, RecordClass recordClass)
+        {
+            var client = GetClientForServers(nameservers);
+            DnsMessage answer = client.Resolve(name, recordType, recordClass);
+            return answer;
+        }
 
         internal static DnsMessage DnsResolve(string name, RecordType recordType, RecordClass recordClass)
         {
@@ -120,13 +130,18 @@ namespace dotBitNs.Server
             return dnsClient.Resolve(name, recordType, recordClass);
         }
 
-        private static IPAddress defaultDnsServer = new IPAddress(new byte[] { 8, 8, 8, 8 });
         private static DnsClient GetNonDefaultDnsClient()
         {
             var servers = WindowsNameServicesManager.GetCachedDnsServers();
             if (!servers.Any())
                 servers.Add(defaultDnsServer);
-            var client = new DnsClient(servers, 2000);
+            var client = GetClientForServers(servers);
+            return client;
+        }
+
+        private static DnsClient GetClientForServers(List<IPAddress> servers)
+        {
+            var client = new DnsClient(servers, nsTimeout);
             return client;
         }
     }
